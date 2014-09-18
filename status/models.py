@@ -64,7 +64,7 @@ class ContactMethod(models.Model):
 			return self.user + " :: " + self.phoneNumber
 
 
-	email = models.CharField(null = True, blank = True)
-	phoneNumber = models.CharField(null = True, blank = True)
-	provider = models.ForeignKey("Provider", null = True, blank = True)
+	email = models.CharField(max_length=35, null = True, blank = True)
+	phoneNumber = models.CharField(max_length=15, null = True, blank = True)
+	provider = models.ForeignKey(Provider, null = True, blank = True)
 	user = models.ForeignKey(User)
