@@ -41,3 +41,30 @@ class Comment(Post):
 	"""Stores comment posts"""
 
 	status = models.ForeignKey(Status)
+
+
+class Provider(models.Model):
+	"""Maps phone provider to email for that provider"""
+
+	def __str__(self):
+		return self.name + " :: " + self.gateway
+
+	name = models.CharField(max_length=25)
+	gateway = models.CharField(max_length=30)
+
+
+class ContactMethod(models.Model):
+	"""Many to 1 :: ContactMethods -> User"""
+
+	def __str__(self):
+		if (self.email):
+			return self.user + " :: " + self.email
+
+		elif (self.phoneNumber):
+			return self.user + " :: " + self.phoneNumber
+
+
+	email = models.CharField(null = True, blank = True)
+	phoneNumber = models.CharField(null = True, blank = True)
+	provider = models.ForeignKey("Provider", null = True, blank = True)
+	user = models.ForeignKey(User)
