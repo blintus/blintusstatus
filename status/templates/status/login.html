@@ -1,0 +1,19 @@
+{% extends "status/page.html" %}
+
+{% block content %}
+<form action="{% url 'status:login' %}" method="post" role="form" style="width: 400px; margin: 0 auto">
+    {% csrf_token %}
+    {% if error %}
+    <p class="alert alert-danger">Error signing in. Please enter a valid username and password and click Sign In.</p>
+    {% endif %}
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="{{ username }}" autofocus />
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password" />
+    </div>
+    <input class="btn btn-primary pull-right" type="submit" value="Sign In" />
+</form>
+{% endblock content %}

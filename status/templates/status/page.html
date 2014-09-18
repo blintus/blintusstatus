@@ -2,7 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+    {% if page_title %}
+    <title>Blintus Status | {{ page_title }}</title>
+    {% else %}
     <title>Blintus Status</title>
+    {% endif %}
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
@@ -35,15 +39,18 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                 </ul>
+                {% if not hide_nav_user %}
                 <ul class="nav navbar-nav navbar-right">
+                    {% if not user.is_authenticated %}
                     <li><a href="#">Sign Up</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign In <span class="caret"></span></a>
                         <div id="login-menu" class="dropdown-menu" role="menu">
-                            <form action="[YOUR ACTION]" method="post" role="form">
+                            <form action="{% url 'status:login' %}" method="post" role="form">
+                                {% csrf_token %}
                                 <div class="form-group">
                                     <label for="username">Username</label>
-                                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" />
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" autofocus />
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Password</label>
@@ -53,17 +60,20 @@
                             </form>
                         </div>
                     </li>
-                    <li><p class="navbar-text">Logged in as &lt;username&gt;.</p></li>
-                    <li><a href="#">Log Out</a></li>
+                    {% else %}
+                    <li><p class="navbar-text">Logged in as {{ user.username }}.</p></li>
+                    <li><a href="{% url 'status:logout' %}">Log Out</a></li>
+                    {% endif %}
                 </ul>
+                {% endif %}
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
 
     <div class="container-fluid">
-        <h1 id="title">Hello, world!</h1>
+        <h1 id="title">{{ page_title }}</h1>
         <div id="content">
-            <p>Hi</p>
+            {% block content %}{% endblock %}
         </div>
     </div>
 
