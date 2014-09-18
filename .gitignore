@@ -1,4 +1,12 @@
+# Foreman/Heroku environment settings
 .env
+
+# Python virutal environment
 venv
+
+# Compiled python files
 __pycache__
 *.pyc
+
+# Test database
+db.sqlite3
