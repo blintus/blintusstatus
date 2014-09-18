@@ -6,15 +6,21 @@ class Category(models.Model):
 	"""Contains a category and parent category"""
 	
 	def __str__(self):
-		return self.name + " :: " + self.parent.name
+		if (self.parent):
+			return self.name + " :: " + self.parent.name
+		else:
+			return self.name
 
 	name = models.CharField(max_length=20)
-	parent = models.ForeignKey(Category)
+	parent = models.ForeignKey("Category", null = True, blank = True)
 
 
 class Post(models.Model):
 	"""Generic post object used by Status and Comment"""
 	
+	class Meta:
+		abstract = True
+
 	def __str__(self):
 		return self.created + " :: " + self.user + " :: " + self.message
 
@@ -27,7 +33,7 @@ class Post(models.Model):
 class Status(Post):
 	"""Stores status posts"""
 
-	status = SmallPositiveIntegerField()
+	status = models.PositiveIntegerField()
 	category = models.ForeignKey(Category)
 
 
