@@ -1,4 +1,7 @@
 runserver:
+	foreman run python manage.py runserver
+
+run_heroku_server:
 	foreman start
 
 install_dependencies:
