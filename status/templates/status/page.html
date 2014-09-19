@@ -43,9 +43,9 @@
                 <ul class="nav navbar-nav navbar-right">
                     {% if not user.is_authenticated %}
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign Up <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" rel="new-page">Sign Up <span class="caret"></span></a>
                         <div id="login-menu" class="dropdown-menu" role="menu">
-                            <form action="{% url 'status:register' %}" method="post" role="form">
+                            <form action="{% url 'status:register' %}" method="post" role="form" class="redirect-form">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="username">Username</label>
@@ -64,9 +64,9 @@
                         </div>
                     </li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign In <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" rel="new-page">Sign In <span class="caret"></span></a>
                         <div id="login-menu" class="dropdown-menu" role="menu">
-                            <form action="{% url 'status:login' %}" method="post" role="form">
+                            <form action="{% url 'status:login' %}" method="post" role="form" class="redirect-form">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="username">Username</label>
@@ -82,7 +82,7 @@
                     </li>
                     {% else %}
                     <li><p class="navbar-text">Logged in as {{ user.username }}.</p></li>
-                    <li><a href="{% url 'status:logout' %}">Log Out</a></li>
+                    <li><a href="{% url 'status:logout' %}" rel="new-page" id="logout-link">Log Out</a></li>
                     {% endif %}
                 </ul>
                 {% endif %}
@@ -91,7 +91,7 @@
     </nav>
 
     <div class="container-fluid">
-        <h1 id="title">{{ page_title }}</h1>
+        <h1 id="page-title">{{ page_title }}</h1>
         <div id="content">
             {% block content %}{% endblock %}
         </div>

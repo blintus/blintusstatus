@@ -1,12 +1,13 @@
+import json
+
 from django.shortcuts import render, redirect, HttpResponse
 
 from django.contrib.auth import authenticate, login as djangoLogin, logout as djangoLogout
 from django.contrib.auth.models import User
 
-# Create your views here.
 
 def index(request):
-    return HttpResponse("Hi.")
+    return HttpResponse(json.dumps(["testObject"]), content_type="application/json")
 
 
 def register(request):
@@ -24,9 +25,12 @@ def register(request):
                 user = User.objects.create_user(username=username, password=password)
                 user.backend = "django.contrib.auth.backends.ModelBackend"
                 djangoLogin(request, user)
-                return redirect("status:root")
+                if "next" in request.GET:
+                    return redirect(request.GET["next"])
+                else:
+                    return redirect("status:root")
         else:
-            error = "Error registering -- Please stop being a fucking retard and fill everything out"
+            error = "Error registering. Please fill out all fields and click Register."
     return render(request, "status/register.html", {
         "page_title": "Register Account",
         "error": error,
@@ -43,7 +47,10 @@ def login(request):
         user = authenticate(username = username, password = password)
         if user and user.is_active:
             djangoLogin(request, user)
-            return redirect("status:root")
+            if "next" in request.GET:
+                return redirect(request.GET["next"])
+            else:
+                return redirect("status:root")
         else:
             error = "Error signing in. Please enter a valid username and password and click Sign In."
     return render(request, "status/login.html", {
@@ -55,4 +62,7 @@ def login(request):
 
 def logout(request):
     djangoLogout(request)
-    return redirect("status:root")
+    if "next" in request.GET:
+        return redirect(request.GET["next"])
+    else:
+        return redirect("status:root")
