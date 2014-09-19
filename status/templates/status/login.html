@@ -4,7 +4,7 @@
 <form action="{% url 'status:login' %}" method="post" role="form" style="width: 400px; margin: 0 auto">
     {% csrf_token %}
     {% if error %}
-    <p class="alert alert-danger">Error signing in. Please enter a valid username and password and click Sign In.</p>
+    <p class="alert alert-danger">{{ error }}</p>
     {% endif %}
     <div class="form-group">
         <label for="username">Username</label>

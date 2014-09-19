@@ -45,7 +45,7 @@ def login(request):
             djangoLogin(request, user)
             return redirect("status:root")
         else:
-            error = True
+            error = "Error signing in. Please enter a valid username and password and click Sign In."
     return render(request, "status/login.html", {
         "page_title": "Login",
         "error": error,
