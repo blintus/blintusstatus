@@ -1,0 +1,23 @@
+{% extends "status/page.html" %}
+
+{% block content %}
+<form action="{% url 'status:register' %}" method="post" role="form" style="width: 400px; margin: 0 auto">
+    {% csrf_token %}
+    {% if error %}
+    <p class="alert alert-danger">{{ error }}</p>
+    {% endif %}
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="{{ username }}" autofocus />
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password" />
+    </div>
+    <div class="form-group">
+        <label for="password">Confirm Password</label>
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" />
+    </div>
+    <input class="btn btn-primary pull-right" type="submit" value="Register" />
+</form>
+{% endblock content %}

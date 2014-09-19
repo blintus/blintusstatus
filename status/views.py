@@ -26,7 +26,7 @@ def register(request):
                 djangoLogin(request, user)
                 return redirect("status:root")
         else:
-            error = "Error registering -- Please stop being a fucking retard and fill everything out"
+            error = "Error registering -- Please stop being a fucking retard"
     return render(request, "status/register.html", {
         "page_title": "Register Account",
         "error": error,
