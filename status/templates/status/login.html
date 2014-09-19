@@ -1,7 +1,7 @@
 {% extends "status/page.html" %}
 
 {% block content %}
-<form action="{% url 'status:login' %}" method="post" role="form" style="width: 400px; margin: 0 auto">
+<form action="" method="post" role="form" style="width: 400px; margin: 0 auto">
     {% csrf_token %}
     {% if error %}
     <p class="alert alert-danger">{{ error }}</p>
