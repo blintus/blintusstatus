@@ -1,13 +1,7 @@
-import json
-
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 
 from django.contrib.auth import authenticate, login as djangoLogin, logout as djangoLogout
 from django.contrib.auth.models import User
-
-
-def index(request):
-    return HttpResponse(json.dumps(["testObject"]), content_type="application/json")
 
 
 def register(request):

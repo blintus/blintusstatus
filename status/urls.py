@@ -5,10 +5,15 @@ from django.views.generic import TemplateView
 
 urlpatterns = patterns('status',
 
-    url(r'^rest', 'views.index', name='rest'),
+    # rest urls
+    url(r'^rest', 'restviews.index', name='rest'),
+
+    # login/logout/register views
     url(r'^login', 'views.login', name='login'),
     url(r'^logout', 'views.logout', name='logout'),
     url(r'^register', 'views.register', name='register'),
+
+    # every other page view
     url(r'^', TemplateView.as_view(template_name='status/page.html'), name='root')
     
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
