@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 
 class Category(models.Model):
 	"""Contains a category and parent category"""
+
+	class Meta:
+		verbose_name_plural = "Categories"
 	
 	def __str__(self):
 		if (self.parent):
@@ -33,6 +36,10 @@ class Post(models.Model):
 class Status(Post):
 	"""Stores status posts"""
 
+	class Meta:
+		verbose_name_plural = "Statuses"
+
+	title = models.CharField(max_length=255)
 	status = models.PositiveIntegerField()
 	category = models.ForeignKey(Category)
 
