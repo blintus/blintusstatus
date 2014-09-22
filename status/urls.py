@@ -6,7 +6,15 @@ from django.views.generic import TemplateView
 urlpatterns = patterns('status',
 
     # rest urls
+    url(r'^rest/status', 'restviews.status', name='status'),
+    url(r'^rest/comment', 'restviews.comment', name='comment'),
+    url(r'^rest/provider', 'restviews.provider', name='provider'),
+    url(r'^rest/contactMethod', 'restviews.contactMethod', name='contactMethod'),
+    url(r'^rest/category', 'restviews.category', name='category'),
+    url(r'^rest/subscriptions', 'restviews.subscriptions', name='subscriptions'),
     url(r'^rest', 'restviews.index', name='rest'),
+
+
 
     # login/logout/register views
     url(r'^login', 'views.login', name='login'),
