@@ -25,7 +25,7 @@ class Post(models.Model):
 		abstract = True
 
 	def __str__(self):
-		return self.created + " :: " + self.user + " :: " + self.message
+		return str(self.created) + " :: " + str(self.user) + " :: " + self.message
 
 	created = models.DateField(auto_now = False, auto_now_add = True)
 	updated = models.DateField(auto_now = True)
