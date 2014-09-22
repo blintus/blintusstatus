@@ -17,7 +17,8 @@ var PAGE_ROUTES = [
         baseUrl: ASSET_ROOT + 'js/lib',
         paths: {
             hbs: 'require-handlebars-plugin/hbs',
-            pages: '../pages'
+            pages: '../pages',
+            shared: '../shared'
         }
     });
 
