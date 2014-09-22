@@ -22,7 +22,7 @@ def status(request):
 def comment(request):
 	if request.method == 'GET':
 		return _returnJSON(["comment"])
-	elif request.method == 'POST'
+	elif request.method == 'POST':
 		pass
 
 
@@ -34,9 +34,9 @@ def provider(request):
 
 @rest_login_required
 def contactMethod(request):
-	if request.method == 'GET'
+	if request.method == 'GET':
 		return _returnJSON(["contactMethod"])
-	elif request.method == 'POST'
+	elif request.method == 'POST':
 		pass
 
 
@@ -50,5 +50,5 @@ def category(request):
 def subscriptions(request):
 	if request.method == 'GET':
 		return _returnJSON(["subscriptions"])
-	elif request.method == 'POST'
+	elif request.method == 'POST':
 		pass
