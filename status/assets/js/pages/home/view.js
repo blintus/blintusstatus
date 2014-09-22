@@ -1,7 +1,7 @@
-define(['jquery', 'shared/statusIcons',
+define(['jquery',
     'hbs!pages/home/markup',
     'hbs!pages/home/statusPostMarkup'
-], function ($, statusIcons, pageMarkup, postMarkup) {
+], function ($, pageMarkup, postMarkup) {
     'use strict';
 
     var HomeView = function ($container) {
@@ -10,9 +10,6 @@ define(['jquery', 'shared/statusIcons',
     };
 
     HomeView.prototype.setPosts = function (posts) {
-        posts.forEach(function (post) {
-            post.statusIcon = statusIcons[post.status];
-        });
         this.$postContainer.empty().append(postMarkup({
             posts: posts
         }));

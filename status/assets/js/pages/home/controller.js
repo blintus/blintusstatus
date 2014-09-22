@@ -17,33 +17,51 @@ define(['pageUtils', 'pages/home/view'], function (pageUtils, HomeView) {
         $.when({
             posts: [
                 {
-                    created: '',
+                    created: '2014-09-21',
                     updated: '',
-                    message: 'This is a test message.',
-                    user: '1',
-                    status: '1',
-                    category: '1',
-                    title: 'This is a test title',
+                    message: 'This is about Teamspeak being ok.',
+                    user: {
+                        username: 'dave'
+                    },
+                    status: 1,
+                    category: {
+                        id: 1,
+                        name: 'Teamspeak',
+                        parent: null
+                    },
+                    title: 'Teamspeak ok',
                     comments: []
                 },
                 {
-                    created: '',
+                    created: '2014-09-20',
                     updated: '',
-                    message: 'This is a second test message.',
-                    user: '1',
-                    status: '2',
-                    category: '1',
-                    title: 'This is a second test title',
+                    message: 'This is about the media share being broken.',
+                    user: {
+                        username: 'dave'
+                    },
+                    status: 3,
+                    category: {
+                        id: 1,
+                        name: 'Media',
+                        parent: null
+                    },
+                    title: 'Media down',
                     comments: []
                 },
                 {
-                    created: '',
+                    created: '2014-09-19',
                     updated: '',
-                    message: 'This is a third test message.',
-                    user: '1',
-                    status: '3',
-                    category: '1',
-                    title: 'This is a third test title',
+                    message: 'This is about the shares only kind of working.',
+                    user: {
+                        username: 'dave'
+                    },
+                    status: 2,
+                    category: {
+                        id: 2,
+                        name: 'Shares',
+                        parent: null
+                    },
+                    title: 'Shares sort of ok',
                     comments: []
                 }
             ]

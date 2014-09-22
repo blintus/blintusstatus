@@ -17,8 +17,7 @@ var PAGE_ROUTES = [
         baseUrl: ASSET_ROOT + 'js/lib',
         paths: {
             hbs: 'require-handlebars-plugin/hbs',
-            pages: '../pages',
-            shared: '../shared'
+            pages: '../pages'
         }
     });
 
@@ -42,6 +41,42 @@ var PAGE_ROUTES = [
                 $("#page-title").text(title);
             }
         };
+    });
+
+    /************************
+     ** Handlebars helpers **
+     ************************/
+
+    define('templates/helpers/statusIcon', ['hbs/handlebars'], function (Handlebars) {
+        Handlebars.registerHelper('statusIcon', function (statusCode, options) {
+            var iconClass = 'status-icon';
+            if (options.hash.small) {
+                iconClass += '-small';
+            }
+            statusCode = Handlebars.Utils.escapeExpression(statusCode);
+            return new Handlebars.SafeString('<span class="' + iconClass + ' status-icon-status-' + statusCode + '"></span>');
+        });
+    });
+
+    var padTime = function (str) {
+        str = '' + str;
+        var zeros = (str.length === 2) ? '' : ((str.length === 1) ? '0' : '00');
+        return zeros + str;
+    };
+
+    define('templates/helpers/formatPostDate', ['hbs/handlebars'], function (Handlebars) {
+        Handlebars.registerHelper('formatPostDate', function (dateStr) {
+            var dateObj = new Date(dateStr);
+            // var hours = padTime(dateObj.getHours());
+            // var minutes = padTime(dateObj.getMinutes());
+            // var seconds = padTime(dateObj.getSeconds());
+            // var time = hours + ':' + minutes + ':' + seconds;
+            var month = dateObj.getMonth();
+            var day = dateObj.getDate();
+            var year = dateObj.getFullYear();
+            var date = month + '/' + day + '/' + year;
+            return 'on ' + date;
+        });
     });
 
     /*****************************

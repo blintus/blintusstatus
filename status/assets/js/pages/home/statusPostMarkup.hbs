@@ -1,7 +1,8 @@
 <hr>
 {{#each posts}}
     <div class="status-post">
-        <h2><img src="/assets/img/{{statusIcon}}">{{title}}</h2>
+        <h3 class="status-post-title">{{statusIcon status}}{{title}}</h3>
+        <p class="status-post-info">Posted by {{user.username}} {{formatPostDate created}} | <a href="#">{{category.name}}</a></p>
         <p>{{message}}</p>
     </div>
     <hr>

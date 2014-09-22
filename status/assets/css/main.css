@@ -1,12 +1,114 @@
+/*************************
+ ** Main element styles **
+ *************************/
+
 body {
     padding-top: 20px;
 }
 
-#login-menu {
+#content {
+    position: relative;
+}
+
+#register-menu, #login-menu {
     width: 350px;
     padding: 15px;
 }
 
+
+/******************
+ ** Status posts **
+ ******************/
+
+#status-posts {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 75%;
+}
+
 #status-posts hr {
     border-color: #DDD;
+}
+
+.status-post-title {
+    margin-bottom: 0;
+}
+
+.status-post-info {
+    font-size: 80%;
+    margin-top: 0;
+}
+
+#categories {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20%;
+}
+
+#categories-title {
+    margin-top: 0;
+}
+
+#categories ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#categories-list ul {
+    margin-left: 20px;
+}
+#categories-list li {
+    padding: 2px 0 2px 0;
+}
+
+#categories-list a {
+    display: block;
+    color: black;
+    text-decoration: none;
+}
+#categories-list a.active {
+    color: blue;
+}
+#categories-list a:hover, #categories-list a.active {
+    font-weight: bold;
+}
+
+
+/***********
+ ** Icons **
+ ***********/
+
+.status-icon, .status-icon-small {
+    display: inline-block;
+    line-height: 100%;
+    margin-right: 5px;
+}
+.status-icon {
+    width: 16px;
+    height: 16px;
+    background-size: 16px 16px;
+}
+.status-icon-small {
+    width: 10px;
+    height: 10px;
+    background-size: 10px 10px;
+}
+
+/* Status 1 - green, ok */
+.status-icon-status-1 {
+    background-image: url("../img/circle_green.png");
+}
+/* Status 2 - yellow, issues */
+.status-icon-status-2 {
+    background-image: url("../img/circle_yellow.png");
+}
+/* Status 3 - red, failure */
+.status-icon-status-3 {
+    background-image: url("../img/circle_red.png");
+}
+/* Status 10 - grey, unknown status */
+.status-icon-status-10 {
+    background-image: url("../img/circle_grey.png");
 }
