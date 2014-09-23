@@ -3,11 +3,11 @@ import json
 from django.shortcuts import HttpResponse
 from status.decorators import rest_login_required
 from django.core import serializers
-from status.models import Category
+from status.models import Status, Comment, Provider, ContactMethod, Category, Subscription
 
 
 def _returnJSON(obj):
-    return HttpResponse(json.dumps(obj), content_type="application/json")
+    return HttpResponse(serializers.serialize("json", obj), content_type="application/json")
 
 
 def index(request):
@@ -15,29 +15,37 @@ def index(request):
 
 
 @rest_login_required
-def status(request, id = None):
+def status(request, staus_id = None):
 	if request.method == 'GET':
-		return _returnJSON(["status"])
+		if status_id:
+			return _returnJSON(Status.objects.filter(id = status_id))
+		return _returnJSON(Status.objects.all())
 
 
 @rest_login_required
-def comment(request, id = None):
+def comment(request, status_id = None):
 	if request.method == 'GET':
-		return _returnJSON(["comment"])
+		if status_id:
+			thisStatus = Status.objects.filter(id = status_id)
+			return _returnJSON(Comment.objects.filter(status = thisStatus))
 	elif request.method == 'POST':
 		pass
 
 
 @rest_login_required
-def provider(request, id = None):
+def provider(request, provider_id = None):
 	if request.method == 'GET':
-		return _returnJSON(["provider"])
+		if provider_id:
+			return _returnJSON(Provider.objects.filter(id = provider_id))
+		return _returnJSON(Provider.objects.all())
 
 
 @rest_login_required
 def contactMethod(request, user_id = None):
 	if request.method == 'GET':
-		return _returnJSON(["contactMethod"])
+		if user_id:
+			thisUser = user.objects.filter(id = user_id)
+			return _returnJSON(ContactMethod.objects.filter(user = thisUser))
 	elif request.method == 'POST':
 		pass
 	elif request.method == 'DELETE':
@@ -47,13 +55,15 @@ def contactMethod(request, user_id = None):
 @rest_login_required
 def category(request):
 	if request.method == 'GET':
-		return HttpResponse(serializers.serialize("json", Category.objects.all()), content_type="application/json")
+		return _returnJSON(Category.objects.all())
 
 
 @rest_login_required
-def subscriptions(request, user_id = None):
+def subscription(request, user_id = None):
 	if request.method == 'GET':
-		return _returnJSON(["subscriptions"])
+		if user_id:
+			thisUser = user.objects.filter(id = user_id)
+			return _returnJSON(Subscription.objects.filter(user = thisUser))
 	elif request.method == 'POST':
 		pass
 	elif request.method == 'DELETE':

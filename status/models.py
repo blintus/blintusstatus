@@ -77,7 +77,7 @@ class ContactMethod(models.Model):
 	user = models.ForeignKey(User)
 
 
-class Subscriptions(models.Model):
+class Subscription(models.Model):
 	"""Allows users to subscribe to categories"""
 
 	def __str__(self):
