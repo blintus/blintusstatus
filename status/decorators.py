@@ -1,4 +1,4 @@
-from django.shortcuts import HttpResponse
+from django.http import JsonResponse, HttpResponseForbidden
 
 def rest_login_required(func):
 	def wrapper(request, *args, **kwargs):
