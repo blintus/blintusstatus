@@ -65,8 +65,76 @@ define(['pageUtils', 'pages/home/view'], function (pageUtils, HomeView) {
                     comments: []
                 }
             ]
-        }).done(function (response) {
-            that.view.setPosts(response.posts);
+        },{
+            categories: [
+                {
+                    name: 'All',
+                    status: 2,
+                    children: [
+                        {
+                            name: 'Thor',
+                            status: 2,
+                            children: [
+                                {
+                                    name: 'Apache',
+                                    status: 1,
+                                    children: []
+                                },
+                                {
+                                    name: 'Teamspeak',
+                                    status: 1,
+                                    children: []
+                                },
+                                {
+                                    name: 'Mumble',
+                                    status: 1,
+                                    children: []
+                                },
+                                {
+                                    name: 'Shares',
+                                    status: 2,
+                                    children: [
+                                        {
+                                            name: 'Samba',
+                                            status: 1,
+                                            children: []
+                                        },
+                                        {
+                                            name: 'NFS',
+                                            status: 1,
+                                            children: []
+                                        },
+                                        {
+                                            name: 'AFP',
+                                            status: 1,
+                                            children: []
+                                        },
+                                        {
+                                            name: 'Public',
+                                            status: 1,
+                                            children: []
+                                        },
+                                        {
+                                            name: 'Media',
+                                            status: 3,
+                                            children: []
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'Ymir',
+                            status: 10,
+                            children: []
+                        }
+                    ]
+                }
+            ]
+        }).done(function (postResponse, categoryResponse) {
+            that.view.setPosts(postResponse.posts);
+            //that.view.setCategories(categoryResponse.categories);
+            console.log(categoryResponse.categories);
         });
     };
 
