@@ -17,7 +17,8 @@ var PAGE_ROUTES = [
         baseUrl: ASSET_ROOT + 'js/lib',
         paths: {
             hbs: 'require-handlebars-plugin/hbs',
-            pages: '../pages'
+            pages: '../pages',
+            shared: '../shared'
         }
     });
 
@@ -76,6 +77,15 @@ var PAGE_ROUTES = [
             var year = dateObj.getFullYear();
             var date = month + '/' + day + '/' + year;
             return 'on ' + date;
+        });
+    });
+
+    // black magic (ok not really) helper method for using recursive partials
+    define('templates/helpers/recursivePartial', ['hbs/handlebars'], function (Handlebars) {
+        Handlebars.registerHelper('recursivePartial', function (template, contextHash) {
+            var tpl = Handlebars.partials[template];
+            if (!tpl) return "";
+            return new Handlebars.SafeString(tpl(contextHash.hash));
         });
     });
 
