@@ -6,6 +6,30 @@
 define([], function () {
     'use strict';
 
+    // /**
+    //  * Helper method to tell if two objects are equal.
+    //  *
+    //  * @method _isEqual
+    //  * @private
+    //  * @param {Object} obj1
+    //  * @param {Object} obj2
+    //  * @return {Boolean} True if they are equal, false if they are not.
+    //  */
+    // var _isEqual = function (obj1, obj2) {
+    //     for (key in obj2) {
+    //         if (!obj1[key]) return false;
+    //     }
+    //     for (key in obj1) {
+    //         if (!obj2[key]) return false;
+    //         if (typeof obj1[key] === 'object') {
+    //             if (!_isEqual(obj1[key], obj2[key])) return false;
+    //         } else {
+    //             if (obj1[key] !== obj2[key]) return false;
+    //         }
+    //     }
+    //     return true;
+    // };
+
     /**
      * Represents a store of data.
      *
@@ -14,6 +38,7 @@ define([], function () {
      */
     var Store = function () {
         this._subscribable = $(this);
+        this._queryCache = {};
         this.data = {};
     };
 
@@ -195,32 +220,34 @@ define([], function () {
          * @param {Object} filterObject An object of key value pairs to match when searching
          * @return {Array} An array of matched objects
          */
-        query: function (type, filterObject) {},
+        query: function (type, filterObject) {
+            var resultSet = [];
+            var items = this.items(type);
+            for (key in items) {
+                var item = items[key];
+                for (field in filterObject) {
+                    if (item[field] && item[field] === filterObject[field]) {
+                        resultSet.append(item);
+                    }
+                }
+            }
+            return resultSet;
+        },
 
         utils: {
 
-            /**
-             * Store/retrieve data to/from the cache
-             *
-             * @method cache
-             * @param {String} type The store type to associate with the cache
-             * @param {String} key The cache key
-             * @param {Object} [object] The object to save. If omitted, returns the data stored
-                                        in the cache for that key, or null if no data is stored
-             * @return {Object} The data that was stored to/retrieved from the cache
-             */
-            cache: function (type, key, object) {},
-
-            /**
-             * Invalidate the cache for a certain type
-             *
-             * @method _invalidateCache
-             * @private
-             * @param {String} type The store type of the cache
-             * @param {String} [key] The key to invalidate. If omitted, invalidates entire cache
-                                     for the type
-             */
-            _invalidateCache: function (type, key) {},
+            // /**
+            //  * Store/retrieve data to/from the query cache
+            //  *
+            //  * @method _qeuryCache
+            //  * @private
+            //  * @param {String} type The store type to associate with the cache
+            //  * @param {String} key The cache key
+            //  * @param {Object} [object] The object to save. If omitted, returns the data stored
+            //                            in the cache for that key, or null if no data is stored
+            //  * @return {Object} The data that was stored to/retrieved from the cache
+            //  */
+            // _queryCache: function (type, key, object) {},
 
             /**
              * Trigger an event listener.
