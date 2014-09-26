@@ -8,7 +8,7 @@ define(['jquery',
     /**
      * Constructor for a home view
      *
-     * @class
+     * @class HomeView
      * @constructor
      * @param {Store} store The store for the app
      * @param {jQuery} $container A jQuery object for the root content container

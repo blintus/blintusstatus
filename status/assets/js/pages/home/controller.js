@@ -4,6 +4,14 @@ define(['pageUtils', 'pages/home/view',
 ], function (pageUtils, HomeView, postsMock, categoriesMock) {
     'use strict';
 
+    /**
+     * Constructor for a home controller
+     *
+     * @class HomeController
+     * @contructor
+     * @param {Store} store The store for the app
+     * @param {jQuery} $container A jQuery object for the root content container
+     */
     var HomeController = function (store, $container) {
         this.view = new HomeView(store, this, $container);
         this.store = store;
@@ -11,6 +19,11 @@ define(['pageUtils', 'pages/home/view',
         this.loadAllData();
     };
 
+    /**
+     * Load all data from the server
+     *
+     * @method loadAllData
+     */
     HomeController.prototype.loadAllData = function () {
         var that = this;
 
@@ -63,9 +76,16 @@ define(['pageUtils', 'pages/home/view',
         return nestedIds;
     };
 
+    /**
+     * Fetch the posts that belong to a category, as well as all posts belonging to child categories
+     *
+     * @method getPostsForCategory
+     * @param {int} categoryId The categoryId of the root category
+     * @return {Array} An array of the posts available that belong to the category and its children
+     */
     HomeController.prototype.getPostsForCategory = function (categoryId) {
         var categories = this.store.itemsRaw('categoriesWithChildren');
-        // If a categoryId is specified, search for all posts with in that category or it's children
+        // If a categoryId is specified, search for all posts with in that category or its children
         if (categoryId) {
             var categoryIds = this._getChildrenCategoryIds([categories[categoryId]]);
             return $.extend(true, [], this.store.query('posts', function (post) {
