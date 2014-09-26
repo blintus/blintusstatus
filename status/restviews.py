@@ -15,7 +15,7 @@ def index(request):
 
 
 @rest_login_required
-def status(request, staus_id = None):
+def status(request, status_id = None):
 	if request.method == 'GET':
 		if status_id:
 			return _returnJSON(Status.objects.filter(id = status_id))
