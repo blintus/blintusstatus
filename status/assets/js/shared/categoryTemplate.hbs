@@ -1,9 +1,0 @@
-{{#each categories}}
-    <li><a href="#">{{statusIcon status small=true}} {{name}}</a>
-        {{#if children}}
-            <ul>
-                {{recursivePartial "shared/categoryTemplate" categories=children}}
-            </ul>
-        {{/if}}
-    </li>
-{{/each}}

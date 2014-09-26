@@ -1,152 +1,78 @@
-define(['pageUtils', 'pages/home/view'], function (pageUtils, HomeView) {
+define(['pageUtils', 'pages/home/view',
+    'pages/home/mocks/postsMock',
+    'pages/home/mocks/categoriesMock',
+], function (pageUtils, HomeView, postsMock, categoriesMock) {
     'use strict';
 
-    var HomeController = function () {
-        this.view = null;
-    };
-
-    HomeController.prototype.start = function ($container) {
+    var HomeController = function (store, $container) {
+        this.view = new HomeView(store, this, $container);
+        this.store = store;
         pageUtils.setTitle("Home");
-        this.view = new HomeView($container);
         this.loadAllData();
     };
 
     HomeController.prototype.loadAllData = function () {
         var that = this;
 
-        $.when({
-            posts: [
-                {
-                    created: '2014-09-21',
-                    updated: '',
-                    message: 'This is about Teamspeak being ok.',
-                    user: {
-                        username: 'dave'
-                    },
-                    status: 1,
-                    category: {
-                        id: 1,
-                        name: 'Teamspeak',
-                        parent: null
-                    },
-                    title: 'Teamspeak ok',
-                    comments: []
-                },
-                {
-                    created: '2014-09-20',
-                    updated: '',
-                    message: 'This is about the media share being broken.',
-                    user: {
-                        username: 'dave'
-                    },
-                    status: 3,
-                    category: {
-                        id: 1,
-                        name: 'Media',
-                        parent: null
-                    },
-                    title: 'Media down',
-                    comments: []
-                },
-                {
-                    created: '2014-09-19',
-                    updated: '',
-                    message: 'This is about the shares only kind of working.',
-                    user: {
-                        username: 'dave'
-                    },
-                    status: 2,
-                    category: {
-                        id: 2,
-                        name: 'Shares',
-                        parent: null
-                    },
-                    title: 'Shares sort of ok',
-                    comments: []
+        $.when(postsMock, categoriesMock).done(function (postResponse, categoryResponse) {
+            that.store.addAll('posts', postResponse.posts);
+            that.store.addAll('categories', categoryResponse.categories);
+
+            // Created an object with child categories added to a children array
+            var rawCategories = $.extend(true, {}, that.store.itemsRaw('categories'));
+            for (var key in rawCategories) {
+                var category = rawCategories[key];
+                if (category.parent) {
+                    var parent = rawCategories[category.parent];
+                    if (!parent.children) parent.children = [];
+                    parent.children.push(category);
                 }
-            ]
-        },{
-            categories: [
-                {
-                    id: 1,
-                    name: 'All',
-                    status: 2,
-                    children: [
-                        {
-                            id: 2,
-                            name: 'Thor',
-                            status: 2,
-                            children: [
-                                {
-                                    id: 3,
-                                    name: 'Apache',
-                                    status: 1,
-                                    children: []
-                                },
-                                {
-                                    id: 4,
-                                    name: 'Teamspeak',
-                                    status: 1,
-                                    children: []
-                                },
-                                {
-                                    id: 5,
-                                    name: 'Mumble',
-                                    status: 1,
-                                    children: []
-                                },
-                                {
-                                    id: 6,
-                                    name: 'Shares',
-                                    status: 2,
-                                    children: [
-                                        {
-                                            id: 7,
-                                            name: 'Samba',
-                                            status: 1,
-                                            children: []
-                                        },
-                                        {
-                                            id: 8,
-                                            name: 'NFS',
-                                            status: 1,
-                                            children: []
-                                        },
-                                        {
-                                            id: 9,
-                                            name: 'AFP',
-                                            status: 1,
-                                            children: []
-                                        },
-                                        {
-                                            id: 10,
-                                            name: 'Public',
-                                            status: 1,
-                                            children: []
-                                        },
-                                        {
-                                            id: 11,
-                                            name: 'Media',
-                                            status: 3,
-                                            children: []
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            id: 12,
-                            name: 'Ymir',
-                            status: 10,
-                            children: []
-                        }
-                    ]
+            }
+
+            var categoriesWithChildren = [];
+            var nestedCategories = [];
+            for (var key in rawCategories) {
+                categoriesWithChildren.push(rawCategories[key]);
+                if (!rawCategories[key].parent) {
+                    nestedCategories.push(rawCategories[key]);
                 }
-            ]
-        }).done(function (postResponse, categoryResponse) {
-            that.view.setPosts(postResponse.posts);
-            that.view.setCategories(categoryResponse.categories);
+            }
+            that.store.addAll('categoriesWithChildren', categoriesWithChildren);
+            that.store.addAll('nestedCategories', nestedCategories);
+
+            that.view.init();
         });
+    };
+
+    /**
+     * Helper method to get the ids of all nested categories
+     *
+     * @method _getChildrenCategoryIds
+     * @private
+     * @param {Array} children An array of children to search
+     */
+    HomeController.prototype._getChildrenCategoryIds = function (children) {
+        var that = this,
+            nestedIds = [];
+        children.forEach(function (child) {
+            nestedIds.push(child.pk);
+            if (child.children) {
+                Array.prototype.push.apply(nestedIds, that._getChildrenCategoryIds(child.children));
+            }
+        });
+        return nestedIds;
+    };
+
+    HomeController.prototype.getPostsForCategory = function (categoryId) {
+        var categories = this.store.itemsRaw('categoriesWithChildren');
+        // If a categoryId is specified, search for all posts with in that category or it's children
+        if (categoryId) {
+            var categoryIds = this._getChildrenCategoryIds([categories[categoryId]]);
+            return $.extend(true, [], this.store.query('posts', function (post) {
+                return categoryIds.indexOf(post.category) !== -1;
+            }));
+        }
+        return $.extend(true, [], this.store.items('posts'));
     };
 
     return HomeController;

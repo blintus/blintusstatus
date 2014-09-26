@@ -105,14 +105,15 @@ var PAGE_ROUTES = [
      ** Page loading methods **
      **************************/
 
-    var contentElement = $('#content');
+    var $contentElement = $('#content');
     var pageController;
+    var store = null;
 
     var unloadPage = function () {
         if (pageController && pageController.destroy) {
             pageController.destroy();
         }
-        contentElement.empty();
+        $contentElement.empty();
     };
 
     var loadPage = function () {
@@ -126,13 +127,12 @@ var PAGE_ROUTES = [
                 pathArgs = results.slice(1).filter(function (item) {
                     return item !== '';
                 });
-                require([path], function (Controller) {
-                    pageController = new Controller();
-                    if (pageController.start) {
-                        pageController.start(contentElement);
-                    } else {
-                        throw new Error("Please define a start method in your controller.");
+                require(['shared/store', path], function (Store, Controller) {
+                    if (store == null) {
+                        store = new Store();
+                        window.store = store;
                     }
+                    pageController = new Controller(store, $contentElement);
                 });
             }
         });
@@ -147,7 +147,7 @@ var PAGE_ROUTES = [
     $(document).on('click', 'a:not([rel="new-page"])', function (event) {
         event.preventDefault();
         var href = event.target.href;
-        if (window.location.href !== href) {
+        if (href && href !== window.location.href) {
             window.history.pushState(null, '', href);
             changePage();
         }

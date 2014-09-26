@@ -1,8 +1,3 @@
-/**
- * Defines a data store
- *
- * @module store
- */
 define([], function () {
     'use strict';
 
@@ -16,7 +11,7 @@ define([], function () {
      * @return {Boolean}
      */
     var _contains = function (object, containedObject) {
-        for (key in containedObject) {
+        for (var key in containedObject) {
             if (!object[key]) return false;
             if (typeof containedObject[key] === 'object') {
                 if (!_contains(object[key], containedObject[key])) return false;
@@ -35,8 +30,7 @@ define([], function () {
      */
     var Store = function () {
         this._subscribable = $(this);
-        this._queryCache = {};
-        this.data = {};
+        this._data = {};
     };
 
     Store.prototype = {
@@ -73,12 +67,11 @@ define([], function () {
          * @return {Store} Itself, for chaining
          */
         add: function (type, object) {
-            if (!this.data[type]) {
-                this.data[type] = {};
+            if (!this._data[type]) {
+                this._data[type] = {};
             }
-            this.data[type][object.pk] = object;
-            this.invalidateCache(type);
-            this.utils._trigger('added', [type, [object]]);
+            this._data[type][object.pk] = object;
+            this._trigger('added', [type, [object]]);
             return this;
         },
 
@@ -95,8 +88,7 @@ define([], function () {
             objectArray.forEach(function (object) {
                 that.add(type, object);
             });
-            this.invalidateCache(type);
-            this.utils._trigger('added', [type, objectArray]);
+            this._trigger('added', [type, objectArray]);
             return this;
         },
 
@@ -109,7 +101,7 @@ define([], function () {
          * @return {Object} The found item, or null if no item is found
          */
         item: function (type, pk) {
-            return this.data[type] && this.data[type][pk] || null;
+            return this._data[type] && this._data[type][pk] || null;
         },
 
         /**
@@ -120,12 +112,36 @@ define([], function () {
          * @return {Array} An array of all objects of the given type
          */
         items: function (type) {
-            if (!this.data[type]) return null;
+            if (!this._data[type]) return null;
             var resultSet = [];
-            for (key in this.data[type]) {
-                resultSet.append(this.data[type][key]);
+            for (var key in this._data[type]) {
+                resultSet.push(this._data[type][key]);
             }
             return resultSet;
+        },
+
+        /**
+         * Get all items of the given type in object format.
+         *
+         * For Example:
+         * {
+         *     1: {
+         *         pk: 1,
+         *         field1: 'value'
+         *     },
+         *     7: {
+         *         pk: 7,
+         *         field1: 'value2'
+         *     }
+         * }
+         *
+         * @method itemsRaw
+         * @param {String} type The type to get items for
+         * @return {Object} An object containing all objects in the store of that type,
+         *                  in the above specified format
+         */
+        itemsRaw: function (type) {
+            return this._data[type] || null;
         },
 
         /**
@@ -138,8 +154,8 @@ define([], function () {
          * @return {Store} Itself, for chaining
          */
         update: function (type, pk, updateObject) {
-            if (this.data[type] && this.data[type][pk]) {
-                var object = this.data[type][pk];
+            if (this._data[type] && this._data[type][pk]) {
+                var object = this._data[type][pk];
                 var changed = false;
                 for (var field in updateObject) {
                     if (object[field] && object[field] !== updateObject[field]) {
@@ -147,9 +163,10 @@ define([], function () {
                         changed = true;
                     }
                 }
-                if (changed) this.invalidateCache(type);
             }
-            this.utils._trigger('updated', [type, updateObject]);
+            if (changed) {
+                this._trigger('updated', [type, updateObject]);
+            }
             return this;
         },
 
@@ -163,11 +180,11 @@ define([], function () {
          */
         remove: function (type, pk) {
             var delObj = null;
-            if (this.data[type] && this.data[type][pk]) {
-                delObj = this.data[type][pk];
-                delete this.data[type][pk];
+            if (this._data[type] && this._data[type][pk]) {
+                delObj = this._data[type][pk];
+                delete this._data[type][pk];
             }
-            this.utils._trigger('removed', [type, [delObj]]);
+            this._trigger('removed', [type, [delObj]]);
             return this;
         },
 
@@ -180,13 +197,13 @@ define([], function () {
          */
         removeAll: function (type) {
             var removedObjects = [];
-            if (this.data[type]) {
-                for (pk in this.data[type]) {
-                    removedObjects.push(this.data[type][pk]);
-                    delete this.data[type][pk];
+            if (this._data[type]) {
+                for (var pk in this._data[type]) {
+                    removedObjects.push(this._data[type][pk]);
+                    delete this._data[type][pk];
                 }
             }
-            this.utils._trigger('removed', [type, removedObjects]);
+            this._trigger('removed', [type, removedObjects]);
             return this;
         },
 
@@ -226,32 +243,28 @@ define([], function () {
         query: function (type, queryParam) {
             var resultSet = [];
             var items = this.items(type);
-            for (key in items) {
+            for (var key in items) {
                 var item = items[key];
                 if (typeof queryParam === 'function') {
-                    if (queryParam(item)) resultSet.append(item);
+                    if (queryParam(item)) resultSet.push(item);
                 } else {
-                    if (_contains(item, queryParam)) resultSet.append(item);
+                    if (_contains(item, queryParam)) resultSet.push(item);
                 }
             }
             return resultSet;
         },
 
-        utils: {
-
-            /**
-             * Trigger an event listener.
-             *
-             * @method _trigger
-             * @private
-             * @param {String} eventName The event to trigger
-             * @param {Array} extraArguments An array of arguments to pass to the handler
-             * @return {Object} The return value of the last handler executed
-             */
-            _trigger: function (eventName, extraArguments) {
-                return this._subscribable.triggerHandler(eventName, extraArguments);
-            }
-
+        /**
+         * Trigger an event listener.
+         *
+         * @method _trigger
+         * @private
+         * @param {String} eventName The event to trigger
+         * @param {Array} extraArguments An array of arguments to pass to the handler
+         * @return {Object} The return value of the last handler executed
+         */
+        _trigger: function (eventName, extraArguments) {
+            return this._subscribable.triggerHandler(eventName, extraArguments);
         }
 
     };

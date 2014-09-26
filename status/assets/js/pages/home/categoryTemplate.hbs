@@ -1,0 +1,9 @@
+{{#each categories}}
+    <li><a class="category-link" data-categoryid="{{pk}}">{{statusIcon status small=true}} {{name}}</a>
+        {{#if children}}
+            <ul>
+                {{recursivePartial "pages/home/categoryTemplate" categories=children}}
+            </ul>
+        {{/if}}
+    </li>
+{{/each}}
