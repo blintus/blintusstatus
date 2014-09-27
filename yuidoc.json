@@ -1,0 +1,8 @@
+{
+    "name": "The Blintus Status API",
+    "description": "Shows the status of servers in the blint.us network",
+    "version": "1.0.0",
+    "options": {
+        "outdir": "yuidoc"
+    }
+}

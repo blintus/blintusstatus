@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>status/assets/js/pages/home/view.js - The Blintus Status API</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="The Blintus Status API"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/HomeController.html">HomeController</a></li>
+            
+                <li><a href="../classes/HomeView.html">HomeView</a></li>
+            
+                <li><a href="../classes/Store.html">Store</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: status/assets/js/pages/home/view.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+define([&#x27;jquery&#x27;,
+    &#x27;hbs!pages/home/markup&#x27;,
+    &#x27;hbs!pages/home/statusPostMarkup&#x27;,
+    &#x27;hbs!pages/home/categoryTemplate&#x27;
+], function ($, pageMarkup, postMarkup, categoryMarkup) {
+    &#x27;use strict&#x27;;
+
+    /**
+     * Constructor for a home view
+     *
+     * @class HomeView
+     * @constructor
+     * @param {Store} store The store for the app
+     * @param {jQuery} $container A jQuery object for the root content container
+     */
+    var HomeView = function (store, controller, $container) {
+        this.store = store;
+        this.controller = controller;
+        $container.append(pageMarkup());
+        this.$postContainer = $container.find(&quot;#status-posts&quot;);
+        this.$categoriesList = $container.find(&quot;#categories-list&quot;);
+        this.categoryLinks = null;
+    };
+
+    /**
+     * Initializes the view with data
+     *
+     * @method init
+     */
+    HomeView.prototype.init = function () {
+        var that = this,
+            categories = this.store.items(&#x27;nestedCategories&#x27;);
+
+        this.$categoriesList.empty().append(categoryMarkup({
+            categories: categories
+        }));
+        this.categoryLinks = $(&#x27;.category-link&#x27;);
+
+        var selectedCategoryId = localStorage[&#x27;selectedCategoryId&#x27;];
+        if (!this.store.item(&#x27;categories&#x27;, selectedCategoryId)) {
+            selectedCategoryId = categories[0].pk;
+        }
+        this._selectCategory(selectedCategoryId);
+
+        this._initEventListeners();
+    };
+
+    /**
+     * Initializes the event listeners for the view
+     *
+     * @method _initEventListeners
+     * @private
+     */
+    HomeView.prototype._initEventListeners = function () {
+        var that = this;
+
+        // Bind category link listeners
+        this.categoryLinks.on(&#x27;click&#x27;, function (event) {
+            var $target = $(event.target);
+            var categoryId = $target.data(&#x27;categoryid&#x27;);
+            that._selectCategory(categoryId, $target);
+        });
+
+        // Bind post inline category link listeners
+        this.$postContainer.on(&#x27;click&#x27;, &#x27;.inline-category-link&#x27;, function (event) {
+            var categoryId = $(event.target).data(&#x27;categoryid&#x27;);
+            that._selectCategory(categoryId);
+        });
+
+    };
+
+    /**
+     * Select a category and display the related posts
+     *
+     * @method _selectCategory
+     * @private
+     * @param {int} categoryId The id of the category to select
+     * @param {jQuery} $targetCategoryLink An optional parameter that specifies the category
+                                           link that was clicked. If omitted, finds the link based
+                                           on the categoryId
+     */
+    HomeView.prototype._selectCategory = function (categoryId, $targetCategoryLink) {
+        var that = this,
+            posts;
+
+        localStorage[&#x27;selectedCategoryId&#x27;] = categoryId;
+
+        // Update link css classes
+        this.categoryLinks.removeClass(&#x27;active&#x27;);
+        if ($targetCategoryLink) {
+            $targetCategoryLink.addClass(&#x27;active&#x27;);
+        } else {
+            $(&#x27;.category-link[data-categoryid=&quot;&#x27; + categoryId + &#x27;&quot;]&#x27;).addClass(&#x27;active&#x27;);
+        }
+
+        posts = this.controller.getPostsForCategory(categoryId);
+
+        // Add categories to post, and render them
+        posts.forEach(function (post) {
+            post.category = that.store.item(&#x27;categories&#x27;, post.category);
+        });
+        this.$postContainer.empty().append(postMarkup({
+            posts: posts
+        }));
+
+    };
+
+    return HomeView;
+
+});
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

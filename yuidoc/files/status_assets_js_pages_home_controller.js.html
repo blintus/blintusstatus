@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>status/assets/js/pages/home/controller.js - The Blintus Status API</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="The Blintus Status API"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/HomeController.html">HomeController</a></li>
+            
+                <li><a href="../classes/HomeView.html">HomeView</a></li>
+            
+                <li><a href="../classes/Store.html">Store</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: status/assets/js/pages/home/controller.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+define([&#x27;pageUtils&#x27;, &#x27;pages/home/view&#x27;,
+    &#x27;pages/home/mocks/postsMock&#x27;,
+    &#x27;pages/home/mocks/categoriesMock&#x27;,
+], function (pageUtils, HomeView, postsMock, categoriesMock) {
+    &#x27;use strict&#x27;;
+
+    /**
+     * Constructor for a home controller
+     *
+     * @class HomeController
+     * @contructor
+     * @param {Store} store The store for the app
+     * @param {jQuery} $container A jQuery object for the root content container
+     */
+    var HomeController = function (store, $container) {
+        this.view = new HomeView(store, this, $container);
+        this.store = store;
+        pageUtils.setTitle(&quot;Home&quot;);
+        this.loadAllData();
+    };
+
+    /**
+     * Load all data from the server
+     *
+     * @method loadAllData
+     */
+    HomeController.prototype.loadAllData = function () {
+        var that = this;
+
+        $.when(postsMock, categoriesMock).done(function (postResponse, categoryResponse) {
+            that.store.addAll(&#x27;posts&#x27;, postResponse.posts);
+            that.store.addAll(&#x27;categories&#x27;, categoryResponse.categories);
+
+            // Created an object with child categories added to a children array
+            var rawCategories = $.extend(true, {}, that.store.itemsRaw(&#x27;categories&#x27;));
+            for (var key in rawCategories) {
+                var category = rawCategories[key];
+                if (category.parent) {
+                    var parent = rawCategories[category.parent];
+                    if (!parent.children) parent.children = [];
+                    parent.children.push(category);
+                }
+            }
+
+            var categoriesWithChildren = [];
+            var nestedCategories = [];
+            for (var key in rawCategories) {
+                categoriesWithChildren.push(rawCategories[key]);
+                if (!rawCategories[key].parent) {
+                    nestedCategories.push(rawCategories[key]);
+                }
+            }
+            that.store.addAll(&#x27;categoriesWithChildren&#x27;, categoriesWithChildren);
+            that.store.addAll(&#x27;nestedCategories&#x27;, nestedCategories);
+
+            that.view.init();
+        });
+    };
+
+    /**
+     * Helper method to get the ids of all nested categories
+     *
+     * @method _getChildrenCategoryIds
+     * @private
+     * @param {Array} children An array of children to search
+     */
+    HomeController.prototype._getChildrenCategoryIds = function (children) {
+        var that = this,
+            nestedIds = [];
+        children.forEach(function (child) {
+            nestedIds.push(child.pk);
+            if (child.children) {
+                Array.prototype.push.apply(nestedIds, that._getChildrenCategoryIds(child.children));
+            }
+        });
+        return nestedIds;
+    };
+
+    /**
+     * Fetch the posts that belong to a category, as well as all posts belonging to child categories
+     *
+     * @method getPostsForCategory
+     * @param {int} categoryId The categoryId of the root category
+     * @return {Array} An array of the posts available that belong to the category and its children
+     */
+    HomeController.prototype.getPostsForCategory = function (categoryId) {
+        var categories = this.store.itemsRaw(&#x27;categoriesWithChildren&#x27;);
+        // If a categoryId is specified, search for all posts with in that category or its children
+        if (categoryId) {
+            var categoryIds = this._getChildrenCategoryIds([categories[categoryId]]);
+            return $.extend(true, [], this.store.query(&#x27;posts&#x27;, function (post) {
+                return categoryIds.indexOf(post.category) !== -1;
+            }));
+        }
+        return $.extend(true, [], this.store.items(&#x27;posts&#x27;));
+    };
+
+    return HomeController;
+
+});
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
