@@ -9,9 +9,7 @@ define([], function () {
                 created: '2014-09-21',
                 updated: '',
                 message: 'This is about Teamspeak being ok.',
-                user: {
-                    username: 'dave'
-                },
+                user: 'dave',
                 status: 1,
                 category: 4,
                 title: 'Teamspeak ok'
@@ -21,9 +19,7 @@ define([], function () {
                 created: '2014-09-20',
                 updated: '',
                 message: 'This is about the media share being broken.',
-                user: {
-                    username: 'dave'
-                },
+                user: 'dave',
                 status: 3,
                 category: 11,
                 title: 'Media down'
@@ -33,9 +29,7 @@ define([], function () {
                 created: '2014-09-19',
                 updated: '',
                 message: 'This is about the shares only kind of working.',
-                user: {
-                    username: 'dave'
-                },
+                user: 'dave',
                 status: 2,
                 category: 6,
                 title: 'Shares sort of ok'

@@ -2,7 +2,7 @@
 {{#each posts}}
     <div class="status-post">
         <h3 class="status-post-title">{{statusIcon status}}{{title}}</h3>
-        <p class="status-post-info">Posted by {{user.username}} {{formatPostDate created}} | <a class="inline-category-link" data-categoryid="{{category.pk}}">{{category.name}}</a></p>
+        <p class="status-post-info">Posted by {{user}} {{formatPostDate created}} | <a class="inline-category-link" data-categoryid="{{category.pk}}">{{category.name}}</a></p>
         <p>{{message}}</p>
     </div>
     <hr>

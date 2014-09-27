@@ -163,9 +163,9 @@ define([], function () {
                         changed = true;
                     }
                 }
-            }
-            if (changed) {
-                this._trigger('updated', [type, updateObject]);
+                if (changed) {
+                    this._trigger('updated', [type, updateObject]);
+                }
             }
             return this;
         },
