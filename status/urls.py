@@ -6,12 +6,12 @@ from django.views.generic import TemplateView
 urlpatterns = patterns('status',
 
     # rest urls
-    url(r'^rest/status', 'restviews.status', name='status'),
-    url(r'^rest/comment', 'restviews.comment', name='comment'),
-    url(r'^rest/provider', 'restviews.provider', name='provider'),
-    url(r'^rest/contactMethod', 'restviews.contactMethod', name='contactMethod'),
+    url(r'^rest/status(/(?P<status_id>\d+))?', 'restviews.status', name='status'),
+    url(r'^rest/comment(/(?P<status_id>\d+))?', 'restviews.comment', name='comment'),
+    url(r'^rest/provider(/(?P<provider_id>\d+))?', 'restviews.provider', name='provider'),
+    url(r'^rest/contactMethod/(?P<user_id>\d+)', 'restviews.contactMethod', name='contactMethod'),
     url(r'^rest/category', 'restviews.category', name='category'),
-    url(r'^rest/subscription', 'restviews.subscription', name='subscription'),
+    url(r'^rest/subscription/(?P<user_id>\d+)', 'restviews.subscription', name='subscription'),
     url(r'^rest', 'restviews.index', name='rest'),
 
 

@@ -1,6 +1,6 @@
 import json
 
-from django.shortcuts import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from status.decorators import rest_login_required
 from django.core import serializers
 from status.models import Status, Comment, Provider, ContactMethod, Category, Subscription
@@ -20,6 +20,8 @@ def status(request, status_id = None):
 		if status_id:
 			return _returnJSON(Status.objects.filter(id = status_id))
 		return _returnJSON(Status.objects.all())
+	
+	return HttpResponseNotAllowed({'message':'method provided is not supported'})
 
 
 @rest_login_required
@@ -28,8 +30,20 @@ def comment(request, status_id = None):
 		if status_id:
 			thisStatus = Status.objects.filter(id = status_id)
 			return _returnJSON(Comment.objects.filter(status = thisStatus))
+		return _returnJSON(Comment.objects.all())
+	
 	elif request.method == 'POST':
-		pass
+		status = request.POST['status']
+		message = request.POST['message']
+		user = request.POST['user']
+		if status and message and user:
+			comment = Comment(status = status, message = message, user = user)
+			comment.save()
+			return _returnJSON(comment)
+		else:
+			return HttpResponseBadRequest({'message':'Please supply the associated status, a message, and the user posting'})
+	
+	return HttpResponseNotAllowed({'message':'method provided is not supported'})
 
 
 @rest_login_required
@@ -38,6 +52,8 @@ def provider(request, provider_id = None):
 		if provider_id:
 			return _returnJSON(Provider.objects.filter(id = provider_id))
 		return _returnJSON(Provider.objects.all())
+	
+	return HttpResponseNotAllowed({'message':'method provided is not supported'})
 
 
 @rest_login_required
@@ -46,16 +62,34 @@ def contactMethod(request, user_id = None):
 		if user_id:
 			thisUser = user.objects.filter(id = user_id)
 			return _returnJSON(ContactMethod.objects.filter(user = thisUser))
-	elif request.method == 'POST':
-		pass
+		else:
+			return HttpResponseBadRequest({'message':'Please provide a user'})
+		
+	email = request.POST['email']
+	phoneNumber = request.POST['phoneNumber']
+	provider = request.POST['provider']
+	user = request.POST['user']
+	
+	if not (user and email or (phoneNumber and provider)):
+		return HttpResponseBadRequest({'message':'Please supply either an email or phone number with provider'})
+	
+	if request.method == 'POST':
+		contactMethod = ContactMethod(email = email, phoneNumber = phoneNumber, provider = provider, user = user)
+		contactMethod.save()
+		return _returnJSON(contactMethod)
+		
 	elif request.method == 'DELETE':
-		pass
+		ContactMethod.objects.filter(email = email, phoneNumber = phoneNumber, provider = provider, user = user).delete()
+		return HttpResponse({'message':'Contact methods successfully deleted'})
+	
+	return HttpResponseNotAllowed({'message':'method provided is not supported'})
 
 
 @rest_login_required
 def category(request):
 	if request.method == 'GET':
 		return _returnJSON(Category.objects.all())
+	return HttpResponseNotAllowed({'message':'method provided is not supported'})
 
 
 @rest_login_required
@@ -64,7 +98,22 @@ def subscription(request, user_id = None):
 		if user_id:
 			thisUser = user.objects.filter(id = user_id)
 			return _returnJSON(Subscription.objects.filter(user = thisUser))
-	elif request.method == 'POST':
-		pass
+		return HttpResponseBadRequest({'message':'Please supply the user id'})
+
+	category = request.POST['category']
+	user = request.POST['user']
+	contactMethod = request.POST['contactMethod']
+	
+	if not (category and user and contactMethod):
+		return HttpResponseBadRequest({'message':'Please supply a category, user, and contact method'})
+	
+	if request.method == 'POST':	
+			subscription = Subscription(category = category, user = user, contactMethod = contactMethod)
+			subscription.save()
+			return _returnJSON(subscription)
+
 	elif request.method == 'DELETE':
-		return _returnJSON(["ZOMG THIS JUST GOT DELETED"])
+		Subscription.objects.filter(category = category, user = user, contactMethod = contactMethod).delete()
+		return HttpResponse({'message':'Subscription successfully deleted'})
+	
+	return HttpResponseNotAllowed({'message':'method provided is not supported'})
