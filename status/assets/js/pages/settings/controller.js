@@ -1,13 +1,12 @@
 define(['pageUtils', 'pages/settings/view'], function (pageUtils, SettingsView) {
     'use strict';
 
-    var SettingsController = function () {
-        this.view = null;
-    }
 
-    SettingsController.prototype.start = function ($container) {
+    var SettingsController = function (store, $container) {
+        this.view = new SettingsView(store, this, $container);
+        this.store = store;
         pageUtils.setTitle("Settings");
-        this.view = new SettingsView($container);
+        //this.loadAllData();
     };
 
     return SettingsController;
