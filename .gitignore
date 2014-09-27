@@ -10,6 +10,7 @@ __pycache__
 
 # Test database
 db.sqlite3
+sqlite.db
 
 # Collected static assets
 /assets
