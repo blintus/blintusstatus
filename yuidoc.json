@@ -3,6 +3,9 @@
     "description": "Shows the status of servers in the blint.us network",
     "version": "1.0.0",
     "options": {
-        "outdir": "yuidoc"
+        "linkNatives": "true",
+        "outdir": "yuidoc",
+        "paths": "status/assets/js/*",
+        "exclude": "status/assets/js/lib"
     }
 }
