@@ -6,12 +6,12 @@ from django.views.generic import TemplateView
 urlpatterns = patterns('status',
 
     # rest urls
-    url(r'^rest/status(/(?P<status_id>\d+))?', 'restviews.status', name='status'),
-    url(r'^rest/comment(/(?P<status_id>\d+))?', 'restviews.comment', name='comment'),
-    url(r'^rest/provider(/(?P<provider_id>\d+))?', 'restviews.provider', name='provider'),
-    url(r'^rest/contactMethod/(?P<user_id>\d+)', 'restviews.contactMethod', name='contactMethod'),
-    url(r'^rest/category', 'restviews.category', name='category'),
-    url(r'^rest/subscription/(?P<user_id>\d+)', 'restviews.subscription', name='subscription'),
+    url(r'^rest/posts(/(?P<post_id>\d+))?', 'restviews.post', name='post'),
+    url(r'^rest/comments(/(?P<status_id>\d+))?', 'restviews.comment', name='comment'),
+    url(r'^rest/providers(/(?P<provider_id>\d+))?', 'restviews.provider', name='provider'),
+    url(r'^rest/contactMethods/(?P<user_id>\d+)', 'restviews.contactMethod', name='contactMethod'),
+    url(r'^rest/categories', 'restviews.category', name='category'),
+    url(r'^rest/subscriptions/(?P<user_id>\d+)', 'restviews.subscription', name='subscription'),
     url(r'^rest', 'restviews.index', name='rest'),
 
 

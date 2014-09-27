@@ -16,38 +16,35 @@ class Category(models.Model):
 
 	name = models.CharField(max_length=20)
 	parent = models.ForeignKey("Category", null = True, blank = True)
+	status = models.PositiveIntegerField()
 
 
 class Post(models.Model):
-	"""Generic post object used by Status and Comment"""
-	
-	class Meta:
-		abstract = True
+	"""Stores status posts"""
 
 	def __str__(self):
 		return str(self.created) + " :: " + str(self.user) + " :: " + self.message
 
+	title = models.CharField(max_length=255)
+	status = models.PositiveIntegerField()
+	category = models.ForeignKey(Category)
 	created = models.DateField(auto_now = False, auto_now_add = True)
 	updated = models.DateField(auto_now = True)
 	message = models.TextField()
 	user = models.ForeignKey(User)
 
 
-class Status(Post):
-	"""Stores status posts"""
-
-	class Meta:
-		verbose_name_plural = "Statuses"
-
-	title = models.CharField(max_length=255)
-	status = models.PositiveIntegerField()
-	category = models.ForeignKey(Category)
-
-
-class Comment(Post):
+class Comment(models.Model):
 	"""Stores comment posts"""
 
-	status = models.ForeignKey(Status)
+	def __str__(self):
+		return str(self.created) + " :: " + str(self.user) + " :: " + self.message
+
+	post = models.ForeignKey(Post)
+	created = models.DateField(auto_now = False, auto_now_add = True)
+	updated = models.DateField(auto_now = True)
+	message = models.TextField()
+	user = models.ForeignKey(User)
 
 
 class Provider(models.Model):

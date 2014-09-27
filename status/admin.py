@@ -9,6 +9,6 @@ admin.site.register(Provider)
 admin.site.register(ContactMethod)
 
 class StatusAdmin(admin.ModelAdmin):
-    fields = ('title', 'category', 'status', 'user', 'message')
+    fields = ('title', 'category', 'post', 'user', 'message')
 
-admin.site.register(Status, StatusAdmin)
+admin.site.register(Post, StatusAdmin)

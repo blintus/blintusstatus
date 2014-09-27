@@ -2,12 +2,13 @@ import json
 
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from status.decorators import rest_login_required
-from django.core import serializers
-from status.models import Status, Comment, Provider, ContactMethod, Category, Subscription
+from status.JSONSerializer import JSONSerializer
+from status.models import Post, Comment, Provider, ContactMethod, Category, Subscription
 
 
 def _returnJSON(obj):
-    return HttpResponse(serializers.serialize("json", obj), content_type="application/json")
+    s = JSONSerializer()
+    return HttpResponse(s.serialize(obj), content_type="application/json")
 
 
 def index(request):
@@ -15,21 +16,21 @@ def index(request):
 
 
 @rest_login_required
-def status(request, status_id = None):
+def post(request, post_id = None):
 	if request.method == 'GET':
-		if status_id:
-			return _returnJSON(Status.objects.filter(id = status_id))
-		return _returnJSON(Status.objects.all())
+		if post_id:
+			return _returnJSON(Post.objects.filter(id = post_id))
+		return _returnJSON(Post.objects.all())
 	
 	return HttpResponseNotAllowed({'message':'method provided is not supported'})
 
 
 @rest_login_required
-def comment(request, status_id = None):
+def comment(request, post_id = None):
 	if request.method == 'GET':
-		if status_id:
-			thisStatus = Status.objects.filter(id = status_id)
-			return _returnJSON(Comment.objects.filter(status = thisStatus))
+		if post_id:
+			thisPost = Post.objects.filter(id = post_id)
+			return _returnJSON(Comment.objects.filter(status = thisPost))
 		return _returnJSON(Comment.objects.all())
 	
 	elif request.method == 'POST':
