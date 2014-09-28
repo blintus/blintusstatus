@@ -1,4 +1,7 @@
-define(['pageUtils', 'pages/settings/view'], function (pageUtils, SettingsView) {
+define(['pageUtils', 
+		'pages/settings/view'
+	], function (pageUtils, SettingsView) {
+    
     'use strict';
 
 
