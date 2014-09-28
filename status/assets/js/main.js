@@ -44,6 +44,14 @@ var PAGE_ROUTES = [
         };
     });
 
+    var persistentStorage = null;
+    define('persistentStorage', ['shared/persistentStorage'], function (PersistentStorage) {
+        if (persistentStorage === null) {
+            persistentStorage = new PersistentStorage();
+        }
+        return persistentStorage;
+    });
+
     /************************
      ** Handlebars helpers **
      ************************/

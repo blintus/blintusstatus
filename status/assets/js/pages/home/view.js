@@ -1,8 +1,8 @@
-define(['jquery',
+define(['jquery', 'persistentStorage',
     'hbs!pages/home/markup',
     'hbs!pages/home/statusPostMarkup',
     'hbs!pages/home/categoryTemplate'
-], function ($, pageMarkup, postMarkup, categoryMarkup) {
+], function ($, persistentStorage, pageMarkup, postMarkup, categoryMarkup) {
     'use strict';
 
     /**
@@ -36,7 +36,7 @@ define(['jquery',
         }));
         this.categoryLinks = $('.category-link');
 
-        var selectedCategoryId = localStorage['selectedCategoryId'];
+        var selectedCategoryId = persistentStorage.getItem('local', 'selectedCategoryId');
         if (!this.store.item('categories', selectedCategoryId)) {
             selectedCategoryId = categories[0].pk;
         }
@@ -83,7 +83,7 @@ define(['jquery',
         var that = this,
             posts;
 
-        localStorage['selectedCategoryId'] = categoryId;
+        persistentStorage.setItem('local', 'selectedCategoryId', categoryId);
 
         // Update link css classes
         this.categoryLinks.removeClass('active');
