@@ -27,9 +27,9 @@ define(['pageUtils', 'pages/home/view',
     HomeController.prototype.loadAllData = function () {
         var that = this;
 
-        $.when(postsMock, categoriesMock).done(function (postResponse, categoryResponse) {
-            that.store.addAll('posts', postResponse.posts);
-            that.store.addAll('categories', categoryResponse.categories);
+        $.when(postsMock, categoriesMock).done(function (posts, categories) {
+            that.store.addAll('posts', posts);
+            that.store.addAll('categories', categories);
 
             // Created an object with child categories added to a children array
             var rawCategories = $.extend(true, {}, that.store.itemsRaw('categories'));
