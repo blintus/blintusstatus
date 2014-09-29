@@ -28,7 +28,7 @@ define(['pageUtils',
             that.store.addAll('contactMethods', contactMethodResponse);
             that.store.addAll('subscriptions', SubscriptionResponse);
             that.store.addAll('providers', providerResponse);
-            that.store.addAll('categories', categoryResponse['categories']);
+            that.store.addAll('categories', categoryResponse);
 
             that.view.init();
         });
