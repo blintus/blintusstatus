@@ -1,0 +1,26 @@
+<table class="contact-method-table">
+	<tr>
+		<td class="contact-method"></td>
+		{{#each contactMethods}}
+			<td class="contact-method">
+				{{#if email}}
+					{{email}}
+				{{else}}
+					{{#if phoneNumber}}
+						{{#if provider}}
+							{{phoneNumber}}  ({{provider}})
+						{{/if}}
+					{{/if}}
+				{{/if}}
+			</td>
+		{{/each}}
+	</tr>
+	{{#categories}}
+		<tr>
+			<td class="settings-category">{{name}}</td>
+			{{#each contactMethods}}
+				<td class=settings-category><input type="checkbox" name="{{pk}}" value="{{pk}}"></td>
+			{{/each}}
+		</tr>
+	{{/categories}}
+</table>

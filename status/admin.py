@@ -7,6 +7,7 @@ admin.site.register(Category)
 admin.site.register(Comment)
 admin.site.register(Provider)
 admin.site.register(ContactMethod)
+admin.site.register(Subscription)
 
 class StatusAdmin(admin.ModelAdmin):
     fields = ('title', 'category', 'status', 'user', 'message')

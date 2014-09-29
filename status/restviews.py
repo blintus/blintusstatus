@@ -2,6 +2,7 @@ import json
 
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseForbidden
 from status.decorators import rest_login_required
+from django.contrib.auth.models import User
 from status.JSONSerializer import JSONSerializer
 from status.models import Post, Comment, Provider, ContactMethod, Category, Subscription
 
@@ -61,7 +62,7 @@ def provider(request, provider_id = None):
 def contactMethod(request, user_id = None):
 	if request.method == 'GET':
 		if user_id:
-			thisUser = user.objects.filter(id = user_id)
+			thisUser = User.objects.filter(id = user_id)
 			return _returnJSON(ContactMethod.objects.filter(user = thisUser))
 		else:
 			return HttpResponseBadRequest(JsonResponse({'message':'Please provide a user'}))
@@ -97,7 +98,7 @@ def category(request):
 def subscription(request, user_id = None):
 	if request.method == 'GET':
 		if user_id:
-			thisUser = user.objects.filter(id = user_id)
+			thisUser = User.objects.filter(id = user_id)
 			return _returnJSON(Subscription.objects.filter(user = thisUser))
 		return HttpResponseBadRequest(JsonResponse({'message':'Please supply the user id'}))
 

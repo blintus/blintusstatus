@@ -62,10 +62,10 @@ class ContactMethod(models.Model):
 
 	def __str__(self):
 		if (self.email):
-			return self.user + " :: " + self.email
+			return str(self.user) + " :: " + self.email
 
 		elif (self.phoneNumber and self.provider.name):
-			return self.user + " :: " + self.phoneNumber + " :: " + self.provider.name
+			return str(self.user) + " :: " + self.phoneNumber + " :: " + self.provider.name
 
 
 	email = models.CharField(max_length=35, null = True, blank = True)
@@ -79,10 +79,10 @@ class Subscription(models.Model):
 
 	def __str__(self):
 		if (self.contactMethod.email):
-			return self.user + " :: " + self.category.name + " :: " + self.contactMethod.email
+			return str(self.user) + " :: " + self.category.name + " :: " + self.contactMethod.email
 
 		elif (self.contactMethod.phoneNumber and self.contactMethod.provider.name):
-			return self.user + " :: " + self.category.name + " :: " + self.contactMethod.phoneNumber + " :: " + self.contactMethod.provider.name
+			return str(self.user) + " :: " + self.category.name + " :: " + self.contactMethod.phoneNumber + " :: " + self.contactMethod.provider.name
 
 	category = models.ForeignKey(Category)
 	user = models.ForeignKey(User)

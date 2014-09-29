@@ -1,6 +1,7 @@
 define(['jquery', 
-		'hbs!pages/settings/markup'
-	], function ($, pageMarkup) {
+		'hbs!pages/settings/markup',
+		'hbs!pages/settings/contactMethodMarkup'
+	], function ($, pageMarkup, contactMethodMarkup) {
     
     'use strict';
 
@@ -16,6 +17,7 @@ define(['jquery',
         this.store = store;
         this.controller = controller;
         $container.append(pageMarkup());
+        this.$contactMethodContainer = $container.find("#contact-methods");
     };
 
     /**
@@ -23,7 +25,11 @@ define(['jquery',
      *
      * @method init
      */
-    HomeView.prototype.init = function () {
+    SettingsView.prototype.init = function () {
+        var that = this;
+
+        this._loadContactMethods();
+
         this._initEventListeners();
     };
 
@@ -33,14 +39,26 @@ define(['jquery',
      * @method _initEventListeners
      * @private
      */
-    HomeView.prototype._initEventListeners = function () {
+    SettingsView.prototype._initEventListeners = function () {
         var that = this;
 
         // Bind listeners
-        this.categoryLinks.on('click', function (event) {
 
-        });
     };
+
+    SettingsView.prototype._loadContactMethods = function () {
+    	var that = this,
+    		contactMethods,
+    		categories;
+
+    	contactMethods = this.controller.getContactMethods();
+    	categories = this.controller.getCategories();
+
+    	this.$contactMethodContainer.empty().append(contactMethodMarkup({
+    		contactMethods: contactMethods,
+    		categories: categories
+    	}));
+    }
 
     return SettingsView;
 

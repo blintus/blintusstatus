@@ -88,6 +88,33 @@ a:hover {
 }
 
 
+/**************
+ ** Settings **
+ *************/
+
+#settings {
+
+}
+
+.contact-method-table {
+    border: 1px solid black;
+}
+
+.contact-method {
+    padding: 15px;
+}
+
+.settings-category {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 5px;
+}
+
+#add-contact-methods {
+
+}
+
+
 /***********
  ** Icons **
  ***********/
