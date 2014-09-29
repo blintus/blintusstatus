@@ -67,6 +67,12 @@ define(['jquery', 'persistentStorage',
             that._selectCategory(categoryId);
         });
 
+        // Bind show comments links
+        this.$postContainer.on('click', '.comments-show-link', function (event) {
+            var postId = $(event.target).data('postid');
+            that._showComments(postId);
+        });
+
     };
 
     /**
@@ -103,6 +109,11 @@ define(['jquery', 'persistentStorage',
             posts: posts
         }));
 
+    };
+
+    HomeView.prototype._showComments = function (postId) {
+        var comments = this.controller.getComments(postId);
+        console.log(comments);
     };
 
     return HomeView;

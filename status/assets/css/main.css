@@ -33,6 +33,7 @@ a:hover {
 
 #status-posts hr {
     border-color: #DDD;
+    margin-top: 5px;
 }
 
 .status-post-title {
@@ -42,6 +43,13 @@ a:hover {
 .status-post-info {
     font-size: 80%;
     margin-top: 0;
+}
+
+.comments-show-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 0;
 }
 
 #categories {

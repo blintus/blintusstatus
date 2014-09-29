@@ -1,7 +1,8 @@
 define(['pageUtils', 'pages/home/view',
     'pages/home/mocks/postsMock',
     'pages/home/mocks/categoriesMock',
-], function (pageUtils, HomeView, postsMock, categoriesMock) {
+    'pages/home/mocks/commentsMock'
+], function (pageUtils, HomeView, postsMock, categoriesMock, commentsMock) {
     'use strict';
 
     /**
@@ -93,6 +94,10 @@ define(['pageUtils', 'pages/home/view',
             }));
         }
         return $.extend(true, [], this.store.items('posts'));
+    };
+
+    HomeController.prototype.getComments = function (postId) {
+        return commentsMock[postId];
     };
 
     return HomeController;
