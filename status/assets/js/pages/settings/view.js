@@ -70,12 +70,26 @@ define(['jquery',
     	contactMethods = this.controller.getContactMethods();
     	categories = this.controller.getCategories();
         subscriptions = this.controller.getSubscriptions();
-
+        
+        // Create subscription table
     	this.$contactMethodContainer.empty().append(contactMethodMarkup({
     		contactMethods: contactMethods,
-    		categories: categories,
-            subscriptions: subscriptions
+    		categories: categories
     	}));
+ 
+        // Check correct checkbox's
+        var sub_len = subscriptions.length;
+        for (var i=0; i < sub_len; i++) {
+            var con = subscriptions[i].contactMethod;
+            var cat = subscriptions[i].category;
+            console.log(con);
+            console.log(cat);
+            this.$contactMethodContainer.find('input[type="checkbox"]').filter( function() { 
+                    return $(this).attr('data-contactmethodid').match(con); 
+                }).filter( function() { 
+                    return $(this).attr('data-categoryid').match(cat); 
+                }).prop('checked', true);
+        }
     }
 
     return SettingsView;

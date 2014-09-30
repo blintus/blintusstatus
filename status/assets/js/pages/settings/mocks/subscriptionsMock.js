@@ -3,15 +3,15 @@ define([], function () {
 
     return [
 		{
+			"category": 5,
+			"pk": 12,
 			"contactMethod": 5,
-			"pk": 3,
-			"category": 1,
 			"user": 2
 		},
 		{
-			"contactMethod": 6,
-			"pk": 4,
-			"category": 2,
+			"category": 4,
+			"pk": 13,
+			"contactMethod": 5,
 			"user": 2
 		}
 	]

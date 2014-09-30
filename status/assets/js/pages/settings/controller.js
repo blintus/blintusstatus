@@ -1,10 +1,7 @@
 define(['pageUtils', 
 		'pages/settings/view',
-		'pages/settings/mocks/contactMethodsMock',
-		'pages/settings/mocks/subscriptionsMock',
-		'pages/settings/mocks/providersMock',
-		'pages/home/mocks/categoriesMock'
-	], function (pageUtils, SettingsView, contactMethodsMock, subscriptionsMock, providersMock, categoriesMock) {
+        'shared/dataFormatter'
+	], function (pageUtils, SettingsView, dataFormatter) {
     
     'use strict';
 
@@ -14,6 +11,10 @@ define(['pageUtils',
         this.store = store;
         pageUtils.setTitle("Settings");
         this.loadAllData();
+        this.subscriptions = null;
+        this.contactMethods = null;
+        this.providers = null;
+        this.categories = null;
     };
 
     /**
@@ -22,37 +23,52 @@ define(['pageUtils',
      * @method loadAllData
      */
     SettingsController.prototype.loadAllData = function () {
-        var that = this;
+        var that = this,
+            cat_promise,
+            con_promise,
+            prov_promise,
+            sub_promise;
 
-        $.when(contactMethodsMock, subscriptionsMock, providersMock, categoriesMock).done(function (contactMethodResponse, SubscriptionResponse, providerResponse, categoryResponse) {
-            that.store.addAll('contactMethods', contactMethodResponse);
-            that.store.addAll('subscriptions', SubscriptionResponse);
-            that.store.addAll('providers', providerResponse);
-            if (store.items('categories') == null) {
-                that.store.addAll('categories', categoryResponse);
-            }
-
-            that.view.init();
+        cat_promise = $.getJSON("/rest/categories", function (json) {
+            that.categories = dataFormatter.arrayToPkObject(json);
         });
+
+        con_promise = $.getJSON("/rest/contactMethods", function (json) {
+            that.contactMethods = dataFormatter.arrayToPkObject(json);
+        });
+
+        prov_promise = $.getJSON( "/rest/providers", function (json) {
+            that.providers = dataFormatter.arrayToPkObject(json);
+        });
+
+        sub_promise = $.getJSON("/rest/subscriptions", function ( json ) {
+            that.subscriptions = dataFormatter.arrayToPkObject(json);
+        });
+
+        $.when(cat_promise, con_promise, prov_promise, sub_promise).done(function () {
+            that.view.init();
+        })
     };
 
     SettingsController.prototype.getContactMethods = function () {
-    	var rawContactMethods = $.extend(true, {}, this.store.items('contactMethods'));
-		for (var key in rawContactMethods) {
-			var provider = this.store.item('providers', rawContactMethods[key]['provider']);
-			if (provider != null && provider['name'] != null) {
-				rawContactMethods[key]['provider'] = provider['name'];
-			}
-		}
+        var rawContactMethods = $.extend(true, {}, this.contactMethods);
+        for (var key in rawContactMethods) {
+            var provider = this.providers[key];
+            if (provider != null && provider['name'] != null) {
+                rawContactMethods[key]['provider'] = provider['name'];
+            }
+        }
     	return rawContactMethods;
     }
 
     SettingsController.prototype.getCategories = function () {
-    	return this.store.items('categories');
+        console.log(this.categories);
+    	return this.categories;
     }
 
     SettingsController.prototype.getSubscriptions = function () {
-        return this.store.items('subscriptions');
+        console.log(this.subscriptions);
+        return this.subscriptions;
     }
 
     return SettingsController;
