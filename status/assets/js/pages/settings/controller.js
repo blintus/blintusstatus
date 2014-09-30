@@ -28,7 +28,9 @@ define(['pageUtils',
             that.store.addAll('contactMethods', contactMethodResponse);
             that.store.addAll('subscriptions', SubscriptionResponse);
             that.store.addAll('providers', providerResponse);
-            that.store.addAll('categories', categoryResponse);
+            if (store.items('categories') == null) {
+                that.store.addAll('categories', categoryResponse);
+            }
 
             that.view.init();
         });
@@ -47,6 +49,10 @@ define(['pageUtils',
 
     SettingsController.prototype.getCategories = function () {
     	return this.store.items('categories');
+    }
+
+    SettingsController.prototype.getSubscriptions = function () {
+        return this.store.items('subscriptions');
     }
 
     return SettingsController;

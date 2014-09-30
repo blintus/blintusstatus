@@ -18,6 +18,8 @@ define(['jquery',
         this.controller = controller;
         $container.append(pageMarkup());
         this.$contactMethodContainer = $container.find("#contact-methods");
+        this.$addContactMethodContainer = $container.find("#add-contact-methods");
+        
     };
 
     /**
@@ -26,10 +28,8 @@ define(['jquery',
      * @method init
      */
     SettingsView.prototype.init = function () {
-        var that = this;
 
         this._loadContactMethods();
-
         this._initEventListeners();
     };
 
@@ -42,21 +42,31 @@ define(['jquery',
     SettingsView.prototype._initEventListeners = function () {
         var that = this;
 
-        // Bind listeners
+        // Bind show comments links
+        this.$contactMethodContainer.on('click', '.settings-category-checkbox', function (event) {
+            $(event.target).find('input[type="checkbox"]').click()
+            var contactMethod = $(event.target).data('contactmethodid'),
+                category      = $(event.target).data('categoryid');
+            console.log(contactMethod);
+            console.log(category);
+        });
+//        $('#checkboxtable').on('click', '.checkbox-class', function (event) { /do things/ });
 
     };
 
     SettingsView.prototype._loadContactMethods = function () {
-    	var that = this,
-    		contactMethods,
-    		categories;
+    	var contactMethods,
+    		categories,
+            subscriptions;
 
     	contactMethods = this.controller.getContactMethods();
     	categories = this.controller.getCategories();
+        subscriptions = this.controller.getSubscriptions();
 
     	this.$contactMethodContainer.empty().append(contactMethodMarkup({
     		contactMethods: contactMethods,
-    		categories: categories
+    		categories: categories,
+            subscriptions: subscriptions
     	}));
     }
 

@@ -15,12 +15,12 @@
 			</td>
 		{{/each}}
 	</tr>
-	{{#categories}}
+	{{#each categories}}
 		<tr>
 			<td class="settings-category">{{name}}</td>
-			{{#each contactMethods}}
-				<td class=settings-category><input type="checkbox" name="{{pk}}" value="{{pk}}"></td>
+			{{#each ../contactMethods}}
+				<td class="settings-category-checkbox"><input type="checkbox" data-contactmethodid="{{../pk}}" data-categoryid="{{pk}}"></td>
 			{{/each}}
 		</tr>
-	{{/categories}}
+	{{/each}}
 </table>
