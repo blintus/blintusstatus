@@ -1,13 +1,18 @@
 <hr>
-{{#each posts}}
+{{#posts}}
     <div class="status-post">
         <h3 class="status-post-title">{{statusIcon status}}{{title}}</h3>
         <p class="status-post-info">Posted by {{user}} {{formatPostDate created}} | <a class="inline-category-link" data-categoryid="{{category.pk}}">{{category.name}}</a></p>
         <p>{{message}}</p>
-        <a class="comments-show-link" data-postid="{{pk}}">Show Comments</a>
-        <div class="comments">
-            
+        <div class="comments-wrapper">
+            <a class="comments-show-link" data-postid="{{pk}}">Show Comments</a>
+            <div class="comments">
+                <div class="post-comment">
+                    <textarea class="form-control" placeholder="Write a comment"></textarea>
+                    <input type="button" value="Post" class="btn btn-primary">
+                </div>
+            </div>
         </div>
     </div>
     <hr>
-{{/each}}
+{{/posts}}

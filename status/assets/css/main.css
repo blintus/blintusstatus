@@ -45,12 +45,56 @@ a:hover {
     margin-top: 0;
 }
 
+
+/**************
+ ** Comments **
+ **************/
+
+.comments-wrapper {
+    margin-top: 20px;
+}
+
 .comments-show-link {
     display: block;
     width: 100%;
     text-align: center;
     padding: 0;
 }
+
+.comments {
+    display: none;
+}
+
+.comment {
+    margin: 0px calc(10% + 10px) 10px 30px;
+    background: #F7F7F7;
+    padding: 5px 15px;
+    border-radius: 6px;
+    box-shadow: 1px 1px #F0F0F0;
+}
+
+.comment-info {
+    font-size: 80%;
+}
+
+.post-comment {
+    position: relative;
+}
+.post-comment textarea {
+    width: calc(90% - 40px);
+    margin-left: 30px;
+}
+.post-comment input {
+    width: 9%;
+    position: absolute;
+    right: 10px;
+    bottom: 0;
+}
+
+
+/****************
+ ** Categories **
+ ****************/
 
 #categories {
     position: absolute;

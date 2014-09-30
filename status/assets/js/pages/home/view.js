@@ -1,8 +1,9 @@
 define(['jquery', 'persistentStorage',
     'hbs!pages/home/markup',
     'hbs!pages/home/statusPostMarkup',
-    'hbs!pages/home/categoryTemplate'
-], function ($, persistentStorage, pageMarkup, postMarkup, categoryMarkup) {
+    'hbs!pages/home/categoryTemplate',
+    'hbs!pages/home/commentsMarkup'
+], function ($, persistentStorage, pageMarkup, postMarkup, categoryMarkup, commentsMarkup) {
     'use strict';
 
     /**
@@ -69,8 +70,9 @@ define(['jquery', 'persistentStorage',
 
         // Bind show comments links
         this.$postContainer.on('click', '.comments-show-link', function (event) {
-            var postId = $(event.target).data('postid');
-            that._showComments(postId);
+            var $target = $(event.target);
+            var postId = $target.data('postid');
+            that._showComments($target, postId);
         });
 
     };
@@ -111,9 +113,20 @@ define(['jquery', 'persistentStorage',
 
     };
 
-    HomeView.prototype._showComments = function (postId) {
+    HomeView.prototype._showComments = function ($showLink, postId) {
         var comments = this.controller.getComments(postId);
-        console.log(comments);
+        var $commentsDiv = $showLink.siblings('.comments');
+        $commentsDiv.prepend(commentsMarkup({
+            comments: comments
+        }));
+        $commentsDiv.slideDown({
+            duration: 200,
+            queue: false
+        });
+        $showLink.slideUp({
+            duration: 200,
+            queue: false
+        });
     };
 
     return HomeView;
