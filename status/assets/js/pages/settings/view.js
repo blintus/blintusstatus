@@ -42,16 +42,24 @@ define(['jquery',
     SettingsView.prototype._initEventListeners = function () {
         var that = this;
 
-        // Bind show comments links
-        this.$contactMethodContainer.on('click', '.settings-category-checkbox', function (event) {
-            $(event.target).find('input[type="checkbox"]').click()
-            var contactMethod = $(event.target).data('contactmethodid'),
-                category      = $(event.target).data('categoryid');
-            console.log(contactMethod);
-            console.log(category);
+        // Bind checkbox cell click
+        this.$contactMethodContainer.on('click', '.settings-category-cell', function (event) {
+        	$(event.target).find('input[type="checkbox"]').click();
         });
-//        $('#checkboxtable').on('click', '.checkbox-class', function (event) { /do things/ });
 
+        // Bind checkbox click
+        this.$contactMethodContainer.on('click', '.settings-category-checkbox', function (event) {
+            var contactmethodid = $(event.target).data('contactmethodid'),
+                categoryid      = $(event.target).data('categoryid');
+            $.ajax({
+            	type: "POST",
+            	url: "/rest/subscriptions",
+            	data: { contactmethodid: contactmethodid, categoryid: categoryid }
+            })
+            .done(function( msg ) {
+                alert( "Data Saved: " + msg );
+            });
+        });
     };
 
     SettingsView.prototype._loadContactMethods = function () {

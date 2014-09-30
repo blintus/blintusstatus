@@ -96,18 +96,28 @@ a:hover {
 
 }
 
+#contact-methods {
+    
+}
+
 .contact-method-table {
     border: 1px solid black;
 }
 
 .contact-method {
-    padding: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 5px;
 }
 
 .settings-category {
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 5px;
+}
+
+.settings-category-cell {
+
 }
 
 .settings-category-checkbox {

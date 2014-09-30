@@ -37,13 +37,12 @@ def comment(request, post_id = None):
 	elif request.method == 'POST':
 		status = request.POST['status']
 		message = request.POST['message']
-		user = request.POST['user']
-		if status and message and user:
-			comment = Comment(status = status, message = message, user = user)
+		if status and message:
+			comment = Comment(status = status, message = message, user = request.user)
 			comment.save()
-			return _returnJSON(comment)
+			return HttpResponse(JsonResponse({'message':'Comment successfully saved'}))
 		else:
-			return HttpResponseBadRequest(JsonResponse({'message':'Please supply the associated status, a message, and the user posting'}))
+			return HttpResponseBadRequest(JsonResponse({'message':'Please supply the associated status and a message'}))
 	
 	return HttpResponseNotAllowed(['GET', 'POST'], JsonResponse({'message':'method provided is not supported'}))
 
@@ -59,29 +58,28 @@ def provider(request, provider_id = None):
 
 
 @rest_login_required
-def contactMethod(request, user_id = None):
+def contactMethod(request):
 	if request.method == 'GET':
-		if user_id:
-			thisUser = User.objects.filter(id = user_id)
-			return _returnJSON(ContactMethod.objects.filter(user = thisUser))
-		else:
-			return HttpResponseBadRequest(JsonResponse({'message':'Please provide a user'}))
+		return _returnJSON(ContactMethod.objects.filter(user = request.user))
 		
 	email = request.POST['email']
 	phoneNumber = request.POST['phoneNumber']
-	provider = request.POST['provider']
-	user = request.POST['user']
+	providerid = request.POST['provider']
 	
-	if not (user and email or (phoneNumber and provider)):
+	if not ( email or (phoneNumber and providerid)):
 		return HttpResponseBadRequest(JsonResponse({'message':'Please supply either an email or phone number with provider'}))
 	
+	provider = Provider.objects.get(pk=providerid)
+
 	if request.method == 'POST':
-		contactMethod = ContactMethod(email = email, phoneNumber = phoneNumber, provider = provider, user = user)
+		if len(ContactMethod.objects.filter(email = email, phoneNumber = phoneNumber, provider = provider, user = request.user)) > 0:
+			return HttpResponse(JsonResponse({'message':'Contact method already exists'}))
+		contactMethod = ContactMethod(email = email, phoneNumber = phoneNumber, provider = provider, user = request.user)
 		contactMethod.save()
-		return _returnJSON(contactMethod)
+		return HttpResponse(JsonResponse({'message':'Contact method successfully saved'}))
 		
 	elif request.method == 'DELETE':
-		ContactMethod.objects.filter(email = email, phoneNumber = phoneNumber, provider = provider, user = user).delete()
+		ContactMethod.objects.filter(email = email, phoneNumber = phoneNumber, provider = provider, user = request.user).delete()
 		return HttpResponse(JsonResponse({'message':'Contact methods successfully deleted'}))
 	
 	return HttpResponseNotAllowed(['GET', 'POST', 'DELETE'], JsonResponse({'message':'method provided is not supported'}))
@@ -95,27 +93,28 @@ def category(request):
 
 
 @rest_login_required
-def subscription(request, user_id = None):
+def subscription(request):
 	if request.method == 'GET':
-		if user_id:
-			thisUser = User.objects.filter(id = user_id)
-			return _returnJSON(Subscription.objects.filter(user = thisUser))
-		return HttpResponseBadRequest(JsonResponse({'message':'Please supply the user id'}))
+		return _returnJSON(Subscription.objects.filter(user = request.user))
 
-	category = request.POST['category']
-	user = request.POST['user']
-	contactMethod = request.POST['contactMethod']
+	categoryid = request.POST['categoryid']
+	contactMethodid = request.POST['contactmethodid']
 	
-	if not (category and user and contactMethod):
-		return HttpResponseBadRequest(JsonResponse({'message':'Please supply a category, user, and contact method'}))
+	if not (categoryid and contactMethodid):
+		return HttpResponseBadRequest(JsonResponse({'message':'Please supply a category, and contact method'}))
 	
-	if request.method == 'POST':	
-			subscription = Subscription(category = category, user = user, contactMethod = contactMethod)
-			subscription.save()
-			return _returnJSON(subscription)
+	category = Category.objects.get(pk = categoryid)
+	contactMethod = ContactMethod.objects.get(pk = contactMethodid)
+
+	if request.method == 'POST':
+		if len(Subscription.objects.filter(category = category, user = request.user, contactMethod = contactMethod)) > 0:
+			return HttpResponse(JsonResponse({'message':'Subscription already exists'}))
+		subscription = Subscription(category = category, user = request.user, contactMethod = contactMethod)
+		subscription.save()
+		return HttpResponse(JsonResponse({'message':'Subscription successfully saved'}))
 
 	elif request.method == 'DELETE':
-		Subscription.objects.filter(category = category, user = user, contactMethod = contactMethod).delete()
+		Subscription.objects.filter(category = category, user = request.user, contactMethod = contactMethod).delete()
 		return HttpResponse(JsonResponse({'message':'Subscription successfully deleted'}))
 	
 	return HttpResponseNotAllowed(['GET', 'POST', 'DELETE'], JsonResponse({'message':'method provided is not supported'}))
