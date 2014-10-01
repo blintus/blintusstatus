@@ -10,11 +10,9 @@ define(['jquery',
      *
      * @class SettingsView
      * @constructor
-     * @param {Store} store The store for the app
      * @param {jQuery} $container A jQuery object for the root content container
      */
-    var SettingsView = function (store, controller, $container) {
-        this.store = store;
+    var SettingsView = function (controller, $container) {
         this.controller = controller;
         $container.append(pageMarkup());
         this.$contactMethodContainer = $container.find("#contact-methods");

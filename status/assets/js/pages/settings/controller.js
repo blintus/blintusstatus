@@ -1,14 +1,13 @@
 define(['pageUtils', 
 		'pages/settings/view',
-        'shared/dataFormatter'
+        'shared/dataUtils'
 	], function (pageUtils, SettingsView, dataFormatter) {
     
     'use strict';
 
 
-    var SettingsController = function (store, $container) {
-        this.view = new SettingsView(store, this, $container);
-        this.store = store;
+    var SettingsController = function ($container) {
+        this.view = new SettingsView(this, $container);
         pageUtils.setTitle("Settings");
         this.loadAllData();
         this.subscriptions = null;

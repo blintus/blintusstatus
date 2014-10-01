@@ -1,8 +1,9 @@
-define(['pageUtils', 'pages/home/view',
+define(['pageUtils', 'shared/dataUtils',
+    'pages/home/view',
     'pages/home/mocks/postsMock',
     'pages/home/mocks/categoriesMock',
     'pages/home/mocks/commentsMock'
-], function (pageUtils, HomeView, postsMock, categoriesMock, commentsMock) {
+], function (pageUtils, dataUtils, HomeView, postsMock, categoriesMock, commentsMock) {
     'use strict';
 
     /**
@@ -10,12 +11,10 @@ define(['pageUtils', 'pages/home/view',
      *
      * @class HomeController
      * @contructor
-     * @param {Store} store The store for the app
      * @param {jQuery} $container A jQuery object for the root content container
      */
-    var HomeController = function (store, $container) {
-        this.view = new HomeView(store, this, $container);
-        this.store = store;
+    var HomeController = function ($container) {
+        this.view = new HomeView(this, $container);
         pageUtils.setTitle("Home");
         this.loadAllData();
     };
@@ -29,11 +28,11 @@ define(['pageUtils', 'pages/home/view',
         var that = this;
 
         $.when(postsMock, categoriesMock).done(function (posts, categories) {
-            that.store.addAll('posts', posts);
-            that.store.addAll('categories', categories);
+            that._posts = posts;
+            that._categories = categories;
 
             // Created an object with child categories added to a children array
-            var rawCategories = $.extend(true, {}, that.store.itemsRaw('categories'));
+            var rawCategories = $.extend(true, {}, dataUtils.arrayToPkObject(categories));
             for (var key in rawCategories) {
                 var category = rawCategories[key];
                 if (category.parent) {
@@ -51,8 +50,8 @@ define(['pageUtils', 'pages/home/view',
                     nestedCategories.push(rawCategories[key]);
                 }
             }
-            that.store.addAll('categoriesWithChildren', categoriesWithChildren);
-            that.store.addAll('nestedCategories', nestedCategories);
+            that._categoriesWithChildren = categoriesWithChildren;
+            that._nestedCategories = nestedCategories;
 
             that.view.init();
         });
@@ -85,15 +84,17 @@ define(['pageUtils', 'pages/home/view',
      * @return {Array} An array of the posts available that belong to the category and its children
      */
     HomeController.prototype.getPostsForCategory = function (categoryId) {
-        var categories = this.store.itemsRaw('categoriesWithChildren');
         // If a categoryId is specified, search for all posts with in that category or its children
         if (categoryId) {
-            var categoryIds = this._getChildrenCategoryIds([categories[categoryId]]);
-            return $.extend(true, [], this.store.query('posts', function (post) {
+            var categoryIds = this._getChildrenCategoryIds([dataUtils.arrayToPkObject(this._categoriesWithChildren)[categoryId]]);
+            return this._posts.filter(function (post) {
+                if (categoryIds.indexOf(post.category) === -1) {
+                    // debugger
+                }
                 return categoryIds.indexOf(post.category) !== -1;
-            }));
+            });
         }
-        return $.extend(true, [], this.store.items('posts'));
+        return $.extend(true, [], this._posts);
     };
 
     HomeController.prototype.getComments = function (postId) {

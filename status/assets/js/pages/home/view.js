@@ -1,9 +1,9 @@
-define(['jquery', 'persistentStorage',
+define(['jquery', 'shared/dataUtils', 'persistentStorage',
     'hbs!pages/home/markup',
     'hbs!pages/home/markup/statusPost',
     'hbs!pages/home/markup/categoryTemplate',
     'hbs!pages/home/markup/comments'
-], function ($, persistentStorage, pageMarkup, postMarkup, categoryMarkup, commentsMarkup) {
+], function ($, dataUtils, persistentStorage, pageMarkup, postMarkup, categoryMarkup, commentsMarkup) {
     'use strict';
 
     /**
@@ -11,11 +11,9 @@ define(['jquery', 'persistentStorage',
      *
      * @class HomeView
      * @constructor
-     * @param {Store} store The store for the app
      * @param {jQuery} $container A jQuery object for the root content container
      */
-    var HomeView = function (store, controller, $container) {
-        this.store = store;
+    var HomeView = function (controller, $container) {
         this.controller = controller;
         $container.append(pageMarkup());
         this.$postContainer = $container.find("#status-posts");
@@ -30,7 +28,7 @@ define(['jquery', 'persistentStorage',
      */
     HomeView.prototype.init = function () {
         var that = this,
-            categories = this.store.items('nestedCategories');
+            categories = this.controller._nestedCategories;
 
         this.$categoriesList.empty().append(categoryMarkup({
             categories: categories
@@ -38,7 +36,8 @@ define(['jquery', 'persistentStorage',
         this.categoryLinks = $('.category-link');
 
         var selectedCategoryId = persistentStorage.getItem('local', 'selectedCategoryId');
-        if (!this.store.item('categories', selectedCategoryId)) {
+        var categoriesPkObject = dataUtils.arrayToPkObject(this.controller._categories);
+        if (!categoriesPkObject[selectedCategoryId]) {
             selectedCategoryId = categories[0].pk;
         }
         this._selectCategory(selectedCategoryId);
@@ -101,11 +100,12 @@ define(['jquery', 'persistentStorage',
             $('.category-link[data-categoryid="' + categoryId + '"]').addClass('active');
         }
 
-        posts = this.controller.getPostsForCategory(categoryId);
+        posts = $.extend(true, [], this.controller.getPostsForCategory(categoryId));
 
         // Add categories to post, and render them
+        var categoriesPkObject = dataUtils.arrayToPkObject(this.controller._categories);
         posts.forEach(function (post) {
-            post.category = that.store.item('categories', post.category);
+            post.category = categoriesPkObject[post.category];
         });
         this.$postContainer.empty().append(postMarkup({
             posts: posts

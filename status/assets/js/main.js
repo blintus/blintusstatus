@@ -115,7 +115,6 @@ var PAGE_ROUTES = [
 
     var $contentElement = $('#content');
     var pageController;
-    var store = null;
 
     var unloadPage = function () {
         if (pageController && pageController.destroy) {
@@ -135,12 +134,8 @@ var PAGE_ROUTES = [
                 pathArgs = results.slice(1).filter(function (item) {
                     return item !== '';
                 });
-                require(['shared/store', path], function (Store, Controller) {
-                    if (store == null) {
-                        store = new Store();
-                        window.store = store;
-                    }
-                    pageController = new Controller(store, $contentElement);
+                require([path], function (Controller) {
+                    pageController = new Controller($contentElement);
                 });
             }
         });
