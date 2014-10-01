@@ -41,11 +41,13 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/HomeController.html">HomeController</a></li>
+                <li><a href="../classes/pages.home.HomeController.html">pages.home.HomeController</a></li>
             
-                <li><a href="../classes/HomeView.html">HomeView</a></li>
+                <li><a href="../classes/pages.home.HomeView.html">pages.home.HomeView</a></li>
             
-                <li><a href="../classes/Store.html">Store</a></li>
+                <li><a href="../classes/pages.settings.SettingsView.html">pages.settings.SettingsView</a></li>
+            
+                <li><a href="../classes/shared.DataUtils.html">shared.DataUtils</a></li>
             
             </ul>
 
@@ -90,23 +92,23 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-define([&#x27;pageUtils&#x27;, &#x27;pages/home/view&#x27;,
+define([&#x27;pageUtils&#x27;, &#x27;shared/dataUtils&#x27;,
+    &#x27;pages/home/view&#x27;,
     &#x27;pages/home/mocks/postsMock&#x27;,
     &#x27;pages/home/mocks/categoriesMock&#x27;,
-], function (pageUtils, HomeView, postsMock, categoriesMock) {
+    &#x27;pages/home/mocks/commentsMock&#x27;
+], function (pageUtils, dataUtils, HomeView, postsMock, categoriesMock, commentsMock) {
     &#x27;use strict&#x27;;
 
     /**
      * Constructor for a home controller
      *
-     * @class HomeController
+     * @class pages.home.HomeController
      * @contructor
-     * @param {Store} store The store for the app
      * @param {jQuery} $container A jQuery object for the root content container
      */
-    var HomeController = function (store, $container) {
-        this.view = new HomeView(store, this, $container);
-        this.store = store;
+    var HomeController = function ($container) {
+        this.view = new HomeView(this, $container);
         pageUtils.setTitle(&quot;Home&quot;);
         this.loadAllData();
     };
@@ -119,50 +121,45 @@ define([&#x27;pageUtils&#x27;, &#x27;pages/home/view&#x27;,
     HomeController.prototype.loadAllData = function () {
         var that = this;
 
-        $.when(postsMock, categoriesMock).done(function (postResponse, categoryResponse) {
-            that.store.addAll(&#x27;posts&#x27;, postResponse.posts);
-            that.store.addAll(&#x27;categories&#x27;, categoryResponse.categories);
+        $.when(postsMock, categoriesMock).done(function (posts, categories) {
+            // Normal posts array
+            that._posts = posts;
 
             // Created an object with child categories added to a children array
-            var rawCategories = $.extend(true, {}, that.store.itemsRaw(&#x27;categories&#x27;));
-            for (var key in rawCategories) {
-                var category = rawCategories[key];
+            categories = dataUtils.arrayToPkObject(categories);
+            for (var key in categories) {
+                var category = categories[key];
                 if (category.parent) {
-                    var parent = rawCategories[category.parent];
+                    var parent = categories[category.parent];
                     if (!parent.children) parent.children = [];
                     parent.children.push(category);
                 }
             }
 
-            var categoriesWithChildren = [];
-            var nestedCategories = [];
-            for (var key in rawCategories) {
-                categoriesWithChildren.push(rawCategories[key]);
-                if (!rawCategories[key].parent) {
-                    nestedCategories.push(rawCategories[key]);
-                }
-            }
-            that.store.addAll(&#x27;categoriesWithChildren&#x27;, categoriesWithChildren);
-            that.store.addAll(&#x27;nestedCategories&#x27;, nestedCategories);
+            // An array of categories with each category having a array of it&#x27;s children,
+            // if it has any
+            that._categories = categories;
 
             that.view.init();
         });
     };
 
     /**
-     * Helper method to get the ids of all nested categories
+     * Helper method to get the ids of category, as well as any children categories
+     * of that category.
      *
-     * @method _getChildrenCategoryIds
+     * @method _getCategoryIds
      * @private
-     * @param {Array} children An array of children to search
+     * @param {Array/Object} children An array of children or object to search
      */
-    HomeController.prototype._getChildrenCategoryIds = function (children) {
+    HomeController.prototype._getCategoryIds = function getCategoryIds(children) {
         var that = this,
             nestedIds = [];
+        if (!Array.isArray(children)) children = [children];
         children.forEach(function (child) {
             nestedIds.push(child.pk);
             if (child.children) {
-                Array.prototype.push.apply(nestedIds, that._getChildrenCategoryIds(child.children));
+                Array.prototype.push.apply(nestedIds, getCategoryIds(child.children));
             }
         });
         return nestedIds;
@@ -176,15 +173,46 @@ define([&#x27;pageUtils&#x27;, &#x27;pages/home/view&#x27;,
      * @return {Array} An array of the posts available that belong to the category and its children
      */
     HomeController.prototype.getPostsForCategory = function (categoryId) {
-        var categories = this.store.itemsRaw(&#x27;categoriesWithChildren&#x27;);
-        // If a categoryId is specified, search for all posts with in that category or its children
-        if (categoryId) {
-            var categoryIds = this._getChildrenCategoryIds([categories[categoryId]]);
-            return $.extend(true, [], this.store.query(&#x27;posts&#x27;, function (post) {
-                return categoryIds.indexOf(post.category) !== -1;
-            }));
+        var categoryIds = this._getCategoryIds(this._categories[categoryId]);
+        return this._posts.filter(function (post) {
+            return categoryIds.indexOf(post.category) !== -1;
+        });
+    };
+
+    /**
+     * Get a single category by its id
+     *
+     * @method getCategory
+     * @param {int} categoryId The id of the category
+     * @return {Object} The category or null
+     */
+    HomeController.prototype.getCategory = function (categoryId) {
+        return this._categories[categoryId] || null;
+    };
+
+    /**
+     * Get a list of root level categories with their children included
+     *
+     * @method getRootCategories
+     * @return {Array} An array of root level categories
+     */
+    HomeController.prototype.getRootCategories = function () {
+        var rootCategories = [];
+        for (var key in this._categories) {
+            var category = this._categories[key];
+            if (!category.parent) rootCategories.push(category);
         }
-        return $.extend(true, [], this.store.items(&#x27;posts&#x27;));
+        return rootCategories;
+    };
+
+    /**
+     * Get all of the comments for a post
+     *
+     * @param {int} postId The post id
+     * @return {Array} An array of comments
+     */
+    HomeController.prototype.getCommentsForPost = function (postId) {
+        return commentsMock[postId];
     };
 
     return HomeController;

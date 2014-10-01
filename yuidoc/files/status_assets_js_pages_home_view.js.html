@@ -41,11 +41,13 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/HomeController.html">HomeController</a></li>
+                <li><a href="../classes/pages.home.HomeController.html">pages.home.HomeController</a></li>
             
-                <li><a href="../classes/HomeView.html">HomeView</a></li>
+                <li><a href="../classes/pages.home.HomeView.html">pages.home.HomeView</a></li>
             
-                <li><a href="../classes/Store.html">Store</a></li>
+                <li><a href="../classes/pages.settings.SettingsView.html">pages.settings.SettingsView</a></li>
+            
+                <li><a href="../classes/shared.DataUtils.html">shared.DataUtils</a></li>
             
             </ul>
 
@@ -90,23 +92,22 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-define([&#x27;jquery&#x27;,
+define([&#x27;jquery&#x27;, &#x27;shared/dataUtils&#x27;, &#x27;persistentStorage&#x27;,
     &#x27;hbs!pages/home/markup&#x27;,
-    &#x27;hbs!pages/home/statusPostMarkup&#x27;,
-    &#x27;hbs!pages/home/categoryTemplate&#x27;
-], function ($, pageMarkup, postMarkup, categoryMarkup) {
+    &#x27;hbs!pages/home/markup/statusPost&#x27;,
+    &#x27;hbs!pages/home/markup/categoryTemplate&#x27;,
+    &#x27;hbs!pages/home/markup/comments&#x27;
+], function ($, dataUtils, persistentStorage, pageMarkup, postMarkup, categoryMarkup, commentsMarkup) {
     &#x27;use strict&#x27;;
 
     /**
      * Constructor for a home view
      *
-     * @class HomeView
+     * @class pages.home.HomeView
      * @constructor
-     * @param {Store} store The store for the app
      * @param {jQuery} $container A jQuery object for the root content container
      */
-    var HomeView = function (store, controller, $container) {
-        this.store = store;
+    var HomeView = function (controller, $container) {
         this.controller = controller;
         $container.append(pageMarkup());
         this.$postContainer = $container.find(&quot;#status-posts&quot;);
@@ -121,15 +122,15 @@ define([&#x27;jquery&#x27;,
      */
     HomeView.prototype.init = function () {
         var that = this,
-            categories = this.store.items(&#x27;nestedCategories&#x27;);
+            categories = this.controller.getRootCategories();
 
         this.$categoriesList.empty().append(categoryMarkup({
             categories: categories
         }));
         this.categoryLinks = $(&#x27;.category-link&#x27;);
 
-        var selectedCategoryId = localStorage[&#x27;selectedCategoryId&#x27;];
-        if (!this.store.item(&#x27;categories&#x27;, selectedCategoryId)) {
+        var selectedCategoryId = persistentStorage.getItem(&#x27;local&#x27;, &#x27;selectedCategoryId&#x27;);
+        if (!this.controller.getCategory(selectedCategoryId)) {
             selectedCategoryId = categories[0].pk;
         }
         this._selectCategory(selectedCategoryId);
@@ -159,6 +160,13 @@ define([&#x27;jquery&#x27;,
             that._selectCategory(categoryId);
         });
 
+        // Bind show comments links
+        this.$postContainer.on(&#x27;click&#x27;, &#x27;.comments-show-link&#x27;, function (event) {
+            var $target = $(event.target);
+            var postId = $target.data(&#x27;postid&#x27;);
+            that._showComments($target, postId);
+        });
+
     };
 
     /**
@@ -167,15 +175,15 @@ define([&#x27;jquery&#x27;,
      * @method _selectCategory
      * @private
      * @param {int} categoryId The id of the category to select
-     * @param {jQuery} $targetCategoryLink An optional parameter that specifies the category
-                                           link that was clicked. If omitted, finds the link based
-                                           on the categoryId
+     * @param {jQuery} [$targetCategoryLink] An optional parameter that specifies the category
+                                             link that was clicked. If omitted, finds the link based
+                                             on the categoryId
      */
     HomeView.prototype._selectCategory = function (categoryId, $targetCategoryLink) {
         var that = this,
             posts;
 
-        localStorage[&#x27;selectedCategoryId&#x27;] = categoryId;
+        persistentStorage.setItem(&#x27;local&#x27;, &#x27;selectedCategoryId&#x27;, categoryId);
 
         // Update link css classes
         this.categoryLinks.removeClass(&#x27;active&#x27;);
@@ -185,16 +193,38 @@ define([&#x27;jquery&#x27;,
             $(&#x27;.category-link[data-categoryid=&quot;&#x27; + categoryId + &#x27;&quot;]&#x27;).addClass(&#x27;active&#x27;);
         }
 
-        posts = this.controller.getPostsForCategory(categoryId);
+        posts = dataUtils.clone(this.controller.getPostsForCategory(categoryId));
 
         // Add categories to post, and render them
         posts.forEach(function (post) {
-            post.category = that.store.item(&#x27;categories&#x27;, post.category);
+            post.category = that.controller.getCategory(post.category);
         });
         this.$postContainer.empty().append(postMarkup({
             posts: posts
         }));
 
+    };
+
+    /**
+     * Show comments for the specified post
+     *
+     * @param {jQuery} $showLink An object representing the link that was clicked
+     * @param {int} postId The post to show comments for
+     */
+    HomeView.prototype._showComments = function ($showLink, postId) {
+        var comments = this.controller.getCommentsForPost(postId);
+        var $commentsDiv = $showLink.siblings(&#x27;.comments&#x27;);
+        $commentsDiv.prepend(commentsMarkup({
+            comments: comments
+        }));
+        $commentsDiv.slideDown({
+            duration: 200,
+            queue: false
+        });
+        $showLink.slideUp({
+            duration: 200,
+            queue: false
+        });
     };
 
     return HomeView;

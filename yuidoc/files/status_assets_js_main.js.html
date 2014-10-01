@@ -41,11 +41,13 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/HomeController.html">HomeController</a></li>
+                <li><a href="../classes/pages.home.HomeController.html">pages.home.HomeController</a></li>
             
-                <li><a href="../classes/HomeView.html">HomeView</a></li>
+                <li><a href="../classes/pages.home.HomeView.html">pages.home.HomeView</a></li>
             
-                <li><a href="../classes/Store.html">Store</a></li>
+                <li><a href="../classes/pages.settings.SettingsView.html">pages.settings.SettingsView</a></li>
+            
+                <li><a href="../classes/shared.DataUtils.html">shared.DataUtils</a></li>
             
             </ul>
 
@@ -136,6 +138,14 @@ var PAGE_ROUTES = [
         };
     });
 
+    var persistentStorage = null;
+    define(&#x27;persistentStorage&#x27;, [&#x27;shared/persistentStorage&#x27;], function (PersistentStorage) {
+        if (persistentStorage === null) {
+            persistentStorage = new PersistentStorage();
+        }
+        return persistentStorage;
+    });
+
     /************************
      ** Handlebars helpers **
      ************************/
@@ -199,7 +209,6 @@ var PAGE_ROUTES = [
 
     var $contentElement = $(&#x27;#content&#x27;);
     var pageController;
-    var store = null;
 
     var unloadPage = function () {
         if (pageController &amp;&amp; pageController.destroy) {
@@ -219,12 +228,8 @@ var PAGE_ROUTES = [
                 pathArgs = results.slice(1).filter(function (item) {
                     return item !== &#x27;&#x27;;
                 });
-                require([&#x27;shared/store&#x27;, path], function (Store, Controller) {
-                    if (store == null) {
-                        store = new Store();
-                        window.store = store;
-                    }
-                    pageController = new Controller(store, $contentElement);
+                require([path], function (Controller) {
+                    pageController = new Controller($contentElement);
                 });
             }
         });

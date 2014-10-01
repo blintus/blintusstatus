@@ -9,7 +9,7 @@
             "name": "status/assets/js/pages/home/controller.js",
             "modules": {},
             "classes": {
-                "HomeController": 1
+                "pages.home.HomeController": 1
             },
             "fors": {},
             "namespaces": {}
@@ -18,16 +18,32 @@
             "name": "status/assets/js/pages/home/view.js",
             "modules": {},
             "classes": {
-                "HomeView": 1
+                "pages.home.HomeView": 1
             },
             "fors": {},
             "namespaces": {}
         },
-        "status/assets/js/shared/store.js": {
-            "name": "status/assets/js/shared/store.js",
+        "status/assets/js/pages/settings/controller.js": {
+            "name": "status/assets/js/pages/settings/controller.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "status/assets/js/pages/settings/view.js": {
+            "name": "status/assets/js/pages/settings/view.js",
             "modules": {},
             "classes": {
-                "Store": 1
+                "pages.settings.SettingsView": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "status/assets/js/shared/dataUtils.js": {
+            "name": "status/assets/js/shared/dataUtils.js",
+            "modules": {},
+            "classes": {
+                "shared.DataUtils": 1
             },
             "fors": {},
             "namespaces": {}
@@ -38,49 +54,23 @@
             "classes": {},
             "fors": {},
             "namespaces": {}
-        },
-        "venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/inlines.js": {
-            "name": "venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/inlines.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js": {
-            "name": "venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "venv/lib/python3.3/site-packages/django/contrib/gis/static/gis/js/OLMapWidget.js": {
-            "name": "venv/lib/python3.3/site-packages/django/contrib/gis/static/gis/js/OLMapWidget.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
         }
     },
     "modules": {},
     "classes": {
-        "HomeController": {
-            "name": "HomeController",
-            "shortname": "HomeController",
+        "pages.home.HomeController": {
+            "name": "pages.home.HomeController",
+            "shortname": "pages.home.HomeController",
             "classitems": [],
             "plugins": [],
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
             "file": "status/assets/js/pages/home/controller.js",
-            "line": 7,
+            "line": 9,
             "description": "Constructor for a home controller",
             "contructor": "",
             "params": [
-                {
-                    "name": "store",
-                    "description": "The store for the app",
-                    "type": "Store"
-                },
                 {
                     "name": "$container",
                     "description": "A jQuery object for the root content container",
@@ -88,24 +78,19 @@
                 }
             ]
         },
-        "HomeView": {
-            "name": "HomeView",
-            "shortname": "HomeView",
+        "pages.home.HomeView": {
+            "name": "pages.home.HomeView",
+            "shortname": "pages.home.HomeView",
             "classitems": [],
             "plugins": [],
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
             "file": "status/assets/js/pages/home/view.js",
-            "line": 8,
+            "line": 9,
             "description": "Constructor for a home view",
             "is_constructor": 1,
             "params": [
-                {
-                    "name": "store",
-                    "description": "The store for the app",
-                    "type": "Store"
-                },
                 {
                     "name": "$container",
                     "description": "A jQuery object for the root content container",
@@ -113,18 +98,37 @@
                 }
             ]
         },
-        "Store": {
-            "name": "Store",
-            "shortname": "Store",
+        "pages.settings.SettingsView": {
+            "name": "pages.settings.SettingsView",
+            "shortname": "pages.settings.SettingsView",
             "classitems": [],
             "plugins": [],
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "status/assets/js/shared/store.js",
-            "line": 25,
-            "description": "Represents a store of data.",
-            "is_constructor": 1
+            "file": "status/assets/js/pages/settings/view.js",
+            "line": 8,
+            "description": "Constructor for a settings view",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "$container",
+                    "description": "A jQuery object for the root content container",
+                    "type": "JQuery"
+                }
+            ]
+        },
+        "shared.DataUtils": {
+            "name": "shared.DataUtils",
+            "shortname": "shared.DataUtils",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "status/assets/js/shared/dataUtils.js",
+            "line": 1,
+            "static": 1
         }
     },
     "classitems": [
@@ -134,28 +138,28 @@
             "description": "Load all data from the server",
             "itemtype": "method",
             "name": "loadAllData",
-            "class": "HomeController"
+            "class": "pages.home.HomeController"
         },
         {
             "file": "status/assets/js/pages/home/controller.js",
-            "line": 60,
-            "description": "Helper method to get the ids of all nested categories",
+            "line": 53,
+            "description": "Helper method to get the ids of category, as well as any children categories\nof that category.",
             "itemtype": "method",
-            "name": "_getChildrenCategoryIds",
+            "name": "_getCategoryIds",
             "access": "private",
             "tagname": "",
             "params": [
                 {
                     "name": "children",
-                    "description": "An array of children to search",
-                    "type": "Array"
+                    "description": "An array of children or object to search",
+                    "type": "Array/Object"
                 }
             ],
-            "class": "HomeController"
+            "class": "pages.home.HomeController"
         },
         {
             "file": "status/assets/js/pages/home/controller.js",
-            "line": 79,
+            "line": 74,
             "description": "Fetch the posts that belong to a category, as well as all posts belonging to child categories",
             "itemtype": "method",
             "name": "getPostsForCategory",
@@ -170,29 +174,77 @@
                 "description": "An array of the posts available that belong to the category and its children",
                 "type": "Array"
             },
-            "class": "HomeController"
+            "class": "pages.home.HomeController"
+        },
+        {
+            "file": "status/assets/js/pages/home/controller.js",
+            "line": 88,
+            "description": "Get a single category by its id",
+            "itemtype": "method",
+            "name": "getCategory",
+            "params": [
+                {
+                    "name": "categoryId",
+                    "description": "The id of the category",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "The category or null",
+                "type": "Object"
+            },
+            "class": "pages.home.HomeController"
+        },
+        {
+            "file": "status/assets/js/pages/home/controller.js",
+            "line": 99,
+            "description": "Get a list of root level categories with their children included",
+            "itemtype": "method",
+            "name": "getRootCategories",
+            "return": {
+                "description": "An array of root level categories",
+                "type": "Array"
+            },
+            "class": "pages.home.HomeController"
+        },
+        {
+            "file": "status/assets/js/pages/home/controller.js",
+            "line": 114,
+            "description": "Get all of the comments for a post",
+            "params": [
+                {
+                    "name": "postId",
+                    "description": "The post id",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "An array of comments",
+                "type": "Array"
+            },
+            "class": "pages.home.HomeController"
         },
         {
             "file": "status/assets/js/pages/home/view.js",
-            "line": 25,
+            "line": 24,
             "description": "Initializes the view with data",
             "itemtype": "method",
             "name": "init",
-            "class": "HomeView"
+            "class": "pages.home.HomeView"
         },
         {
             "file": "status/assets/js/pages/home/view.js",
-            "line": 48,
+            "line": 47,
             "description": "Initializes the event listeners for the view",
             "itemtype": "method",
             "name": "_initEventListeners",
             "access": "private",
             "tagname": "",
-            "class": "HomeView"
+            "class": "pages.home.HomeView"
         },
         {
             "file": "status/assets/js/pages/home/view.js",
-            "line": 72,
+            "line": 78,
             "description": "Select a category and display the related posts",
             "itemtype": "method",
             "name": "_selectCategory",
@@ -206,378 +258,94 @@
                 },
                 {
                     "name": "$targetCategoryLink",
-                    "description": "An optional parameter that specifies the category\n                                          link that was clicked. If omitted, finds the link based\n                                          on the categoryId",
-                    "type": "JQuery"
-                }
-            ],
-            "class": "HomeView"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 4,
-            "description": "Helper method to tell if an object contains another.",
-            "itemtype": "method",
-            "name": "_contains",
-            "access": "private",
-            "tagname": "",
-            "params": [
-                {
-                    "name": "object",
-                    "description": "",
-                    "type": "Object"
-                },
-                {
-                    "name": "containedObject",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Boolean"
-            },
-            "class": "Store"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 38,
-            "description": "Fired when object(s) are added to the store",
-            "itemtype": "event",
-            "name": "added",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "The type in the store the object(s) were added to",
-                    "type": "String"
-                },
-                {
-                    "name": "objects",
-                    "description": "The objects that were added to the store",
-                    "type": "Array"
-                }
-            ],
-            "class": "Store"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 45,
-            "description": "Fired when an object is updated in the store",
-            "itemtype": "event",
-            "name": "updated",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "The type in the store of the updated object",
-                    "type": "String"
-                },
-                {
-                    "name": "objects",
-                    "description": "The object that was updated in the store",
-                    "type": "Object"
-                }
-            ],
-            "class": "Store"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 52,
-            "description": "Fired when object(s) are removed from the store",
-            "itemtype": "event",
-            "name": "removed",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "The type in the store the object(s) were removed from",
-                    "type": "String"
-                },
-                {
-                    "name": "objects",
-                    "description": "The objects that were removed from the store",
-                    "type": "Array"
-                }
-            ],
-            "class": "Store"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 61,
-            "description": "Add an object to the store under the given type.",
-            "itemtype": "method",
-            "name": "add",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "The type to add the object under",
-                    "type": "String"
-                },
-                {
-                    "name": "object",
-                    "description": "The object to add",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "Itself, for chaining",
-                "type": "Store"
-            },
-            "class": "Store"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 78,
-            "description": "Add all objects in an array to the store under the given type.",
-            "itemtype": "method",
-            "name": "addAll",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "The type to add the objects under",
-                    "type": "String"
-                },
-                {
-                    "name": "objectArray",
-                    "description": "The array of objects to add",
-                    "type": "Array"
-                }
-            ],
-            "return": {
-                "description": "Itself, for chaining",
-                "type": "Store"
-            },
-            "class": "Store"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 95,
-            "description": "Get the item of the given type with the given primary key",
-            "itemtype": "method",
-            "name": "item",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "The type to look under",
-                    "type": "String"
-                },
-                {
-                    "name": "pk",
-                    "description": "The primary key to search for",
-                    "type": "Int"
-                }
-            ],
-            "return": {
-                "description": "The found item, or null if no item is found",
-                "type": "Object"
-            },
-            "class": "Store"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 107,
-            "description": "Get all items of the given type",
-            "itemtype": "method",
-            "name": "items",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "The type to get items for",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "An array of all objects of the given type",
-                "type": "Array"
-            },
-            "class": "Store"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 123,
-            "description": "Get all items of the given type in object format.\n\nFor Example:\n{\n    1: {\n        pk: 1,\n        field1: 'value'\n    },\n    7: {\n        pk: 7,\n        field1: 'value2'\n    }\n}",
-            "itemtype": "method",
-            "name": "itemsRaw",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "The type to get items for",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "An object containing all objects in the store of that type,\n                 in the above specified format",
-                "type": "Object"
-            },
-            "class": "Store"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 147,
-            "description": "Update an item",
-            "itemtype": "method",
-            "name": "update",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "The type of the object to update",
-                    "type": "String"
-                },
-                {
-                    "name": "pk",
-                    "description": "The primary key of the object to update",
-                    "type": "Int"
-                },
-                {
-                    "name": "updateObject",
-                    "description": "An object containing key value pairs to update",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "Itself, for chaining",
-                "type": "Store"
-            },
-            "class": "Store"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 173,
-            "description": "Remove an object from the store",
-            "itemtype": "method",
-            "name": "remove",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "The type of the object to remove",
-                    "type": "String"
-                },
-                {
-                    "name": "pk",
-                    "description": "The primary key of the object to remove",
-                    "type": "Int"
-                }
-            ],
-            "return": {
-                "description": "Itself, for chaining",
-                "type": "Store"
-            },
-            "class": "Store"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 191,
-            "description": "Remove all objects of a given type from the store",
-            "itemtype": "method",
-            "name": "removeAll",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "The type of the objects to remove",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "Itself, for chaining",
-                "type": "Store"
-            },
-            "class": "Store"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 210,
-            "description": "Bind an event handler to the store.",
-            "itemtype": "method",
-            "name": "on",
-            "params": [
-                {
-                    "name": "eventNames",
-                    "description": "The event names to bind to, separated by spaces",
-                    "type": "String"
-                },
-                {
-                    "name": "callback",
-                    "description": "",
-                    "type": "Function"
-                }
-            ],
-            "return": {
-                "description": "Itself, for chaining",
-                "type": "Store"
-            },
-            "class": "Store"
-        },
-        {
-            "file": "status/assets/js/shared/store.js",
-            "line": 222,
-            "description": "Remove all or a specific bound handler from the given events.",
-            "itemtype": "method",
-            "name": "off",
-            "params": [
-                {
-                    "name": "eventNames",
-                    "description": "The event names to unbind from, separated by spaces",
-                    "type": "String"
-                },
-                {
-                    "name": "callback",
-                    "description": "If specified, only removes that specific callback",
-                    "type": "Fucntion",
+                    "description": "An optional parameter that specifies the category\n                                            link that was clicked. If omitted, finds the link based\n                                            on the categoryId",
+                    "type": "JQuery",
                     "optional": true
                 }
             ],
-            "return": {
-                "description": "Itself, for chaining",
-                "type": "Store"
-            },
-            "class": "Store"
+            "class": "pages.home.HomeView"
         },
         {
-            "file": "status/assets/js/shared/store.js",
-            "line": 234,
-            "description": "Query the store for objects.",
-            "itemtype": "method",
-            "name": "query",
+            "file": "status/assets/js/pages/home/view.js",
+            "line": 114,
+            "description": "Show comments for the specified post",
             "params": [
                 {
-                    "name": "type",
-                    "description": "The store type to search under",
-                    "type": "String"
+                    "name": "$showLink",
+                    "description": "An object representing the link that was clicked",
+                    "type": "JQuery"
                 },
                 {
-                    "name": "queryParam",
-                    "description": "An object of key value pairs to use while searching,\n                                              or a function to call to see if a result matches",
-                    "type": "Object/Function"
+                    "name": "postId",
+                    "description": "The post to show comments for",
+                    "type": "Int"
                 }
             ],
-            "return": {
-                "description": "An array of matched objects",
-                "type": "Array"
-            },
-            "class": "Store"
+            "class": "pages.home.HomeView"
         },
         {
-            "file": "status/assets/js/shared/store.js",
-            "line": 257,
-            "description": "Trigger an event listener.",
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 19,
+            "description": "Load all data from the server",
             "itemtype": "method",
-            "name": "_trigger",
+            "name": "loadAllData",
+            "class": "pages.settings.SettingsView"
+        },
+        {
+            "file": "status/assets/js/pages/settings/view.js",
+            "line": 23,
+            "description": "Initializes the view with data",
+            "itemtype": "method",
+            "name": "init",
+            "class": "pages.settings.SettingsView"
+        },
+        {
+            "file": "status/assets/js/pages/settings/view.js",
+            "line": 34,
+            "description": "Initializes the event listeners for the view",
+            "itemtype": "method",
+            "name": "_initEventListeners",
             "access": "private",
             "tagname": "",
+            "class": "pages.settings.SettingsView"
+        },
+        {
+            "file": "status/assets/js/shared/dataUtils.js",
+            "line": 9,
+            "description": "Convert an array of data to a primary key object.\n\nEx:\n<pre><code>[\n    {\n        pk: 1,\n        data1: 'value'\n    }\n]\n</code></pre>\nbecomes\n<pre><code>{\n    1: {\n        pk: 1,\n        data1: 'value'\n    }\n}\n</code></pre>",
+            "itemtype": "method",
+            "name": "arrayToPkObject",
             "params": [
                 {
-                    "name": "eventName",
-                    "description": "The event to trigger",
-                    "type": "String"
-                },
-                {
-                    "name": "extraArguments",
-                    "description": "An array of arguments to pass to the handler",
+                    "name": "dataArray",
+                    "description": "The array of data to convert",
                     "type": "Array"
                 }
             ],
             "return": {
-                "description": "The return value of the last handler executed",
+                "description": "The converted object",
                 "type": "Object"
             },
-            "class": "Store"
+            "class": "shared.DataUtils"
+        },
+        {
+            "file": "status/assets/js/shared/dataUtils.js",
+            "line": 44,
+            "description": "Deep clone an object or array",
+            "itemtype": "method",
+            "name": "clone",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "The object to clone",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "A copy of data",
+                "type": "Object"
+            },
+            "class": "shared.DataUtils"
         },
         {
             "file": "status/assets/js/main.js",
@@ -599,166 +367,35 @@
         },
         {
             "file": "status/assets/js/main.js",
-            "line": 47,
+            "line": 55,
             "description": "* Handlebars helpers **",
             "class": ""
         },
         {
             "file": "status/assets/js/main.js",
-            "line": 92,
+            "line": 100,
             "description": "* Global page setup stuff **",
             "class": ""
         },
         {
             "file": "status/assets/js/main.js",
-            "line": 104,
+            "line": 112,
             "description": "* Page loading methods **",
-            "class": ""
-        },
-        {
-            "file": "venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/inlines.js",
-            "line": 1,
-            "description": "Django admin inlines\n\nBased on jQuery Formset 1.1",
-            "author": "Stanislaus Madueke (stan DOT madueke AT gmail DOT com)",
-            "requires": [
-                "jQuery 1.2.6 or later\n\nCopyright (c) 2009",
-                "Stanislaus Madueke\nAll rights reserved.\n\nSpiced up with Code from Zain Memon's GSoC project 2009\nand modified for Django by Jannis Leidel",
-                "Travis Swicegood and Julien Phalip.\n\nLicensed under the New BSD License\nSee: http://www.opensource.org/licenses/bsd-license.php"
-            ],
-            "class": ""
-        },
-        {
-            "file": "venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js",
-            "line": 3837,
-            "description": "For feature detection",
-            "params": [
-                {
-                    "name": "fn",
-                    "description": "The function to test for native support",
-                    "type": "Function"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js",
-            "line": 3845,
-            "description": "Create key-value caches of limited size",
-            "return": {
-                "description": "Returns the Object data after storing it on itself with\n\tproperty name the (space-suffixed) string and (if the cache is larger than Expr.cacheLength)\n\tdeleting the oldest entry",
-                "type": "Function(string, Object)"
-            },
-            "class": ""
-        },
-        {
-            "file": "venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js",
-            "line": 3865,
-            "description": "Mark a function for special use by Sizzle",
-            "params": [
-                {
-                    "name": "fn",
-                    "description": "The function to mark",
-                    "type": "Function"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js",
-            "line": 3874,
-            "description": "Support testing using an element",
-            "params": [
-                {
-                    "name": "fn",
-                    "description": "Passed the created div and expects a boolean result",
-                    "type": "Function"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js",
-            "line": 4001,
-            "description": "Detect xml",
-            "params": [
-                {
-                    "name": "elem",
-                    "description": "An element or a document",
-                    "type": "Element|Object"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js",
-            "line": 4012,
-            "description": "Sets document-related variables once based on the current document",
-            "params": [
-                {
-                    "name": "doc",
-                    "description": "An element or document object to use to set the document",
-                    "type": "Element|Object",
-                    "optional": true
-                }
-            ],
-            "return": {
-                "description": "Returns the current document",
-                "type": "Object"
-            },
-            "class": ""
-        },
-        {
-            "file": "venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js",
-            "line": 4505,
-            "description": "Utility function for retrieving the text value of an array of DOM nodes",
-            "params": [
-                {
-                    "name": "elem",
-                    "description": "",
-                    "type": "Array|Element"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "venv/lib/python3.3/site-packages/django/contrib/gis/static/gis/js/OLMapWidget.js",
-            "line": 2,
-            "description": "Transforms an array of features to a single feature with the merged\ngeometry of geom_type",
-            "class": ""
-        },
-        {
-            "file": "venv/lib/python3.3/site-packages/django/contrib/gis/static/gis/js/OLMapWidget.js",
-            "line": 18,
-            "requires": [
-                "OpenLayers/Format/WKT.js"
-            ],
-            "class": ""
-        },
-        {
-            "file": "venv/lib/python3.3/site-packages/django/contrib/gis/static/gis/js/OLMapWidget.js",
-            "line": 22,
-            "description": "Class: OpenLayers.Format.DjangoWKT\nClass for reading Well-Known Text, with workarounds to successfully parse\ngeometries and collections as returned by django.contrib.gis.geos.\n\nInherits from:\n - <OpenLayers.Format.WKT>",
-            "class": ""
-        },
-        {
-            "file": "venv/lib/python3.3/site-packages/django/contrib/gis/static/gis/js/OLMapWidget.js",
-            "line": 136,
-            "description": "Patched write: successfully writes WKT for geometries and\ngeometrycollections.",
             "class": ""
         }
     ],
     "warnings": [
         {
             "message": "unknown tag: contructor",
-            "line": " status/assets/js/pages/home/controller.js:7"
+            "line": " status/assets/js/pages/home/controller.js:9"
         },
         {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js:3845"
+            "message": "Missing item type\nGet all of the comments for a post",
+            "line": " status/assets/js/pages/home/controller.js:114"
         },
         {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js:4012"
+            "message": "Missing item type\nShow comments for the specified post",
+            "line": " status/assets/js/pages/home/view.js:114"
         },
         {
             "message": "Missing item type\n* Page routes **",
@@ -774,63 +411,15 @@
         },
         {
             "message": "Missing item type\n* Handlebars helpers **",
-            "line": " status/assets/js/main.js:47"
+            "line": " status/assets/js/main.js:55"
         },
         {
             "message": "Missing item type\n* Global page setup stuff **",
-            "line": " status/assets/js/main.js:92"
+            "line": " status/assets/js/main.js:100"
         },
         {
             "message": "Missing item type\n* Page loading methods **",
-            "line": " status/assets/js/main.js:104"
-        },
-        {
-            "message": "Missing item type\nDjango admin inlines\n\nBased on jQuery Formset 1.1",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/inlines.js:1"
-        },
-        {
-            "message": "Missing item type\nFor feature detection",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js:3837"
-        },
-        {
-            "message": "Missing item type\nCreate key-value caches of limited size",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js:3845"
-        },
-        {
-            "message": "Missing item type\nMark a function for special use by Sizzle",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js:3865"
-        },
-        {
-            "message": "Missing item type\nSupport testing using an element",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js:3874"
-        },
-        {
-            "message": "Missing item type\nDetect xml",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js:4001"
-        },
-        {
-            "message": "Missing item type\nSets document-related variables once based on the current document",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js:4012"
-        },
-        {
-            "message": "Missing item type\nUtility function for retrieving the text value of an array of DOM nodes",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/admin/static/admin/js/jquery.js:4505"
-        },
-        {
-            "message": "Missing item type\nTransforms an array of features to a single feature with the merged\ngeometry of geom_type",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/gis/static/gis/js/OLMapWidget.js:2"
-        },
-        {
-            "message": "Missing item type",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/gis/static/gis/js/OLMapWidget.js:18"
-        },
-        {
-            "message": "Missing item type\nClass: OpenLayers.Format.DjangoWKT\nClass for reading Well-Known Text, with workarounds to successfully parse\ngeometries and collections as returned by django.contrib.gis.geos.\n\nInherits from:\n - <OpenLayers.Format.WKT>",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/gis/static/gis/js/OLMapWidget.js:22"
-        },
-        {
-            "message": "Missing item type\nPatched write: successfully writes WKT for geometries and\ngeometrycollections.",
-            "line": " venv/lib/python3.3/site-packages/django/contrib/gis/static/gis/js/OLMapWidget.js:136"
+            "line": " status/assets/js/main.js:112"
         }
     ]
 }

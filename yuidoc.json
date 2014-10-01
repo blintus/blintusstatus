@@ -5,7 +5,7 @@
     "options": {
         "linkNatives": "true",
         "outdir": "yuidoc",
-        "paths": "status/assets/js/*",
+        "paths": "status/assets/js",
         "exclude": "status/assets/js/lib"
     }
 }

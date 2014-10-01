@@ -8,7 +8,7 @@ define(['jquery',
     /**
      * Constructor for a settings view
      *
-     * @class SettingsView
+     * @class pages.settings.SettingsView
      * @constructor
      * @param {jQuery} $container A jQuery object for the root content container
      */

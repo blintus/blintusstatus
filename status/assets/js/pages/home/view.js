@@ -9,7 +9,7 @@ define(['jquery', 'shared/dataUtils', 'persistentStorage',
     /**
      * Constructor for a home view
      *
-     * @class HomeView
+     * @class pages.home.HomeView
      * @constructor
      * @param {jQuery} $container A jQuery object for the root content container
      */

@@ -1,7 +1,6 @@
 /**
- * Utilities to help with the manipulation of data
- *
- * @module shared/dataUtils
+ * @class shared.DataUtils
+ * @static
  */
 define([], function () {
 
@@ -11,19 +10,21 @@ define([], function () {
          * Convert an array of data to a primary key object.
          *
          * Ex:
-         * [
+         * <pre><code>[
          *     {
          *         pk: 1,
          *         data1: 'value'
          *     }
          * ]
+         * </code></pre>
          * becomes
-         * {
+         * <pre><code>{
          *     1: {
          *         pk: 1,
          *         data1: 'value'
          *     }
          * }
+         * </code></pre>
          *
          * @method arrayToPkObject
          * @param {Array} dataArray The array of data to convert

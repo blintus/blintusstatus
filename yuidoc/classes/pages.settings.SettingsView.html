@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>HomeController - The Blintus Status API</title>
+    <title>pages.settings.SettingsView - The Blintus Status API</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -41,11 +41,13 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/HomeController.html">HomeController</a></li>
+                <li><a href="../classes/pages.home.HomeController.html">pages.home.HomeController</a></li>
             
-                <li><a href="../classes/HomeView.html">HomeView</a></li>
+                <li><a href="../classes/pages.home.HomeView.html">pages.home.HomeView</a></li>
             
-                <li><a href="../classes/Store.html">Store</a></li>
+                <li><a href="../classes/pages.settings.SettingsView.html">pages.settings.SettingsView</a></li>
+            
+                <li><a href="../classes/shared.DataUtils.html">shared.DataUtils</a></li>
             
             </ul>
 
@@ -86,7 +88,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>HomeController Class</h1>
+                        <h1>pages.settings.SettingsView Class</h1>
 <div class="box meta">
     
 
@@ -94,7 +96,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/status_assets_js_pages_home_controller.js.html#l7"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;home&#x2F;controller.js:7</code></a>
+            Defined in: <a href="../files/status_assets_js_pages_settings_view.js.html#l8"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;settings&#x2F;view.js:8</code></a>
         </div>
     
 
@@ -106,10 +108,101 @@
 
 
 <div class="box intro">
-    <p>Constructor for a home controller</p>
+    <p>Constructor for a settings view</p>
 
 </div>
 
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_pages.settings.SettingsView" class="method item">
+    <h3 class="name"><code>pages.settings.SettingsView</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>$container</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/status_assets_js_pages_settings_view.js.html#l8"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;settings&#x2F;view.js:8</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">$container</code>
+                        <span class="type">JQuery</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>A jQuery object for the root content container</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+    </div>
 
 
 <div id="classdocs" class="tabview">
@@ -135,14 +228,14 @@
                     <ul class="index-list methods">
                         
                             <li class="index-item method private">
-                                <a href="#method__getChildrenCategoryIds">_getChildrenCategoryIds</a>
+                                <a href="#method__initEventListeners">_initEventListeners</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_getPostsForCategory">getPostsForCategory</a>
+                                <a href="#method_init">init</a>
 
                                 
                                 
@@ -171,21 +264,11 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method__getChildrenCategoryIds" class="method item private">
-    <h3 class="name"><code>_getChildrenCategoryIds</code></h3>
+                    <div id="method__initEventListeners" class="method item private">
+    <h3 class="name"><code>_initEventListeners</code></h3>
 
     
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>children</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
     
 
     
@@ -215,7 +298,7 @@
             
         
         
-        <a href="../files/status_assets_js_pages_home_controller.js.html#l60"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;home&#x2F;controller.js:60</code></a>
+        <a href="../files/status_assets_js_pages_settings_view.js.html#l34"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;settings&#x2F;view.js:34</code></a>
         
         </p>
 
@@ -226,34 +309,10 @@
     </div>
 
     <div class="description">
-        <p>Helper method to get the ids of all nested categories</p>
+        <p>Initializes the event listeners for the view</p>
 
     </div>
 
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">children</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>An array of children to search</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
     
 
     
@@ -262,27 +321,13 @@
 </div>
 
                 
-                    <div id="method_getPostsForCategory" class="method item">
-    <h3 class="name"><code>getPostsForCategory</code></h3>
+                    <div id="method_init" class="method item">
+    <h3 class="name"><code>init</code></h3>
 
     
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>categoryId</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
     
 
-    
-        <span class="returns-inline">
-            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
-        </span>
     
 
     
@@ -308,7 +353,7 @@
             
         
         
-        <a href="../files/status_assets_js_pages_home_controller.js.html#l79"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;home&#x2F;controller.js:79</code></a>
+        <a href="../files/status_assets_js_pages_settings_view.js.html#l23"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;settings&#x2F;view.js:23</code></a>
         
         </p>
 
@@ -319,50 +364,12 @@
     </div>
 
     <div class="description">
-        <p>Fetch the posts that belong to a category, as well as all posts belonging to child categories</p>
+        <p>Initializes the view with data</p>
 
     </div>
 
     
-        <div class="params">
-            <h4>Parameters:</h4>
 
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">categoryId</code>
-                        <span class="type">Int</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The categoryId of the root category</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>:
-                    
-                    <p>An array of the posts available that belong to the category and its children</p>
-
-                
-            </div>
-        </div>
     
 
     
@@ -401,7 +408,7 @@
             
         
         
-        <a href="../files/status_assets_js_pages_home_controller.js.html#l22"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;home&#x2F;controller.js:22</code></a>
+        <a href="../files/status_assets_js_pages_settings_controller.js.html#l19"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;settings&#x2F;controller.js:19</code></a>
         
         </p>
 

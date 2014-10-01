@@ -9,7 +9,7 @@ define(['pageUtils', 'shared/dataUtils',
     /**
      * Constructor for a home controller
      *
-     * @class HomeController
+     * @class pages.home.HomeController
      * @contructor
      * @param {jQuery} $container A jQuery object for the root content container
      */
