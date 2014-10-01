@@ -54,7 +54,7 @@ define(['jquery',
             $.ajax({
             	type: "POST",
             	url: "/rest/subscriptions",
-            	data: { contactmethodid: contactmethodid, categoryid: categoryid, subscribed: !$(event.target).is(':checked')}
+            	data: { contactmethodid: contactmethodid, categoryid: categoryid, subscribed: !event.target.checked}
             })
             .done(function( msg ) {
                 alert( msg );
