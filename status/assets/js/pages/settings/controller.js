@@ -47,7 +47,7 @@ define(['pageUtils',
 
         $.when(cat_promise, con_promise, prov_promise, sub_promise).done(function () {
             that.view.init();
-        })
+        });
     };
 
     SettingsController.prototype.getContactMethods = function () {

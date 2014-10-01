@@ -55,7 +55,7 @@ define(['jquery',
                 $.ajax({
                 	type: "POST",
                 	url: "/rest/subscriptions",
-                	data: { contactmethodid: contactmethodid, categoryid: categoryid }
+                	data: { contactmethodid: contactmethodid, categoryid: categoryid, posting: 1}
                 })
                 .done(function( msg ) {
                     alert( msg );
@@ -63,9 +63,9 @@ define(['jquery',
             }
             else {
                 $.ajax({
-                    type: "DELETE",
+                    type: "POST",
                     url: "/rest/subscriptions",
-                    data: { contactmethodid: contactmethodid, categoryid: categoryid }
+                    data: { contactmethodid: contactmethodid, categoryid: categoryid, posting: 0 }
                 })
                 .done(function( msg ) {
                     alert( msg );
