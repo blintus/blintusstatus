@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 runserver:
 	foreman run python manage.py runserver
 
@@ -12,3 +14,11 @@ makemigrations:
 
 migrate_database: makemigrations
 	foreman run python manage.py migrate
+
+view_yuidocs:
+	@DOC_PATH=$$(pwd)/yuidoc/index.html; \
+	if type xdg-open >/dev/null 2>&1; then \
+		xdg-open "$$DOC_PATH" >/dev/null 2>&1; \
+	else \
+		open "$$DOC_PATH" >/dev/null 2>&1; \
+	fi
