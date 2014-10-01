@@ -65,21 +65,21 @@ def contactMethod(request):
 	email = request.POST['email']
 	phoneNumber = request.POST['phoneNumber']
 	providerid = request.POST['provider']
-	posting = request.POST['posting']
+	subscribed = request.POST['subscribed']
 	
-	if not ( email or (phoneNumber and providerid and posting)):
+	if not (subscribed and (email or (phoneNumber and providerid))):
 		return HttpResponseBadRequest(JsonResponse({'message':'Please supply either an email or phone number with provider'}))
 	
 	provider = Provider.objects.get(pk=providerid)
 
-	if request.method == 'POST' and posting == '0':
+	if request.method == 'POST' and subscribed == 'false':
 		if len(ContactMethod.objects.filter(email = email, phoneNumber = phoneNumber, provider = provider, user = request.user)) > 0:
 			return HttpResponse(JsonResponse({'message':'Contact method already exists'}))
 		contactMethod = ContactMethod(email = email, phoneNumber = phoneNumber, provider = provider, user = request.user)
 		contactMethod.save()
 		return HttpResponse(JsonResponse({'message':'Contact method successfully saved'}))
 		
-	elif request.method == 'POST' and posting == '0':
+	elif request.method == 'POST' and subscribed == 'true':
 		ContactMethod.objects.get(email = email, phoneNumber = phoneNumber, provider = provider, user = request.user).delete()
 		return HttpResponse(JsonResponse({'message':'Contact methods successfully deleted'}))
 	
@@ -100,22 +100,22 @@ def subscription(request):
 
 	categoryid = request.POST['categoryid']
 	contactMethodid = request.POST['contactmethodid']
-	posting = request.POST['posting']
+	subscribed = request.POST['subscribed']
 	
-	if not (categoryid and contactMethodid and posting):
+	if not (categoryid and contactMethodid and subscribed):
 		return HttpResponseBadRequest(JsonResponse({'message':'Please supply a category, contact method, and a post / delete flag'}))
 	
 	category = Category.objects.get(pk = categoryid)
 	contactMethod = ContactMethod.objects.get(pk = contactMethodid)
 
-	if (request.method == 'POST') and (posting == '1'):
+	if (request.method == 'POST') and (subscribed == 'false'):
 		if len(Subscription.objects.filter(category = category, user = request.user, contactMethod = contactMethod)) > 0:
 			return HttpResponse(JsonResponse({'message':'Subscription already exists'}))
 		subscription = Subscription(category = category, user = request.user, contactMethod = contactMethod)
 		subscription.save()
 		return HttpResponse(JsonResponse({'message':'Subscription successfully saved'}))
 
-	elif (request.method == 'POST') and (posting == '0'):
+	elif (request.method == 'POST') and (subscribed == 'true'):
 		Subscription.objects.get(category = category, user = request.user, contactMethod = contactMethod).delete()
 		return HttpResponse(JsonResponse({'message':'Subscription successfully deleted'}))
 	
