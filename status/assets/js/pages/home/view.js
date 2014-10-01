@@ -1,8 +1,8 @@
 define(['jquery', 'persistentStorage',
     'hbs!pages/home/markup',
-    'hbs!pages/home/statusPostMarkup',
-    'hbs!pages/home/categoryTemplate',
-    'hbs!pages/home/commentsMarkup'
+    'hbs!pages/home/markup/statusPost',
+    'hbs!pages/home/markup/categoryTemplate',
+    'hbs!pages/home/markup/comments'
 ], function ($, persistentStorage, pageMarkup, postMarkup, categoryMarkup, commentsMarkup) {
     'use strict';
 
