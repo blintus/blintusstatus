@@ -161,13 +161,12 @@ a:hover {
 }
 
 .settings-category-cell {
-
+    text-align: center;
+    vertical-align: middle;
 }
 
 .settings-category-checkbox {
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 5px;
+    
 }
 
 #add-contact-methods {
