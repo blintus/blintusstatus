@@ -79,7 +79,7 @@ def contactMethod(request):
 		return HttpResponse(JsonResponse({'message':'Contact method successfully saved'}))
 		
 	elif request.method == 'DELETE':
-		ContactMethod.objects.filter(email = email, phoneNumber = phoneNumber, provider = provider, user = request.user).delete()
+		ContactMethod.objects.get(email = email, phoneNumber = phoneNumber, provider = provider, user = request.user).delete()
 		return HttpResponse(JsonResponse({'message':'Contact methods successfully deleted'}))
 	
 	return HttpResponseNotAllowed(['GET', 'POST', 'DELETE'], JsonResponse({'message':'method provided is not supported'}))
@@ -114,7 +114,7 @@ def subscription(request):
 		return HttpResponse(JsonResponse({'message':'Subscription successfully saved'}))
 
 	elif request.method == 'DELETE':
-		Subscription.objects.filter(category = category, user = request.user, contactMethod = contactMethod).delete()
+		Subscription.objects.get(category = category, user = request.user, contactMethod = contactMethod).delete()
 		return HttpResponse(JsonResponse({'message':'Subscription successfully deleted'}))
 	
 	return HttpResponseNotAllowed(['GET', 'POST', 'DELETE'], JsonResponse({'message':'method provided is not supported'}))

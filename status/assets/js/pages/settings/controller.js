@@ -53,7 +53,7 @@ define(['pageUtils',
     SettingsController.prototype.getContactMethods = function () {
         var rawContactMethods = $.extend(true, {}, this.contactMethods);
         for (var key in rawContactMethods) {
-            var provider = this.providers[key];
+            var provider = this.providers[rawContactMethods[key]['provider']];
             if (provider != null && provider['name'] != null) {
                 rawContactMethods[key]['provider'] = provider['name'];
             }
@@ -62,12 +62,10 @@ define(['pageUtils',
     }
 
     SettingsController.prototype.getCategories = function () {
-        console.log(this.categories);
     	return this.categories;
     }
 
     SettingsController.prototype.getSubscriptions = function () {
-        console.log(this.subscriptions);
         return this.subscriptions;
     }
 

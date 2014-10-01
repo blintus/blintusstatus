@@ -51,14 +51,26 @@ define(['jquery',
         this.$contactMethodContainer.on('click', '.settings-category-checkbox', function (event) {
             var contactmethodid = $(event.target).data('contactmethodid'),
                 categoryid      = $(event.target).data('categoryid');
-            $.ajax({
-            	type: "POST",
-            	url: "/rest/subscriptions",
-            	data: { contactmethodid: contactmethodid, categoryid: categoryid }
-            })
-            .done(function( msg ) {
-                alert( "Data Saved: " + msg );
-            });
+            if ($(event.target).is(':checked')) {
+                $.ajax({
+                	type: "POST",
+                	url: "/rest/subscriptions",
+                	data: { contactmethodid: contactmethodid, categoryid: categoryid }
+                })
+                .done(function( msg ) {
+                    alert( msg );
+                });
+            }
+            else {
+                $.ajax({
+                    type: "DELETE",
+                    url: "/rest/subscriptions",
+                    data: { contactmethodid: contactmethodid, categoryid: categoryid }
+                })
+                .done(function( msg ) {
+                    alert( msg );
+                });
+            }
         });
     };
 
@@ -76,14 +88,12 @@ define(['jquery',
     		contactMethods: contactMethods,
     		categories: categories
     	}));
- 
+
         // Check correct checkbox's
-        var sub_len = subscriptions.length;
-        for (var i=0; i < sub_len; i++) {
-            var con = subscriptions[i].contactMethod;
-            var cat = subscriptions[i].category;
-            console.log(con);
-            console.log(cat);
+        var sub_len = Object.keys(subscriptions).length;
+        for (var key in subscriptions) {
+            var con = subscriptions[key].contactMethod;
+            var cat = subscriptions[key].category;
             this.$contactMethodContainer.find('input[type="checkbox"]').filter( function() { 
                     return $(this).attr('data-contactmethodid').match(con); 
                 }).filter( function() { 
