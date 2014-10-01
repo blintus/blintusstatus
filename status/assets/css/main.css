@@ -137,15 +137,16 @@ a:hover {
  *************/
 
 #settings {
-
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 #contact-methods {
-    
+    padding-bottom: 10px;
 }
 
 .contact-method-table {
-    border: 1px solid black;
+
 }
 
 .contact-method {
@@ -166,11 +167,11 @@ a:hover {
 }
 
 .settings-category-checkbox {
-    
+
 }
 
 #add-contact-methods {
-
+    padding-top: 10px;
 }
 
 

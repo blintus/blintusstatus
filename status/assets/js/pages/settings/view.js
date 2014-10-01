@@ -51,26 +51,14 @@ define(['jquery',
         this.$contactMethodContainer.on('click', '.settings-category-checkbox', function (event) {
             var contactmethodid = $(event.target).data('contactmethodid'),
                 categoryid      = $(event.target).data('categoryid');
-            if ($(event.target).is(':checked')) {
-                $.ajax({
-                	type: "POST",
-                	url: "/rest/subscriptions",
-                	data: { contactmethodid: contactmethodid, categoryid: categoryid, subscribed: false}
-                })
-                .done(function( msg ) {
-                    alert( msg );
-                });
-            }
-            else {
-                $.ajax({
-                    type: "POST",
-                    url: "/rest/subscriptions",
-                    data: { contactmethodid: contactmethodid, categoryid: categoryid, subscribed: true }
-                })
-                .done(function( msg ) {
-                    alert( msg );
-                });
-            }
+            $.ajax({
+            	type: "POST",
+            	url: "/rest/subscriptions",
+            	data: { contactmethodid: contactmethodid, categoryid: categoryid, subscribed: !$(event.target).is(':checked')}
+            })
+            .done(function( msg ) {
+                alert( msg );
+            });
         });
     };
 
