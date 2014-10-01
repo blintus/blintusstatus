@@ -28,7 +28,7 @@ define(['jquery', 'shared/dataUtils', 'persistentStorage',
      */
     HomeView.prototype.init = function () {
         var that = this,
-            categories = this.controller._nestedCategories;
+            categories = this.controller.getRootCategories();
 
         this.$categoriesList.empty().append(categoryMarkup({
             categories: categories
@@ -36,8 +36,7 @@ define(['jquery', 'shared/dataUtils', 'persistentStorage',
         this.categoryLinks = $('.category-link');
 
         var selectedCategoryId = persistentStorage.getItem('local', 'selectedCategoryId');
-        var categoriesPkObject = dataUtils.arrayToPkObject(this.controller._categories);
-        if (!categoriesPkObject[selectedCategoryId]) {
+        if (!this.controller.getCategory(selectedCategoryId)) {
             selectedCategoryId = categories[0].pk;
         }
         this._selectCategory(selectedCategoryId);
@@ -82,9 +81,9 @@ define(['jquery', 'shared/dataUtils', 'persistentStorage',
      * @method _selectCategory
      * @private
      * @param {int} categoryId The id of the category to select
-     * @param {jQuery} $targetCategoryLink An optional parameter that specifies the category
-                                           link that was clicked. If omitted, finds the link based
-                                           on the categoryId
+     * @param {jQuery} [$targetCategoryLink] An optional parameter that specifies the category
+                                             link that was clicked. If omitted, finds the link based
+                                             on the categoryId
      */
     HomeView.prototype._selectCategory = function (categoryId, $targetCategoryLink) {
         var that = this,
@@ -100,12 +99,11 @@ define(['jquery', 'shared/dataUtils', 'persistentStorage',
             $('.category-link[data-categoryid="' + categoryId + '"]').addClass('active');
         }
 
-        posts = $.extend(true, [], this.controller.getPostsForCategory(categoryId));
+        posts = dataUtils.clone(this.controller.getPostsForCategory(categoryId));
 
         // Add categories to post, and render them
-        var categoriesPkObject = dataUtils.arrayToPkObject(this.controller._categories);
         posts.forEach(function (post) {
-            post.category = categoriesPkObject[post.category];
+            post.category = that.controller.getCategory(post.category);
         });
         this.$postContainer.empty().append(postMarkup({
             posts: posts
@@ -113,8 +111,14 @@ define(['jquery', 'shared/dataUtils', 'persistentStorage',
 
     };
 
+    /**
+     * Show comments for the specified post
+     *
+     * @param {jQuery} $showLink An object representing the link that was clicked
+     * @param {int} postId The post to show comments for
+     */
     HomeView.prototype._showComments = function ($showLink, postId) {
-        var comments = this.controller.getComments(postId);
+        var comments = this.controller.getCommentsForPost(postId);
         var $commentsDiv = $showLink.siblings('.comments');
         $commentsDiv.prepend(commentsMarkup({
             comments: comments

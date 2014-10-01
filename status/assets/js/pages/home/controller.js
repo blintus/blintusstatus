@@ -28,49 +28,44 @@ define(['pageUtils', 'shared/dataUtils',
         var that = this;
 
         $.when(postsMock, categoriesMock).done(function (posts, categories) {
+            // Normal posts array
             that._posts = posts;
-            that._categories = categories;
 
             // Created an object with child categories added to a children array
-            var rawCategories = $.extend(true, {}, dataUtils.arrayToPkObject(categories));
-            for (var key in rawCategories) {
-                var category = rawCategories[key];
+            categories = dataUtils.arrayToPkObject(categories);
+            for (var key in categories) {
+                var category = categories[key];
                 if (category.parent) {
-                    var parent = rawCategories[category.parent];
+                    var parent = categories[category.parent];
                     if (!parent.children) parent.children = [];
                     parent.children.push(category);
                 }
             }
 
-            var categoriesWithChildren = [];
-            var nestedCategories = [];
-            for (var key in rawCategories) {
-                categoriesWithChildren.push(rawCategories[key]);
-                if (!rawCategories[key].parent) {
-                    nestedCategories.push(rawCategories[key]);
-                }
-            }
-            that._categoriesWithChildren = categoriesWithChildren;
-            that._nestedCategories = nestedCategories;
+            // An array of categories with each category having a array of it's children,
+            // if it has any
+            that._categories = categories;
 
             that.view.init();
         });
     };
 
     /**
-     * Helper method to get the ids of all nested categories
+     * Helper method to get the ids of category, as well as any children categories
+     * of that category.
      *
-     * @method _getChildrenCategoryIds
+     * @method _getCategoryIds
      * @private
-     * @param {Array} children An array of children to search
+     * @param {Array/Object} children An array of children or object to search
      */
-    HomeController.prototype._getChildrenCategoryIds = function (children) {
+    HomeController.prototype._getCategoryIds = function getCategoryIds(children) {
         var that = this,
             nestedIds = [];
+        if (!Array.isArray(children)) children = [children];
         children.forEach(function (child) {
             nestedIds.push(child.pk);
             if (child.children) {
-                Array.prototype.push.apply(nestedIds, that._getChildrenCategoryIds(child.children));
+                Array.prototype.push.apply(nestedIds, getCategoryIds(child.children));
             }
         });
         return nestedIds;
@@ -84,20 +79,45 @@ define(['pageUtils', 'shared/dataUtils',
      * @return {Array} An array of the posts available that belong to the category and its children
      */
     HomeController.prototype.getPostsForCategory = function (categoryId) {
-        // If a categoryId is specified, search for all posts with in that category or its children
-        if (categoryId) {
-            var categoryIds = this._getChildrenCategoryIds([dataUtils.arrayToPkObject(this._categoriesWithChildren)[categoryId]]);
-            return this._posts.filter(function (post) {
-                if (categoryIds.indexOf(post.category) === -1) {
-                    // debugger
-                }
-                return categoryIds.indexOf(post.category) !== -1;
-            });
-        }
-        return $.extend(true, [], this._posts);
+        var categoryIds = this._getCategoryIds(this._categories[categoryId]);
+        return this._posts.filter(function (post) {
+            return categoryIds.indexOf(post.category) !== -1;
+        });
     };
 
-    HomeController.prototype.getComments = function (postId) {
+    /**
+     * Get a single category by its id
+     *
+     * @method getCategory
+     * @param {int} categoryId The id of the category
+     * @return {Object} The category or null
+     */
+    HomeController.prototype.getCategory = function (categoryId) {
+        return this._categories[categoryId] || null;
+    };
+
+    /**
+     * Get a list of root level categories with their children included
+     *
+     * @method getRootCategories
+     * @return {Array} An array of root level categories
+     */
+    HomeController.prototype.getRootCategories = function () {
+        var rootCategories = [];
+        for (var key in this._categories) {
+            var category = this._categories[key];
+            if (!category.parent) rootCategories.push(category);
+        }
+        return rootCategories;
+    };
+
+    /**
+     * Get all of the comments for a post
+     *
+     * @param {int} postId The post id
+     * @return {Array} An array of comments
+     */
+    HomeController.prototype.getCommentsForPost = function (postId) {
         return commentsMock[postId];
     };
 
