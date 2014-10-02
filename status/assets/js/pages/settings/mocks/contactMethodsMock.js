@@ -16,5 +16,5 @@ define([], function () {
 			"user": 2,
 			"email": ""
 		}
-	]
+	];
 });

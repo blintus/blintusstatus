@@ -12,5 +12,5 @@ define([], function () {
 			"name": "at&t",
 			"gateway": "@atext.com"
 		}
-	]
+	];
 });

@@ -28,8 +28,8 @@ class Post(models.Model):
 	title = models.CharField(max_length=255)
 	status = models.PositiveIntegerField()
 	category = models.ForeignKey(Category)
-	created = models.DateField(auto_now = False, auto_now_add = True)
-	updated = models.DateField(auto_now = True)
+	created = models.DateTimeField(auto_now = False, auto_now_add = True)
+	updated = models.DateTimeField(auto_now = True)
 	message = models.TextField()
 	user = models.ForeignKey(User)
 

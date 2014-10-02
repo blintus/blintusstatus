@@ -1,7 +1,8 @@
 define(['jquery', 
 		'hbs!pages/settings/markup',
-		'hbs!pages/settings/contactMethodMarkup'
-	], function ($, pageMarkup, contactMethodMarkup) {
+		'hbs!pages/settings/contactMethodMarkup',
+        'hbs!pages/settings/addContactMethodMarkup'
+	], function ($, pageMarkup, contactMethodMarkup, addContactMethodMarkup) {
     
     'use strict';
 
@@ -53,10 +54,15 @@ define(['jquery',
             	type: "POST",
             	url: "/rest/subscriptions",
             	data: { contactmethodid: contactmethodid, categoryid: categoryid, subscribed: !event.target.checked}
-            })
-            .done(function( msg ) {
-                alert( msg );
             });
+        });
+
+        this.$addContactMethodContainer.on('submit', 'form.add-new-contact-method-form', function (event) {
+            var message = that.$addContactMethodContainer.data('new-contact-method');
+
+            console.log(message);
+
+            alert(message);
         });
     };
 
@@ -86,7 +92,11 @@ define(['jquery',
                     return $(this).attr('data-categoryid').match(cat); 
                 }).prop('checked', true);
         }
-    }
+
+        this.$addContactMethodContainer.empty().append(addContactMethodMarkup({
+
+        }));
+    };
 
     return SettingsView;
 

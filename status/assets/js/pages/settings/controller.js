@@ -52,21 +52,21 @@ define(['pageUtils',
     SettingsController.prototype.getContactMethods = function () {
         var rawContactMethods = $.extend(true, {}, this.contactMethods);
         for (var key in rawContactMethods) {
-            var provider = this.providers[rawContactMethods[key]['provider']];
-            if (provider != null && provider['name'] != null) {
-                rawContactMethods[key]['provider'] = provider['name'];
+            var provider = this.providers[rawContactMethods[key].provider];
+            if (provider != null && provider.name !== null) {
+                rawContactMethods[key].provider = provider.name;
             }
         }
     	return rawContactMethods;
-    }
+    };
 
     SettingsController.prototype.getCategories = function () {
     	return this.categories;
-    }
+    };
 
     SettingsController.prototype.getSubscriptions = function () {
         return this.subscriptions;
-    }
+    };
 
     return SettingsController;
 

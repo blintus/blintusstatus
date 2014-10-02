@@ -14,5 +14,5 @@ define([], function () {
 			"contactMethod": 5,
 			"user": 2
 		}
-	]
+	];
 });
