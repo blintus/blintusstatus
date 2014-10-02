@@ -115,7 +115,7 @@ define(['lodash', 'pageUtils',
         var promise = $.Deferred();
         setTimeout(function () {
             promise.resolve(commentsMock[postId]);
-        }, 100);
+        }, 1000);
         return promise;
     };
 

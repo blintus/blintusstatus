@@ -148,13 +148,18 @@ define(['jquery', 'lodash', 'persistentStorage',
     HomeView.prototype._addComment = function ($postBtn, postId) {
         var $commentsList = $postBtn.parent().siblings('.comments-inner');
         var $messageBox = $postBtn.siblings('textarea');
+        var $savingSpinner = $postBtn.siblings('.comments-textarea-spinner');
+        var message = $messageBox.val();
+        if (message === '') return;
         $messageBox.prop('disabled', true);
         $postBtn.prop('disabled', true);
-        $.when(this.controller.addComment(postId, $messageBox.val())).done(function (comment) {
+        $savingSpinner.show();
+        $.when(this.controller.addComment(postId, message)).done(function (comment) {
             $commentsList.append(commentMarkup(comment));
             $messageBox.val('');
             $messageBox.prop('disabled', false);
             $postBtn.prop('disabled', false);
+            $savingSpinner.hide();
         });
     };
 
