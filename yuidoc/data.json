@@ -87,7 +87,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "status/assets/js/pages/home/view.js",
-            "line": 9,
+            "line": 14,
             "description": "Constructor for a home view",
             "is_constructor": 1,
             "params": [
@@ -219,14 +219,14 @@
                 }
             ],
             "return": {
-                "description": "An array of comments",
+                "description": "A promise for the returned data",
                 "type": "Array"
             },
             "class": "pages.home.HomeController"
         },
         {
             "file": "status/assets/js/pages/home/view.js",
-            "line": 24,
+            "line": 29,
             "description": "Initializes the view with data",
             "itemtype": "method",
             "name": "init",
@@ -234,7 +234,7 @@
         },
         {
             "file": "status/assets/js/pages/home/view.js",
-            "line": 47,
+            "line": 52,
             "description": "Initializes the event listeners for the view",
             "itemtype": "method",
             "name": "_initEventListeners",
@@ -244,7 +244,7 @@
         },
         {
             "file": "status/assets/js/pages/home/view.js",
-            "line": 78,
+            "line": 90,
             "description": "Select a category and display the related posts",
             "itemtype": "method",
             "name": "_selectCategory",
@@ -267,7 +267,7 @@
         },
         {
             "file": "status/assets/js/pages/home/view.js",
-            "line": 114,
+            "line": 126,
             "description": "Show comments for the specified post",
             "params": [
                 {
@@ -395,7 +395,7 @@
         },
         {
             "message": "Missing item type\nShow comments for the specified post",
-            "line": " status/assets/js/pages/home/view.js:114"
+            "line": " status/assets/js/pages/home/view.js:126"
         },
         {
             "message": "Missing item type\n* Page routes **",
