@@ -32,7 +32,7 @@ define([], function () {
          */
         arrayToPkObject: function (dataArray) {
             if (!Array.isArray(dataArray)) {
-                throw new Error('arrayToPkObject takes an array as an argument.')
+                throw new Error('arrayToPkObject takes an array as an argument.');
             }
             var obj = {};
             dataArray.forEach(function (data) {
