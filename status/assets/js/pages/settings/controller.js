@@ -68,6 +68,10 @@ define(['pageUtils',
         return this.subscriptions;
     };
 
+    SettingsController.prototype.getProviders = function () {
+        return this.providers;
+    };
+
     return SettingsController;
 
 });

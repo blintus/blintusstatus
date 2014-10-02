@@ -1,8 +1,7 @@
 define(['jquery', 
 		'hbs!pages/settings/markup',
-		'hbs!pages/settings/contactMethodMarkup',
-        'hbs!pages/settings/addContactMethodMarkup'
-	], function ($, pageMarkup, contactMethodMarkup, addContactMethodMarkup) {
+		'hbs!pages/settings/contactMethodMarkup'
+	], function ($, pageMarkup, contactMethodMarkup) {
     
     'use strict';
 
@@ -53,32 +52,54 @@ define(['jquery',
             $.ajax({
             	type: "POST",
             	url: "/rest/subscriptions",
-            	data: { contactmethodid: contactmethodid, categoryid: categoryid, subscribed: !event.target.checked}
+            	data: {
+                    contactmethodid: contactmethodid,
+                    categoryid: categoryid,
+                    subscribed: !event.target.checked
+                }
             });
         });
 
-        this.$addContactMethodContainer.on('submit', '.submit-new-contact-method', function (event) {
-            var message = that.$addContactMethodContainer.data('new-contact-method');
+        this.$contactMethodContainer.on('click', '.submit-new-contact-method', function (event) {
+            var email = that.$contactMethodContainer.find('.new-contact-method-email').val(),
+                phoneNumber = that.$contactMethodContainer.find('.new-contact-method-phone-number').val(),
+                provider = that.$contactMethodContainer.find('.new-contact-method-provider').val();
 
-            console.log(message);
+            if (!(email || (phoneNumber && provider !== ''))) {
+                alert('You done fucked up A-Aron');
+            }
 
-            alert(message);
+            $.ajax({
+                type: "POST",
+                url: "/rest/contactMethods",
+                data: {
+                    email: email,
+                    phoneNumber: phoneNumber,
+                    provider: provider,
+                    subscribed: false
+                }
+            }).done(function (msg) {
+                alert(msg);
+            });
         });
     };
 
     SettingsView.prototype._loadContactMethods = function () {
     	var contactMethods,
     		categories,
-            subscriptions;
+            subscriptions,
+            providers;
 
     	contactMethods = this.controller.getContactMethods();
     	categories = this.controller.getCategories();
         subscriptions = this.controller.getSubscriptions();
+        providers = this.controller.getProviders();
         
         // Create subscription table
     	this.$contactMethodContainer.empty().append(contactMethodMarkup({
     		contactMethods: contactMethods,
-    		categories: categories
+    		categories: categories,
+            providers: providers
     	}));
 
         // Check correct checkbox's
@@ -89,10 +110,6 @@ define(['jquery',
             var cat = subscriptions[key].category;
             var checkboxes = this.$contactMethodContainer.find('input[type="checkbox"]').filter('[data-contactmethodid="' + con + '"]').filter('[data-categoryid="' + cat + '"]').prop('checked', true);
         }
-
-        this.$addContactMethodContainer.empty().append(addContactMethodMarkup({
-
-        }));
     };
 
     return SettingsView;

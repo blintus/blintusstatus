@@ -24,3 +24,16 @@
 		</tr>
 	{{/each}}
 </table>
+
+<form class="add-contact-methods-form">
+    Email: <input type="text" class="new-contact-method-email"></br>
+    Phone Number<input type="text" class="new-contact-method-phone-number"></br>
+    Provider:
+    <select class="new-contact-method-provider">
+    	<option value="">Not Applicable</option>
+	    {{#each providers}}
+	    	<option value="{{pk}}">{{name}}</option>
+	    {{/each}}
+	</select></br>
+    <input type="submit" class="submit-new-contact-method">
+</form>

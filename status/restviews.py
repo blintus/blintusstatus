@@ -70,7 +70,10 @@ def contactMethod(request):
 	if not (subscribed and (email or (phoneNumber and providerid))):
 		return HttpResponseBadRequest(JsonResponse({'message':'Please supply either an email or phone number with provider'}))
 	
-	provider = Provider.objects.get(pk=providerid)
+	if email:
+		provider = None
+	else:
+		provider = Provider.objects.get(pk=providerid)
 
 	if request.method == 'POST' and subscribed == 'false':
 		if len(ContactMethod.objects.filter(email = email, phoneNumber = phoneNumber, provider = provider, user = request.user)) > 0:
