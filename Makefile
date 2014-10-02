@@ -7,7 +7,7 @@ run_heroku_server:
 	foreman start
 
 install_dependencies:
-	pip install -r requirements.txt --allow-all-external
+	pip install -r requirements.txt
 
 makemigrations:
 	foreman run python manage.py makemigrations
