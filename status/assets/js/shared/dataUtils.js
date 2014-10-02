@@ -31,6 +31,8 @@ define([], function () {
          * @return {Object} The converted object
          */
         arrayToPkObject: function (dataArray) {
+            var stack = (new Error()).stack;
+            console.warn('This should be replaced with a call to _.indexBy(dataArray, \'pk\') at \n', stack)
             if (!Array.isArray(dataArray)) {
                 throw new Error('arrayToPkObject takes an array as an argument.');
             }
@@ -49,6 +51,8 @@ define([], function () {
          * @return {Object} A copy of data
          */
         clone: function clone(data) {
+            var stack = (new Error()).stack;
+            console.warn('This should be replaced with a call to _.cloneDeep(data) or _.clone(data) at \n', stack)
             if (data === null || data === undefined) {
                 return data;
             } else if (typeof data === 'object') {

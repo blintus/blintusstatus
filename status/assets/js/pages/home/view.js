@@ -1,9 +1,9 @@
-define(['jquery', 'shared/dataUtils', 'persistentStorage',
+define(['jquery', 'lodash', 'persistentStorage',
     'hbs!pages/home/markup',
     'hbs!pages/home/markup/statusPost',
     'hbs!pages/home/markup/categoryTemplate',
     'hbs!pages/home/markup/comment'
-], function ($, dataUtils, persistentStorage, pageMarkup, postMarkup, categoryMarkup, commentMarkup) {
+], function ($, _, persistentStorage, pageMarkup, postMarkup, categoryMarkup, commentMarkup) {
     'use strict';
 
     var animationSettings = {
@@ -111,10 +111,10 @@ define(['jquery', 'shared/dataUtils', 'persistentStorage',
             $('.category-link[data-categoryid="' + categoryId + '"]').addClass('active');
         }
 
-        posts = dataUtils.clone(this.controller.getPostsForCategory(categoryId));
+        posts = _.cloneDeep(this.controller.getPostsForCategory(categoryId));
 
         // Add categories to post, and render them
-        posts.forEach(function (post) {
+        _.each(posts, function (post) {
             post.category = that.controller.getCategory(post.category);
         });
         this.$postContainer.empty().append(postMarkup({
@@ -136,7 +136,7 @@ define(['jquery', 'shared/dataUtils', 'persistentStorage',
         $.when(this.controller.getCommentsForPost(postId)).done(function (comments) {
             var $commentsContainer = $showLink.siblings('.comments');
             var commentsList = [];
-            comments.forEach(function (comment) {
+            _.each(comments, function (comment) {
                 commentsList.push(commentMarkup(comment));
             });
             $commentsContainer.find('.comments-inner').append(commentsList.join(''));

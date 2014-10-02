@@ -30,6 +30,10 @@ var PAGE_ROUTES = [
         return jQuery;
     });
 
+    define('lodash', [], function () {
+        return _;
+    });
+
     var pathArgs;
     define('pathArgs', [], function () {
         return pathArgs;

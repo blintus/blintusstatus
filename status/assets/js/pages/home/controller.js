@@ -1,9 +1,9 @@
-define(['pageUtils', 'shared/dataUtils',
+define(['lodash', 'pageUtils',
     'pages/home/view',
     'pages/home/mocks/postsMock',
     'pages/home/mocks/categoriesMock',
     'pages/home/mocks/commentsMock'
-], function (pageUtils, dataUtils, HomeView, postsMock, categoriesMock, commentsMock) {
+], function (_, pageUtils, HomeView, postsMock, categoriesMock, commentsMock) {
     'use strict';
 
     /**
@@ -32,15 +32,14 @@ define(['pageUtils', 'shared/dataUtils',
             that._posts = posts;
 
             // Created an object with child categories added to a children array
-            categories = dataUtils.arrayToPkObject(categories);
-            for (var key in categories) {
-                var category = categories[key];
+            categories = _.indexBy(categories, 'pk');
+            _.each(categories, function (category) {
                 if (category.parent) {
                     var parent = categories[category.parent];
                     if (!parent.children) parent.children = [];
                     parent.children.push(category);
                 }
-            }
+            });
 
             // An array of categories with each category having a array of it's children,
             // if it has any
@@ -61,8 +60,8 @@ define(['pageUtils', 'shared/dataUtils',
     HomeController.prototype._getCategoryIds = function getCategoryIds(children) {
         var that = this,
             nestedIds = [];
-        if (!Array.isArray(children)) children = [children];
-        children.forEach(function (child) {
+        if (!_.isArray(children)) children = [children];
+        _.each(children, function (child) {
             nestedIds.push(child.pk);
             if (child.children) {
                 Array.prototype.push.apply(nestedIds, getCategoryIds(child.children));
@@ -80,7 +79,7 @@ define(['pageUtils', 'shared/dataUtils',
      */
     HomeController.prototype.getPostsForCategory = function (categoryId) {
         var categoryIds = this._getCategoryIds(this._categories[categoryId]);
-        return this._posts.filter(function (post) {
+        return _.filter(this._posts, function (post) {
             return categoryIds.indexOf(post.category) !== -1;
         });
     };
@@ -103,12 +102,7 @@ define(['pageUtils', 'shared/dataUtils',
      * @return {Array} An array of root level categories
      */
     HomeController.prototype.getRootCategories = function () {
-        var rootCategories = [];
-        for (var key in this._categories) {
-            var category = this._categories[key];
-            if (!category.parent) rootCategories.push(category);
-        }
-        return rootCategories;
+        return _.filter(this._categories, {parent: null});
     };
 
     /**
