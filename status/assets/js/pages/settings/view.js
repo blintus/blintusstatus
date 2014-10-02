@@ -57,7 +57,7 @@ define(['jquery',
             });
         });
 
-        this.$addContactMethodContainer.on('submit', 'form.add-new-contact-method-form', function (event) {
+        this.$addContactMethodContainer.on('submit', '.submit-new-contact-method', function (event) {
             var message = that.$addContactMethodContainer.data('new-contact-method');
 
             console.log(message);
