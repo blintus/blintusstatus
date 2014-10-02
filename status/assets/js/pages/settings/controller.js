@@ -53,7 +53,7 @@ define(['pageUtils',
         var rawContactMethods = $.extend(true, {}, this.contactMethods);
         for (var key in rawContactMethods) {
             var provider = this.providers[rawContactMethods[key].provider];
-            if (provider != null && provider.name !== null) {
+            if (typeof provider !== 'undefined' && provider.name !== null) {
                 rawContactMethods[key].provider = provider.name;
             }
         }

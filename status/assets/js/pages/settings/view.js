@@ -83,14 +83,11 @@ define(['jquery',
 
         // Check correct checkbox's
         var sub_len = Object.keys(subscriptions).length;
+
         for (var key in subscriptions) {
             var con = subscriptions[key].contactMethod;
             var cat = subscriptions[key].category;
-            this.$contactMethodContainer.find('input[type="checkbox"]').filter( function() { 
-                    return $(this).attr('data-contactmethodid').match(con); 
-                }).filter( function() { 
-                    return $(this).attr('data-categoryid').match(cat); 
-                }).prop('checked', true);
+            var checkboxes = this.$contactMethodContainer.find('input[type="checkbox"]').filter('[data-contactmethodid="' + con + '"]').filter('[data-categoryid="' + cat + '"]').prop('checked', true);
         }
 
         this.$addContactMethodContainer.empty().append(addContactMethodMarkup({
