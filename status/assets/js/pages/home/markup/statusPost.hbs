@@ -6,10 +6,16 @@
         <p>{{message}}</p>
         <div class="comments-wrapper">
             <a class="comments-show-link" data-postid="{{pk}}">Show Comments</a>
+            <div class="comments-spinner spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
             <div class="comments">
+                <div class="comments-inner"></div>
                 <div class="post-comment">
                     <textarea class="form-control" placeholder="Write a comment"></textarea>
-                    <input type="button" value="Post" class="btn btn-primary">
+                    <input type="button" value="Post" class="btn btn-primary post-comment-btn" data-postid="{{pk}}">
                 </div>
             </div>
         </div>

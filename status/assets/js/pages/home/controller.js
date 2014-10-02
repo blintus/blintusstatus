@@ -115,10 +115,27 @@ define(['pageUtils', 'shared/dataUtils',
      * Get all of the comments for a post
      *
      * @param {int} postId The post id
-     * @return {Array} An array of comments
+     * @return {Array} A promise for the returned data
      */
-    HomeController.prototype.getCommentsForPost = function (postId) {
-        return commentsMock[postId];
+    HomeController.prototype.getCommentsForPost = function (postId, callback) {
+        var promise = $.Deferred();
+        setTimeout(function () {
+            promise.resolve(commentsMock[postId]);
+        }, 100);
+        return promise;
+    };
+
+    HomeController.prototype.addComment = function (postId, message) {
+        var promise = $.Deferred();
+        setTimeout(function () {
+            promise.resolve({
+                pk: 85,
+                message: message,
+                user: 'current user',
+                created: '2014-10-02'
+            });
+        }, 1000);
+        return promise;
     };
 
     return HomeController;

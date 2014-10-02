@@ -2,9 +2,14 @@ define(['jquery', 'shared/dataUtils', 'persistentStorage',
     'hbs!pages/home/markup',
     'hbs!pages/home/markup/statusPost',
     'hbs!pages/home/markup/categoryTemplate',
-    'hbs!pages/home/markup/comments'
-], function ($, dataUtils, persistentStorage, pageMarkup, postMarkup, categoryMarkup, commentsMarkup) {
+    'hbs!pages/home/markup/comment'
+], function ($, dataUtils, persistentStorage, pageMarkup, postMarkup, categoryMarkup, commentMarkup) {
     'use strict';
+
+    var animationSettings = {
+        duration: 200,
+        queue: true
+    };
 
     /**
      * Constructor for a home view
@@ -73,6 +78,13 @@ define(['jquery', 'shared/dataUtils', 'persistentStorage',
             that._showComments($target, postId);
         });
 
+        // Bind post comment buttons
+        this.$postContainer.on('click', '.post-comment-btn', function (event) {
+            var $target = $(event.target);
+            var postId = $target.data('postid');
+            that._addComment($target);
+        });
+
     };
 
     /**
@@ -118,18 +130,31 @@ define(['jquery', 'shared/dataUtils', 'persistentStorage',
      * @param {int} postId The post to show comments for
      */
     HomeView.prototype._showComments = function ($showLink, postId) {
-        var comments = this.controller.getCommentsForPost(postId);
-        var $commentsDiv = $showLink.siblings('.comments');
-        $commentsDiv.prepend(commentsMarkup({
-            comments: comments
-        }));
-        $commentsDiv.slideDown({
-            duration: 200,
-            queue: false
+        $showLink.slideUp(animationSettings);
+        var $commentsSpinner = $showLink.siblings('.comments-spinner');
+        $commentsSpinner.slideDown(animationSettings);
+        $.when(this.controller.getCommentsForPost(postId)).done(function (comments) {
+            var $commentsContainer = $showLink.siblings('.comments');
+            var commentsList = [];
+            comments.forEach(function (comment) {
+                commentsList.push(commentMarkup(comment));
+            });
+            $commentsContainer.find('.comments-inner').append(commentsList.join(''));
+            $commentsSpinner.slideUp(animationSettings);
+            $commentsContainer.slideDown(animationSettings);
         });
-        $showLink.slideUp({
-            duration: 200,
-            queue: false
+    };
+
+    HomeView.prototype._addComment = function ($postBtn, postId) {
+        var $commentsList = $postBtn.parent().siblings('.comments-inner');
+        var $messageBox = $postBtn.siblings('textarea');
+        $messageBox.prop('disabled', true);
+        $postBtn.prop('disabled', true);
+        $.when(this.controller.addComment(postId, $messageBox.val())).done(function (comment) {
+            $commentsList.append(commentMarkup(comment));
+            $messageBox.val('');
+            $messageBox.prop('disabled', false);
+            $postBtn.prop('disabled', false);
         });
     };
 
