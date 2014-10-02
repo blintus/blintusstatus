@@ -15,6 +15,10 @@ makemigrations:
 migrate_database: makemigrations
 	foreman run python manage.py migrate
 
+test:
+	@foreman run python manage.py validate
+	@jshint status/assets/js/{pages,shared}
+
 view_yuidocs:
 	@DOC_PATH=$$(pwd)/yuidoc/index.html; \
 	if type xdg-open >/dev/null 2>&1; then \
