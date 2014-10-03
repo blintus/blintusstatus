@@ -62,20 +62,23 @@ def contactMethod(request):
 	if request.method == 'GET':
 		return _returnJSON(ContactMethod.objects.filter(user = request.user))
 		
-	email = request.POST['email']
-	phoneNumber = request.POST['phoneNumber']
-	providerid = request.POST['provider']
 	subscribed = request.POST['subscribed']
-	
-	if not (subscribed and (email or (phoneNumber and providerid))):
-		return HttpResponseBadRequest(JsonResponse({'message':'Please supply either an email or phone number with provider'}))
-	
-	if email:
-		provider = None
-	else:
-		provider = Provider.objects.get(pk=providerid)
+	if not subscribed:
+		return HttpResponseBadRequest(JsonResponse({'message':'Please supply subscribed value'}))
 
 	if request.method == 'POST' and subscribed == 'false':
+		email = request.POST['email']
+		phoneNumber = request.POST['phoneNumber']
+		providerid = request.POST['provider']
+		
+		if not (email or (phoneNumber and providerid)):
+			return HttpResponseBadRequest(JsonResponse({'message':'Please supply either an email or phone number with provider'}))
+		
+		if email:
+			provider = None
+		else:
+			provider = Provider.objects.get(pk=providerid)
+
 		if len(ContactMethod.objects.filter(email = email, phoneNumber = phoneNumber, provider = provider, user = request.user)) > 0:
 			return HttpResponse(JsonResponse({'message':'Contact method already exists'}))
 		contactMethod = ContactMethod(email = email, phoneNumber = phoneNumber, provider = provider, user = request.user)
@@ -83,7 +86,11 @@ def contactMethod(request):
 		return HttpResponse(JsonResponse({'message':'Contact method successfully saved'}))
 		
 	elif request.method == 'POST' and subscribed == 'true':
-		ContactMethod.objects.get(email = email, phoneNumber = phoneNumber, provider = provider, user = request.user).delete()
+		pk = request.POST['pk']
+		if not pk:
+			return HttpResponseBadRequest(JsonResponse({'message':'Please supply the pk of a contact method to delete'}))
+		
+		ContactMethod.objects.get(pk=pk, user = request.user).delete()
 		return HttpResponse(JsonResponse({'message':'Contact methods successfully deleted'}))
 	
 	return HttpResponseNotAllowed(['GET', 'POST'], JsonResponse({'message':'method provided is not supported'}))

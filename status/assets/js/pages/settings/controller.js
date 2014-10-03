@@ -1,7 +1,6 @@
 define(['pageUtils', 
-		'pages/settings/view',
-        'shared/dataUtils'
-	], function (pageUtils, SettingsView, dataFormatter) {
+		'pages/settings/view'
+	], function (pageUtils, SettingsView) {
     
     'use strict';
 
@@ -29,19 +28,19 @@ define(['pageUtils',
             sub_promise;
 
         cat_promise = $.getJSON("/rest/categories", function (json) {
-            that.categories = dataFormatter.arrayToPkObject(json);
+            that.categories = _.indexBy(json, 'pk');
         });
 
         con_promise = $.getJSON("/rest/contactMethods", function (json) {
-            that.contactMethods = dataFormatter.arrayToPkObject(json);
+            that.contactMethods = _.indexBy(json, 'pk');
         });
 
         prov_promise = $.getJSON( "/rest/providers", function (json) {
-            that.providers = dataFormatter.arrayToPkObject(json);
+            that.providers = _.indexBy(json, 'pk');
         });
 
         sub_promise = $.getJSON("/rest/subscriptions", function ( json ) {
-            that.subscriptions = dataFormatter.arrayToPkObject(json);
+            that.subscriptions = _.indexBy(json, 'pk');
         });
 
         $.when(cat_promise, con_promise, prov_promise, sub_promise).done(function () {

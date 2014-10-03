@@ -1,3 +1,4 @@
+<h3>Subscribe for updates</h3></br>
 <table class="contact-method-table">
 	<tr>
 		<td class="contact-method"></td>
@@ -23,17 +24,46 @@
 			{{/each}}
 		</tr>
 	{{/each}}
-</table>
+</table></br></br>
 
-<form class="add-contact-methods-form">
-    Email: <input type="text" class="new-contact-method-email"></br>
-    Phone Number<input type="text" class="new-contact-method-phone-number"></br>
-    Provider:
-    <select class="new-contact-method-provider">
-    	<option value="">Not Applicable</option>
-	    {{#each providers}}
-	    	<option value="{{pk}}">{{name}}</option>
-	    {{/each}}
-	</select></br>
-    <input type="submit" class="submit-new-contact-method">
-</form>
+<h3>Add a Contact Method</h3></br>
+
+<table class="add-contact-methods-table">
+    <tr>
+    	<td class="add-contact-method-cell">Email</td><td add-contact-method-cell><input type="text" class="new-contact-method-email"></td>
+    </tr>
+    <tr>
+    	<td class="add-contact-method-cell">Phone Number</td><td add-contact-method-cell><input type="text" class="new-contact-method-phone-number"></td>
+    </tr>
+    <tr>
+	    <td class="add-contact-method-cell">Provider</td>
+	    <td add-contact-method-cell><select class="new-contact-method-provider">
+	    	<option value="">Not Applicable</option>
+		    {{#each providers}}
+		    	<option value="{{pk}}">{{name}}</option>
+		    {{/each}}
+		</select></td>
+    <tr>
+    	<td class="add-contact-method-cell"><input type="submit" class="submit-new-contact-method"></td>
+    </tr>
+</table></br></br>
+
+<h3>Remove Contact Methods</h3></br>
+
+<table class="delete-contact-method-table">
+	{{#each contactMethods}}
+		<tr><td class="remove-contact-method-cell">
+		{{#if email}}
+			<input type="checkbox" class="remove-contact-method-checkbox" data-pk="{{pk}}" data-name="{{email}}">
+			{{email}}
+		{{else}}
+			{{#if phoneNumber}}
+				{{#if provider}}
+					<input type="checkbox" class="remove-contact-method-checkbox" data-pk="{{pk}}" data-name="{{phoneNumber}} ({{provider}}">
+					{{phoneNumber}} ({{provider}})
+				{{/if}}
+			{{/if}}
+		{{/if}}
+		</td><tr>
+	{{/each}}
+</table>

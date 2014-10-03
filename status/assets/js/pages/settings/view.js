@@ -26,7 +26,6 @@ define(['jquery',
      * @method init
      */
     SettingsView.prototype.init = function () {
-
         this._loadContactMethods();
         this._initEventListeners();
     };
@@ -40,13 +39,13 @@ define(['jquery',
     SettingsView.prototype._initEventListeners = function () {
         var that = this;
 
-        // Bind checkbox cell click
-        this.$contactMethodContainer.on('click', '.settings-category-cell', function (event) {
+        // Add a subscription by clicking on cell
+        that.$contactMethodContainer.on('click', '.settings-category-cell', function (event) {
         	$(event.target).find('input[type="checkbox"]').click();
         });
 
-        // Bind checkbox click
-        this.$contactMethodContainer.on('click', '.settings-category-checkbox', function (event) {
+        // Add a subscription by clicking checkbox
+        that.$contactMethodContainer.on('click', '.settings-category-checkbox', function (event) {
             var contactmethodid = $(event.target).data('contactmethodid'),
                 categoryid      = $(event.target).data('categoryid');
             $.ajax({
@@ -58,29 +57,49 @@ define(['jquery',
                     subscribed: !event.target.checked
                 }
             });
+            that._refresh();
         });
 
-        this.$contactMethodContainer.on('click', '.submit-new-contact-method', function (event) {
+        // Add a contact method
+        that.$contactMethodContainer.on('click', '.submit-new-contact-method', function (event) {
             var email = that.$contactMethodContainer.find('.new-contact-method-email').val(),
                 phoneNumber = that.$contactMethodContainer.find('.new-contact-method-phone-number').val(),
                 provider = that.$contactMethodContainer.find('.new-contact-method-provider').val();
 
-            if (!(email || (phoneNumber && provider !== ''))) {
-                alert('You done fucked up A-Aron');
+            if (((email && (phoneNumber === '') && (provider === '')) || ((email === '') && phoneNumber && (provider !== '')))) {
+                $.ajax({
+                    type: "POST",
+                    url: "/rest/contactMethods",
+                    data: {
+                        email: email,
+                        phoneNumber: phoneNumber,
+                        provider: provider,
+                        subscribed: false
+                    }
+                });
+                that._refresh();
             }
+        });
 
-            $.ajax({
-                type: "POST",
-                url: "/rest/contactMethods",
-                data: {
-                    email: email,
-                    phoneNumber: phoneNumber,
-                    provider: provider,
-                    subscribed: false
-                }
-            }).done(function (msg) {
-                alert(msg);
-            });
+        // Remove a contact method
+        that.$contactMethodContainer.on('click', '.remove-contact-method-checkbox', function (event) {
+            event.stopPropagation();
+
+            var pk = $(event.target).data('pk'),
+                name = $(event.target).data('name'),
+                confirmDelete = confirm("Remove contact method: " + name + "?");
+
+            if (confirmDelete === true) {
+                $.ajax({
+                    type: "POST",
+                    url: "/rest/contactMethods",
+                    data: {
+                        pk: pk,
+                        subscribed: true
+                    }
+                });
+            }
+            that._refresh();
         });
     };
 
@@ -110,6 +129,12 @@ define(['jquery',
             var cat = subscriptions[key].category;
             var checkboxes = this.$contactMethodContainer.find('input[type="checkbox"]').filter('[data-contactmethodid="' + con + '"]').filter('[data-categoryid="' + cat + '"]').prop('checked', true);
         }
+    };
+
+    SettingsView.prototype._refresh = function () {
+        var that = this;
+        that.controller.loadAllData();
+        that._loadContactMethods();
     };
 
     return SettingsView;

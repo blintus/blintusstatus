@@ -226,30 +226,28 @@ a:hover {
     vertical-align: middle;
 }
 
-.settings-category-checkbox {
-
-}
-
 #add-contact-methods {
     padding-top: 10px;
 }
 
-.add-contact-methods-form {
+.add-contact-methods-table {
+
+}
+.add-contact-method-cell {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 5px;
+}
+
+.remove-contact-method-table {
 
 }
 
-.new-contact-method-email {
-
+.remove-contact-method-cell {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 5px;
 }
-
-.new-contact-method-phone-number {
-
-}
-
-.submit-new-contact-method {
-
-}
-
 
 /***********
  ** Icons **
