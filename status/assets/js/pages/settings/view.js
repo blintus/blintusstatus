@@ -66,6 +66,54 @@ define(['jquery',
             });
         });
 
+        var disableEmail = function () {
+            that.$contactMethodContainer.find('.new-contact-method-email').prop('disabled', true);
+        };
+
+        var enableEmail = function () {
+            that.$contactMethodContainer.find('.new-contact-method-email').prop('disabled', false);
+        };
+
+        var disablePhoneNumber = function () {
+            that.$contactMethodContainer.find('.new-contact-method-phone-number').prop('disabled', true);
+            that.$contactMethodContainer.find('.new-contact-method-provider').prop('disabled', true);
+        };
+
+        var enablePhoneNumber = function () {
+            that.$contactMethodContainer.find('.new-contact-method-phone-number').prop('disabled', false);
+            that.$contactMethodContainer.find('.new-contact-method-provider').prop('disabled', false);
+        };
+
+        that.$contactMethodContainer.on('focus', '.new-contact-method-email', function (event) {
+            disablePhoneNumber();
+        });
+
+        that.$contactMethodContainer.on('focusout', '.new-contact-method-email', function (event) {
+            if (that.$contactMethodContainer.find('.new-contact-method-email').val() === '') {
+                enablePhoneNumber();
+            }
+        });
+
+        that.$contactMethodContainer.on('focus', '.new-contact-method-phone-number', function (event) {
+            disableEmail();
+        });
+
+        that.$contactMethodContainer.on('focusout', '.new-contact-method-phone-number', function (event) {
+            if (that.$contactMethodContainer.find('.new-contact-method-phone-number').val() === '') {
+                enableEmail();
+            }
+        });
+
+        that.$contactMethodContainer.on('focus', '.new-contact-method-provider', function (event) {
+            disableEmail();
+        });
+
+        that.$contactMethodContainer.on('focusout', '.new-contact-method-provider', function (event) {
+            if (that.$contactMethodContainer.find('.new-contact-method-provider').val() === '') {
+                enableEmail();
+            }
+        });
+
         // Add a contact method
         that.$contactMethodContainer.on('click', '.submit-new-contact-method', function (event) {
             var email = that.$contactMethodContainer.find('.new-contact-method-email').val(),

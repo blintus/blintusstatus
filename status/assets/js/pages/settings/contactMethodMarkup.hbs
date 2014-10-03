@@ -9,7 +9,7 @@
 				{{else}}
 					{{#if phoneNumber}}
 						{{#if provider}}
-							{{phoneNumber}}  ({{provider}}) <button type="button" class="close remove-contact-method" data-pk="{{pk}}" data-name="{{phoneNumber}} ({{provider}}">×</button>
+							{{phoneNumber}}  ({{provider}}) <button type="button" class="glyphicon glyphicon-remove remove-contact-method" data-pk="{{pk}}" data-name="{{phoneNumber}} ({{provider}}"></button>
 						{{/if}}
 					{{/if}}
 				{{/if}}
@@ -29,21 +29,20 @@
 <h3>Add a Contact Method</h3></br>
 
 <table class="add-contact-methods-table">
+	<tr>
+		<td class="add-contact-method-cell">Email</td>
+		<td class="add-contact-method-cell">Phone Number</td>
+		<td class="add-contact-method-cell">Provider</td>
+	</tr>
     <tr>
-    	<td class="add-contact-method-cell">Email</td><td add-contact-method-cell><input type="text" class="new-contact-method-email"></td>
-    </tr>
-    <tr>
-    	<td class="add-contact-method-cell">Phone Number</td><td add-contact-method-cell><input type="text" class="new-contact-method-phone-number"></td>
-    </tr>
-    <tr>
-	    <td class="add-contact-method-cell">Provider</td>
-	    <td add-contact-method-cell><select class="new-contact-method-provider">
+    	</td><td class="add-contact-method-cell"><input type="text" class="new-contact-method-email"></td>
+    	<td class="add-contact-method-cell"><input type="text" class="new-contact-method-phone-number"></td>
+	    <td class="add-contact-method-cell"><select class="new-contact-method-provider">
 	    	<option value="">Not Applicable</option>
 		    {{#each providers}}
 		    	<option value="{{pk}}">{{name}}</option>
 		    {{/each}}
 		</select></td>
-    <tr>
     	<td class="add-contact-method-cell"><input type="submit" class="submit-new-contact-method"></td>
     </tr>
 </table></br></br>
