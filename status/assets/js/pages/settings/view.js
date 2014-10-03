@@ -56,8 +56,14 @@ define(['jquery',
                     categoryid: categoryid,
                     subscribed: !event.target.checked
                 }
+            }).done( function (msg) {
+                var p1 = that.controller.loadContactMethods();
+                var p2 = that.controller.loadSubscriptions();
+                
+                $.when(p1, p2).done(function () {
+                    that._loadContactMethods();
+                });
             });
-            that._refresh();
         });
 
         // Add a contact method
@@ -76,13 +82,19 @@ define(['jquery',
                         provider: provider,
                         subscribed: false
                     }
+                }).done( function (msg) {
+                    var p1 = that.controller.loadContactMethods();
+                    $.when(p1).done(function () {
+                        that._loadContactMethods();
+                    });
                 });
-                that._refresh();
+            } else {
+                alert('HOLY SHIT BATMAN! A WILD RETARD JUST APPEARED~!#@!!')
             }
         });
 
         // Remove a contact method
-        that.$contactMethodContainer.on('click', '.remove-contact-method-checkbox', function (event) {
+        that.$contactMethodContainer.on('click', '.remove-contact-method', function (event) {
             event.stopPropagation();
 
             var pk = $(event.target).data('pk'),
@@ -97,9 +109,13 @@ define(['jquery',
                         pk: pk,
                         subscribed: true
                     }
+                }).done( function (msg) {
+                    var p1 = that.controller.loadContactMethods();
+                    $.when(p1).done(function () {
+                        that._loadContactMethods();
+                    });
                 });
             }
-            that._refresh();
         });
     };
 
@@ -129,12 +145,6 @@ define(['jquery',
             var cat = subscriptions[key].category;
             var checkboxes = this.$contactMethodContainer.find('input[type="checkbox"]').filter('[data-contactmethodid="' + con + '"]').filter('[data-categoryid="' + cat + '"]').prop('checked', true);
         }
-    };
-
-    SettingsView.prototype._refresh = function () {
-        var that = this;
-        that.controller.loadAllData();
-        that._loadContactMethods();
     };
 
     return SettingsView;

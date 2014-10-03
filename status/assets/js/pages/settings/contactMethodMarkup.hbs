@@ -5,11 +5,11 @@
 		{{#each contactMethods}}
 			<td class="contact-method">
 				{{#if email}}
-					{{email}}
+					{{email}} <button type="button" class="close remove-contact-method" data-pk="{{pk}}" data-name="{{email}}">×</button>
 				{{else}}
 					{{#if phoneNumber}}
 						{{#if provider}}
-							{{phoneNumber}}  ({{provider}})
+							{{phoneNumber}}  ({{provider}}) <button type="button" class="close remove-contact-method" data-pk="{{pk}}" data-name="{{phoneNumber}} ({{provider}}">×</button>
 						{{/if}}
 					{{/if}}
 				{{/if}}
@@ -47,23 +47,3 @@
     	<td class="add-contact-method-cell"><input type="submit" class="submit-new-contact-method"></td>
     </tr>
 </table></br></br>
-
-<h3>Remove Contact Methods</h3></br>
-
-<table class="delete-contact-method-table">
-	{{#each contactMethods}}
-		<tr><td class="remove-contact-method-cell">
-		{{#if email}}
-			<input type="checkbox" class="remove-contact-method-checkbox" data-pk="{{pk}}" data-name="{{email}}">
-			{{email}}
-		{{else}}
-			{{#if phoneNumber}}
-				{{#if provider}}
-					<input type="checkbox" class="remove-contact-method-checkbox" data-pk="{{pk}}" data-name="{{phoneNumber}} ({{provider}}">
-					{{phoneNumber}} ({{provider}})
-				{{/if}}
-			{{/if}}
-		{{/if}}
-		</td><tr>
-	{{/each}}
-</table>

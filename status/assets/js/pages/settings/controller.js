@@ -27,31 +27,49 @@ define(['pageUtils',
             prov_promise,
             sub_promise;
 
-        cat_promise = $.getJSON("/rest/categories", function (json) {
-            that.categories = _.indexBy(json, 'pk');
-        });
-
-        con_promise = $.getJSON("/rest/contactMethods", function (json) {
-            that.contactMethods = _.indexBy(json, 'pk');
-        });
-
-        prov_promise = $.getJSON( "/rest/providers", function (json) {
-            that.providers = _.indexBy(json, 'pk');
-        });
-
-        sub_promise = $.getJSON("/rest/subscriptions", function ( json ) {
-            that.subscriptions = _.indexBy(json, 'pk');
-        });
+        cat_promise  = that.loadCategories();
+        con_promise  = that.loadContactMethods();
+        prov_promise = that.loadProviders();
+        sub_promise  = that.loadSubscriptions();
 
         $.when(cat_promise, con_promise, prov_promise, sub_promise).done(function () {
             that.view.init();
         });
     };
 
+    SettingsController.prototype.loadCategories = function () {
+        var that = this;
+        return $.getJSON("/rest/categories", function (json) {
+            that.categories = _.indexBy(json, 'pk');
+        });
+    };
+
+    SettingsController.prototype.loadContactMethods = function () {
+        var that = this;
+        return $.getJSON("/rest/contactMethods", function (json) {
+            that.contactMethods = _.indexBy(json, 'pk');
+        });
+    };
+
+    SettingsController.prototype.loadProviders = function () {
+        var that = this;
+        return $.getJSON( "/rest/providers", function (json) {
+            that.providers = _.indexBy(json, 'pk');
+        });
+    };
+
+    SettingsController.prototype.loadSubscriptions = function () {
+        var that = this;
+        return $.getJSON("/rest/subscriptions", function ( json ) {
+            that.subscriptions = _.indexBy(json, 'pk');
+        });
+    };
+
     SettingsController.prototype.getContactMethods = function () {
-        var rawContactMethods = $.extend(true, {}, this.contactMethods);
+        var that = this,
+            rawContactMethods = $.extend(true, {}, that.contactMethods);
         for (var key in rawContactMethods) {
-            var provider = this.providers[rawContactMethods[key].provider];
+            var provider = that.providers[rawContactMethods[key].provider];
             if (typeof provider !== 'undefined' && provider.name !== null) {
                 rawContactMethods[key].provider = provider.name;
             }
