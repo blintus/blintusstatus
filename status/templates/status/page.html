@@ -82,6 +82,7 @@
                     </li>
                     {% else %}
                     <li><p class="navbar-text">Logged in as {{ user.username }}.</p></li>
+                    <li><a href="/settings">Settings</a></li>
                     <li><a href="{% url 'status:logout' %}" rel="new-page" id="logout-link">Log Out</a></li>
                     {% endif %}
                 </ul>
