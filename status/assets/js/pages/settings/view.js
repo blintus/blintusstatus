@@ -89,7 +89,7 @@ define(['jquery',
                     });
                 });
             } else {
-                alert('HOLY SHIT BATMAN! A WILD RETARD JUST APPEARED~!#@!!')
+                alert('HOLY SHIT BATMAN! A WILD RETARD JUST APPEARED~!#@!!');
             }
         });
 
