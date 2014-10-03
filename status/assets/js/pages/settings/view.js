@@ -84,33 +84,30 @@ define(['jquery',
             that.$contactMethodContainer.find('.new-contact-method-provider').prop('disabled', false);
         };
 
-        that.$contactMethodContainer.on('focus', '.new-contact-method-email', function (event) {
-            disablePhoneNumber();
-        });
-
-        that.$contactMethodContainer.on('focusout', '.new-contact-method-email', function (event) {
+        that.$contactMethodContainer.on('keyup', '.new-contact-method-email', function (event) {
             if (that.$contactMethodContainer.find('.new-contact-method-email').val() === '') {
                 enablePhoneNumber();
             }
-        });
-
-        that.$contactMethodContainer.on('focus', '.new-contact-method-phone-number', function (event) {
-            disableEmail();
-        });
-
-        that.$contactMethodContainer.on('focusout', '.new-contact-method-phone-number', function (event) {
-            if (that.$contactMethodContainer.find('.new-contact-method-phone-number').val() === '') {
-                enableEmail();
+            else {
+                disablePhoneNumber();
             }
         });
 
-        that.$contactMethodContainer.on('focus', '.new-contact-method-provider', function (event) {
-            disableEmail();
+        that.$contactMethodContainer.on('keyup', '.new-contact-method-phone-number', function (event) {
+            if (that.$contactMethodContainer.find('.new-contact-method-phone-number').val() === '') {
+                enableEmail();
+            }
+            else {
+                disableEmail();
+            }
         });
 
-        that.$contactMethodContainer.on('focusout', '.new-contact-method-provider', function (event) {
+        that.$contactMethodContainer.on('click', '.new-contact-method-provider', function (event) {
             if (that.$contactMethodContainer.find('.new-contact-method-provider').val() === '') {
                 enableEmail();
+            }
+            else {
+                disableEmail();
             }
         });
 
