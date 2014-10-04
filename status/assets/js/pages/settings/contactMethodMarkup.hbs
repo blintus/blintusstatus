@@ -1,5 +1,5 @@
 <h3>Subscribe for updates</h3></br>
-<table class="contact-method-table">
+<table class="contact-method-table" style="width: 400px; margin: 0 auto">
 	<tr>
 		<td class="contact-method"></td>
 		{{#each contactMethods}}
@@ -28,21 +28,23 @@
 
 <h3>Add a Contact Method</h3></br>
 
-<table class="add-contact-methods-table">
-	<tr>
-		<td class="add-contact-method-cell">Email</td>
-		<td class="add-contact-method-cell">Phone Number</td>
-		<td class="add-contact-method-cell">Provider</td>
-	</tr>
-    <tr>
-    	</td><td class="add-contact-method-cell"><input type="text" class="new-contact-method-email"></td>
-    	<td class="add-contact-method-cell"><input type="text" class="new-contact-method-phone-number"></td>
-	    <td class="add-contact-method-cell"><select class="new-contact-method-provider">
-	    	<option value="">Not Applicable</option>
-		    {{#each providers}}
+<form action="" role="form" style="width: 400px; margin: 0 auto">
+	<div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" class="form-control new-contact-method-email"/>
+    </div>
+    <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input type="text" class="form-control new-contact-method-phone-number"/>
+    </div>
+    <div class="form-group">
+        <label for="provider">Provider</label>
+        <select class="form-control new-contact-method-provider">
+        	<option value="">Not Applicable</option>
+        	{{#each providers}}
 		    	<option value="{{pk}}">{{name}}</option>
 		    {{/each}}
-		</select></td>
-    	<td class="add-contact-method-cell"><input type="submit" class="submit-new-contact-method"></td>
-    </tr>
-</table></br></br>
+		</select>
+    </div>
+    <input class="btn btn-primary pull-right submit-new-contact-method" type="submit"/>
+</form>
