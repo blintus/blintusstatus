@@ -1,15 +1,15 @@
 <h3>Subscribe for updates</h3></br>
-<table class="contact-method-table" style="width: 400px; margin: 0 auto">
+<table class="table table-bordered table-striped table-hover contact-method-table" style="margin: 0 auto">
 	<tr>
 		<td class="contact-method"></td>
 		{{#each contactMethods}}
 			<td class="contact-method">
 				{{#if email}}
-					{{email}} <button type="button" class="glyphicon glyphicon-remove remove-contact-method" data-pk="{{pk}}" data-name="{{email}}"></button>
+					{{email}}
 				{{else}}
 					{{#if phoneNumber}}
 						{{#if provider}}
-							{{phoneNumber}}  ({{provider}}) <button type="button" class="glyphicon glyphicon-remove remove-contact-method" data-pk="{{pk}}" data-name="{{phoneNumber}} ({{provider}}"></button>
+							{{phoneNumber}}  ({{provider}})
 						{{/if}}
 					{{/if}}
 				{{/if}}
@@ -24,6 +24,20 @@
 			{{/each}}
 		</tr>
 	{{/each}}
+	<tr>
+		<td></td>
+		{{#each contactMethods}}
+			{{#if email}}
+				<td class="settings-category-cell"><button type="button" class="remove-contact-method" data-pk="{{pk}}" data-name="{{email}}">Remove</button></td>
+			{{else}}
+				{{#if phoneNumber}}
+					{{#if provider}}
+						<td class="settings-category-cell"><button type="button" class="remove-contact-method" data-pk="{{pk}}" data-name="{{phoneNumber}} ({{provider}}">Remove</button></td>
+					{{/if}}
+				{{/if}}
+			{{/if}}
+		{{/each}}
+	</tr>
 </table></br></br>
 
 <h3>Add a Contact Method</h3></br>
