@@ -1,9 +1,9 @@
-define(['lodash', 'pageUtils',
+define(['lodash', 'pageUtils', 'shared/utils',
     'pages/home/view',
     'pages/home/mocks/postsMock',
     'pages/home/mocks/categoriesMock',
     'pages/home/mocks/commentsMock'
-], function (_, pageUtils, HomeView, postsMock, categoriesMock, commentsMock) {
+], function (_, pageUtils, utils, HomeView, postsMock, categoriesMock, commentsMock) {
     'use strict';
 
     /**
@@ -33,13 +33,7 @@ define(['lodash', 'pageUtils',
 
             // Created an object with child categories added to a children array
             categories = _.indexBy(categories, 'pk');
-            _.each(categories, function (category) {
-                if (category.parent) {
-                    var parent = categories[category.parent];
-                    if (!parent.children) parent.children = [];
-                    parent.children.push(category);
-                }
-            });
+            utils.categories.addChildren(categories);
 
             // An array of categories with each category having a array of it's children,
             // if it has any

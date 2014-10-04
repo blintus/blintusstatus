@@ -47,7 +47,7 @@
             
                 <li><a href="../classes/pages.settings.SettingsView.html">pages.settings.SettingsView</a></li>
             
-                <li><a href="../classes/shared.DataUtils.html">shared.DataUtils</a></li>
+                <li><a href="../classes/shared.Utils.html">shared.Utils</a></li>
             
             </ul>
 
@@ -93,9 +93,8 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 define([&#x27;pageUtils&#x27;, 
-		&#x27;pages/settings/view&#x27;,
-        &#x27;shared/dataUtils&#x27;
-	], function (pageUtils, SettingsView, dataFormatter) {
+		&#x27;pages/settings/view&#x27;
+	], function (pageUtils, SettingsView) {
     
     &#x27;use strict&#x27;;
 
@@ -122,45 +121,67 @@ define([&#x27;pageUtils&#x27;,
             prov_promise,
             sub_promise;
 
-        cat_promise = $.getJSON(&quot;/rest/categories&quot;, function (json) {
-            that.categories = dataFormatter.arrayToPkObject(json);
-        });
-
-        con_promise = $.getJSON(&quot;/rest/contactMethods&quot;, function (json) {
-            that.contactMethods = dataFormatter.arrayToPkObject(json);
-        });
-
-        prov_promise = $.getJSON( &quot;/rest/providers&quot;, function (json) {
-            that.providers = dataFormatter.arrayToPkObject(json);
-        });
-
-        sub_promise = $.getJSON(&quot;/rest/subscriptions&quot;, function ( json ) {
-            that.subscriptions = dataFormatter.arrayToPkObject(json);
-        });
+        cat_promise  = that.loadCategories();
+        con_promise  = that.loadContactMethods();
+        prov_promise = that.loadProviders();
+        sub_promise  = that.loadSubscriptions();
 
         $.when(cat_promise, con_promise, prov_promise, sub_promise).done(function () {
             that.view.init();
         });
     };
 
+    SettingsController.prototype.loadCategories = function () {
+        var that = this;
+        return $.getJSON(&quot;/rest/categories&quot;, function (json) {
+            that.categories = _.indexBy(json, &#x27;pk&#x27;);
+        });
+    };
+
+    SettingsController.prototype.loadContactMethods = function () {
+        var that = this;
+        return $.getJSON(&quot;/rest/contactMethods&quot;, function (json) {
+            that.contactMethods = _.indexBy(json, &#x27;pk&#x27;);
+        });
+    };
+
+    SettingsController.prototype.loadProviders = function () {
+        var that = this;
+        return $.getJSON( &quot;/rest/providers&quot;, function (json) {
+            that.providers = _.indexBy(json, &#x27;pk&#x27;);
+        });
+    };
+
+    SettingsController.prototype.loadSubscriptions = function () {
+        var that = this;
+        return $.getJSON(&quot;/rest/subscriptions&quot;, function ( json ) {
+            that.subscriptions = _.indexBy(json, &#x27;pk&#x27;);
+        });
+    };
+
     SettingsController.prototype.getContactMethods = function () {
-        var rawContactMethods = $.extend(true, {}, this.contactMethods);
+        var that = this,
+            rawContactMethods = $.extend(true, {}, that.contactMethods);
         for (var key in rawContactMethods) {
-            var provider = this.providers[rawContactMethods[key][&#x27;provider&#x27;]];
-            if (provider != null &amp;&amp; provider[&#x27;name&#x27;] != null) {
-                rawContactMethods[key][&#x27;provider&#x27;] = provider[&#x27;name&#x27;];
+            var provider = that.providers[rawContactMethods[key].provider];
+            if (typeof provider !== &#x27;undefined&#x27; &amp;&amp; provider.name !== null) {
+                rawContactMethods[key].provider = provider.name;
             }
         }
     	return rawContactMethods;
-    }
+    };
 
     SettingsController.prototype.getCategories = function () {
     	return this.categories;
-    }
+    };
 
     SettingsController.prototype.getSubscriptions = function () {
         return this.subscriptions;
-    }
+    };
+
+    SettingsController.prototype.getProviders = function () {
+        return this.providers;
+    };
 
     return SettingsController;
 

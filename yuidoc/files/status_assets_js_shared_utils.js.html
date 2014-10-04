@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>status/assets/js/shared/dataUtils.js - The Blintus Status API</title>
+    <title>status/assets/js/shared/utils.js - The Blintus Status API</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -47,7 +47,7 @@
             
                 <li><a href="../classes/pages.settings.SettingsView.html">pages.settings.SettingsView</a></li>
             
-                <li><a href="../classes/shared.DataUtils.html">shared.DataUtils</a></li>
+                <li><a href="../classes/shared.Utils.html">shared.Utils</a></li>
             
             </ul>
 
@@ -88,76 +88,66 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: status/assets/js/shared/dataUtils.js</h1>
+                        <h1 class="file-heading">File: status/assets/js/shared/utils.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-/**
- * @class shared.DataUtils
- * @static
- */
-define([], function () {
+define([&#x27;lodash&#x27;], function (_) {
 
+    /**
+     * @class shared.Utils
+     * @static
+     */
     return {
 
-        /**
-         * Convert an array of data to a primary key object.
-         *
-         * Ex:
-         * &lt;pre&gt;&lt;code&gt;[
-         *     {
-         *         pk: 1,
-         *         data1: &#x27;value&#x27;
-         *     }
-         * ]
-         * &lt;/code&gt;&lt;/pre&gt;
-         * becomes
-         * &lt;pre&gt;&lt;code&gt;{
-         *     1: {
-         *         pk: 1,
-         *         data1: &#x27;value&#x27;
-         *     }
-         * }
-         * &lt;/code&gt;&lt;/pre&gt;
-         *
-         * @method arrayToPkObject
-         * @param {Array} dataArray The array of data to convert
-         * @return {Object} The converted object
-         */
-        arrayToPkObject: function (dataArray) {
-            if (!Array.isArray(dataArray)) {
-                throw new Error(&#x27;arrayToPkObject takes an array as an argument.&#x27;)
-            }
-            var obj = {};
-            dataArray.forEach(function (data) {
-                obj[data.pk] = data;
-            });
-            return obj;
-        },
+        categories: {
 
-        /**
-         * Deep clone an object or array
-         *
-         * @method clone
-         * @param {Object} data The object to clone
-         * @return {Object} A copy of data
-         */
-        clone: function clone(data) {
-            if (data === null || data === undefined) {
-                return data;
-            } else if (typeof data === &#x27;object&#x27;) {
-                var objCopy = (Array.isArray(data)) ? [] : {};
-                for (var key in data) {
-                    if (typeof data[key] === &#x27;object&#x27;) {
-                        objCopy[key] = clone(data[key]);
-                    } else {
-                        objCopy[key] = data[key];
-                    }
-                }
-                return objCopy;
-            } else {
-                return data;
+            /**
+             * Adds children to a categories primary key object.
+             *
+             * For example,
+             * &lt;pre&gt;&lt;code&gt;
+             * {
+             *     1: {
+             *         pk: 1,
+             *         name: &#x27;Category 1&#x27;,
+             *         parent: null,
+             *     },
+             *     2: {
+             *         pk: 2,
+             *         name: &#x27;Category 2&#x27;,
+             *         parent: 1
+             *     }
+             * }
+             * &lt;/code&gt;&lt;/pre&gt;
+             * becomes
+             * &lt;pre&gt;&lt;code&gt;
+             * {
+             *     1: {
+             *         pk: 1,
+             *         name: &#x27;Category 1&#x27;,
+             *         parent: null,
+             *         children: [{
+             *             pk: 2,
+             *             name: &#x27;Category 2&#x27;,
+             *             parent: 1
+             *         }]
+             *     },
+             *     2: {
+             *         pk: 2,
+             *         name: &#x27;Category 2&#x27;,
+             *         parent: 1
+             *     }
+             * }
+             * &lt;/code&gt;&lt;/pre&gt;
+             *
+             * @method addChildren
+             * @param {Object} categories The categories primary key object to modify
+             */
+            addChildren: function (categories) {
+
             }
+
         }
 
     };

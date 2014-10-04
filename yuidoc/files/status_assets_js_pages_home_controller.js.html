@@ -47,7 +47,7 @@
             
                 <li><a href="../classes/pages.settings.SettingsView.html">pages.settings.SettingsView</a></li>
             
-                <li><a href="../classes/shared.DataUtils.html">shared.DataUtils</a></li>
+                <li><a href="../classes/shared.Utils.html">shared.Utils</a></li>
             
             </ul>
 
@@ -92,12 +92,12 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-define([&#x27;pageUtils&#x27;, &#x27;shared/dataUtils&#x27;,
+define([&#x27;lodash&#x27;, &#x27;pageUtils&#x27;,
     &#x27;pages/home/view&#x27;,
     &#x27;pages/home/mocks/postsMock&#x27;,
     &#x27;pages/home/mocks/categoriesMock&#x27;,
     &#x27;pages/home/mocks/commentsMock&#x27;
-], function (pageUtils, dataUtils, HomeView, postsMock, categoriesMock, commentsMock) {
+], function (_, pageUtils, HomeView, postsMock, categoriesMock, commentsMock) {
     &#x27;use strict&#x27;;
 
     /**
@@ -126,15 +126,14 @@ define([&#x27;pageUtils&#x27;, &#x27;shared/dataUtils&#x27;,
             that._posts = posts;
 
             // Created an object with child categories added to a children array
-            categories = dataUtils.arrayToPkObject(categories);
-            for (var key in categories) {
-                var category = categories[key];
+            categories = _.indexBy(categories, &#x27;pk&#x27;);
+            _.each(categories, function (category) {
                 if (category.parent) {
                     var parent = categories[category.parent];
                     if (!parent.children) parent.children = [];
                     parent.children.push(category);
                 }
-            }
+            });
 
             // An array of categories with each category having a array of it&#x27;s children,
             // if it has any
@@ -155,8 +154,8 @@ define([&#x27;pageUtils&#x27;, &#x27;shared/dataUtils&#x27;,
     HomeController.prototype._getCategoryIds = function getCategoryIds(children) {
         var that = this,
             nestedIds = [];
-        if (!Array.isArray(children)) children = [children];
-        children.forEach(function (child) {
+        if (!_.isArray(children)) children = [children];
+        _.each(children, function (child) {
             nestedIds.push(child.pk);
             if (child.children) {
                 Array.prototype.push.apply(nestedIds, getCategoryIds(child.children));
@@ -174,7 +173,7 @@ define([&#x27;pageUtils&#x27;, &#x27;shared/dataUtils&#x27;,
      */
     HomeController.prototype.getPostsForCategory = function (categoryId) {
         var categoryIds = this._getCategoryIds(this._categories[categoryId]);
-        return this._posts.filter(function (post) {
+        return _.filter(this._posts, function (post) {
             return categoryIds.indexOf(post.category) !== -1;
         });
     };
@@ -197,12 +196,7 @@ define([&#x27;pageUtils&#x27;, &#x27;shared/dataUtils&#x27;,
      * @return {Array} An array of root level categories
      */
     HomeController.prototype.getRootCategories = function () {
-        var rootCategories = [];
-        for (var key in this._categories) {
-            var category = this._categories[key];
-            if (!category.parent) rootCategories.push(category);
-        }
-        return rootCategories;
+        return _.filter(this._categories, {parent: null});
     };
 
     /**
@@ -215,7 +209,7 @@ define([&#x27;pageUtils&#x27;, &#x27;shared/dataUtils&#x27;,
         var promise = $.Deferred();
         setTimeout(function () {
             promise.resolve(commentsMock[postId]);
-        }, 100);
+        }, 1000);
         return promise;
     };
 

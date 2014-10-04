@@ -47,7 +47,7 @@
             
                 <li><a href="../classes/pages.settings.SettingsView.html">pages.settings.SettingsView</a></li>
             
-                <li><a href="../classes/shared.DataUtils.html">shared.DataUtils</a></li>
+                <li><a href="../classes/shared.Utils.html">shared.Utils</a></li>
             
             </ul>
 
@@ -120,7 +120,6 @@ define([&#x27;jquery&#x27;,
      * @method init
      */
     SettingsView.prototype.init = function () {
-
         this._loadContactMethods();
         this._initEventListeners();
     };
@@ -134,53 +133,158 @@ define([&#x27;jquery&#x27;,
     SettingsView.prototype._initEventListeners = function () {
         var that = this;
 
-        // Bind checkbox cell click
-        this.$contactMethodContainer.on(&#x27;click&#x27;, &#x27;.settings-category-cell&#x27;, function (event) {
+        // Add a subscription by clicking on cell
+        that.$contactMethodContainer.on(&#x27;click&#x27;, &#x27;.settings-category-cell&#x27;, function (event) {
         	$(event.target).find(&#x27;input[type=&quot;checkbox&quot;]&#x27;).click();
         });
 
-        // Bind checkbox click
-        this.$contactMethodContainer.on(&#x27;click&#x27;, &#x27;.settings-category-checkbox&#x27;, function (event) {
+        // Add a subscription by clicking checkbox
+        that.$contactMethodContainer.on(&#x27;click&#x27;, &#x27;.settings-category-checkbox&#x27;, function (event) {
             var contactmethodid = $(event.target).data(&#x27;contactmethodid&#x27;),
                 categoryid      = $(event.target).data(&#x27;categoryid&#x27;);
             $.ajax({
             	type: &quot;POST&quot;,
             	url: &quot;/rest/subscriptions&quot;,
-            	data: { contactmethodid: contactmethodid, categoryid: categoryid, subscribed: !event.target.checked}
-            })
-            .done(function( msg ) {
-                alert( msg );
+            	data: {
+                    contactmethodid: contactmethodid,
+                    categoryid: categoryid,
+                    subscribed: !event.target.checked
+                }
+            }).done( function (msg) {
+                var p1 = that.controller.loadContactMethods();
+                var p2 = that.controller.loadSubscriptions();
+                
+                $.when(p1, p2).done(function () {
+                    that._loadContactMethods();
+                });
             });
+        });
+
+        var disableEmail = function () {
+            that.$contactMethodContainer.find(&#x27;.new-contact-method-email&#x27;).prop(&#x27;disabled&#x27;, true);
+        };
+
+        var enableEmail = function () {
+            that.$contactMethodContainer.find(&#x27;.new-contact-method-email&#x27;).prop(&#x27;disabled&#x27;, false);
+        };
+
+        var disablePhoneNumber = function () {
+            that.$contactMethodContainer.find(&#x27;.new-contact-method-phone-number&#x27;).prop(&#x27;disabled&#x27;, true);
+            that.$contactMethodContainer.find(&#x27;.new-contact-method-provider&#x27;).prop(&#x27;disabled&#x27;, true);
+        };
+
+        var enablePhoneNumber = function () {
+            that.$contactMethodContainer.find(&#x27;.new-contact-method-phone-number&#x27;).prop(&#x27;disabled&#x27;, false);
+            that.$contactMethodContainer.find(&#x27;.new-contact-method-provider&#x27;).prop(&#x27;disabled&#x27;, false);
+        };
+
+        that.$contactMethodContainer.on(&#x27;keyup&#x27;, &#x27;.new-contact-method-email&#x27;, function (event) {
+            if (that.$contactMethodContainer.find(&#x27;.new-contact-method-email&#x27;).val() === &#x27;&#x27;) {
+                enablePhoneNumber();
+            }
+            else {
+                disablePhoneNumber();
+            }
+        });
+
+        that.$contactMethodContainer.on(&#x27;keyup&#x27;, &#x27;.new-contact-method-phone-number&#x27;, function (event) {
+            if (that.$contactMethodContainer.find(&#x27;.new-contact-method-phone-number&#x27;).val() === &#x27;&#x27;) {
+                enableEmail();
+            }
+            else {
+                disableEmail();
+            }
+        });
+
+        that.$contactMethodContainer.on(&#x27;click&#x27;, &#x27;.new-contact-method-provider&#x27;, function (event) {
+            if (that.$contactMethodContainer.find(&#x27;.new-contact-method-provider&#x27;).val() === &#x27;&#x27;) {
+                enableEmail();
+            }
+            else {
+                disableEmail();
+            }
+        });
+
+        // Add a contact method
+        that.$contactMethodContainer.on(&#x27;click&#x27;, &#x27;.submit-new-contact-method&#x27;, function (event) {
+            var email = that.$contactMethodContainer.find(&#x27;.new-contact-method-email&#x27;).val(),
+                phoneNumber = that.$contactMethodContainer.find(&#x27;.new-contact-method-phone-number&#x27;).val(),
+                provider = that.$contactMethodContainer.find(&#x27;.new-contact-method-provider&#x27;).val();
+
+            if (((email &amp;&amp; (phoneNumber === &#x27;&#x27;) &amp;&amp; (provider === &#x27;&#x27;)) || ((email === &#x27;&#x27;) &amp;&amp; phoneNumber &amp;&amp; (provider !== &#x27;&#x27;)))) {
+                $.ajax({
+                    type: &quot;POST&quot;,
+                    url: &quot;/rest/contactMethods&quot;,
+                    data: {
+                        email: email,
+                        phoneNumber: phoneNumber,
+                        provider: provider,
+                        subscribed: false
+                    }
+                }).done( function (msg) {
+                    var p1 = that.controller.loadContactMethods();
+                    $.when(p1).done(function () {
+                        that._loadContactMethods();
+                    });
+                });
+            } else {
+                alert(&#x27;HOLY SHIT BATMAN! A WILD RETARD JUST APPEARED~!#@!!&#x27;);
+            }
+        });
+
+        // Remove a contact method
+        that.$contactMethodContainer.on(&#x27;click&#x27;, &#x27;.remove-contact-method&#x27;, function (event) {
+            event.stopPropagation();
+
+            var pk = $(event.target).data(&#x27;pk&#x27;),
+                name = $(event.target).data(&#x27;name&#x27;),
+                confirmDelete = confirm(&quot;Remove contact method: &quot; + name + &quot;?&quot;);
+
+            if (confirmDelete === true) {
+                $.ajax({
+                    type: &quot;POST&quot;,
+                    url: &quot;/rest/contactMethods&quot;,
+                    data: {
+                        pk: pk,
+                        subscribed: true
+                    }
+                }).done( function (msg) {
+                    var p1 = that.controller.loadContactMethods();
+                    $.when(p1).done(function () {
+                        that._loadContactMethods();
+                    });
+                });
+            }
         });
     };
 
     SettingsView.prototype._loadContactMethods = function () {
     	var contactMethods,
     		categories,
-            subscriptions;
+            subscriptions,
+            providers;
 
     	contactMethods = this.controller.getContactMethods();
     	categories = this.controller.getCategories();
         subscriptions = this.controller.getSubscriptions();
+        providers = this.controller.getProviders();
         
         // Create subscription table
     	this.$contactMethodContainer.empty().append(contactMethodMarkup({
     		contactMethods: contactMethods,
-    		categories: categories
+    		categories: categories,
+            providers: providers
     	}));
 
         // Check correct checkbox&#x27;s
         var sub_len = Object.keys(subscriptions).length;
+
         for (var key in subscriptions) {
             var con = subscriptions[key].contactMethod;
             var cat = subscriptions[key].category;
-            this.$contactMethodContainer.find(&#x27;input[type=&quot;checkbox&quot;]&#x27;).filter( function() { 
-                    return $(this).attr(&#x27;data-contactmethodid&#x27;).match(con); 
-                }).filter( function() { 
-                    return $(this).attr(&#x27;data-categoryid&#x27;).match(cat); 
-                }).prop(&#x27;checked&#x27;, true);
+            var checkboxes = this.$contactMethodContainer.find(&#x27;input[type=&quot;checkbox&quot;]&#x27;).filter(&#x27;[data-contactmethodid=&quot;&#x27; + con + &#x27;&quot;]&#x27;).filter(&#x27;[data-categoryid=&quot;&#x27; + cat + &#x27;&quot;]&#x27;).prop(&#x27;checked&#x27;, true);
         }
-    }
+    };
 
     return SettingsView;
 

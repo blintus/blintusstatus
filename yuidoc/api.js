@@ -4,7 +4,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "pages.home.HomeController",
         "pages.home.HomeView",
         "pages.settings.SettingsView",
-        "shared.DataUtils"
+        "shared.Utils"
     ],
     "modules": [],
     "allModules": []

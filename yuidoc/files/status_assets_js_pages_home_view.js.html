@@ -47,7 +47,7 @@
             
                 <li><a href="../classes/pages.settings.SettingsView.html">pages.settings.SettingsView</a></li>
             
-                <li><a href="../classes/shared.DataUtils.html">shared.DataUtils</a></li>
+                <li><a href="../classes/shared.Utils.html">shared.Utils</a></li>
             
             </ul>
 
@@ -92,12 +92,12 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-define([&#x27;jquery&#x27;, &#x27;shared/dataUtils&#x27;, &#x27;persistentStorage&#x27;,
+define([&#x27;jquery&#x27;, &#x27;lodash&#x27;, &#x27;persistentStorage&#x27;,
     &#x27;hbs!pages/home/markup&#x27;,
     &#x27;hbs!pages/home/markup/statusPost&#x27;,
     &#x27;hbs!pages/home/markup/categoryTemplate&#x27;,
     &#x27;hbs!pages/home/markup/comment&#x27;
-], function ($, dataUtils, persistentStorage, pageMarkup, postMarkup, categoryMarkup, commentMarkup) {
+], function ($, _, persistentStorage, pageMarkup, postMarkup, categoryMarkup, commentMarkup) {
     &#x27;use strict&#x27;;
 
     var animationSettings = {
@@ -205,10 +205,10 @@ define([&#x27;jquery&#x27;, &#x27;shared/dataUtils&#x27;, &#x27;persistentStorag
             $(&#x27;.category-link[data-categoryid=&quot;&#x27; + categoryId + &#x27;&quot;]&#x27;).addClass(&#x27;active&#x27;);
         }
 
-        posts = dataUtils.clone(this.controller.getPostsForCategory(categoryId));
+        posts = _.cloneDeep(this.controller.getPostsForCategory(categoryId));
 
         // Add categories to post, and render them
-        posts.forEach(function (post) {
+        _.each(posts, function (post) {
             post.category = that.controller.getCategory(post.category);
         });
         this.$postContainer.empty().append(postMarkup({
@@ -230,7 +230,7 @@ define([&#x27;jquery&#x27;, &#x27;shared/dataUtils&#x27;, &#x27;persistentStorag
         $.when(this.controller.getCommentsForPost(postId)).done(function (comments) {
             var $commentsContainer = $showLink.siblings(&#x27;.comments&#x27;);
             var commentsList = [];
-            comments.forEach(function (comment) {
+            _.each(comments, function (comment) {
                 commentsList.push(commentMarkup(comment));
             });
             $commentsContainer.find(&#x27;.comments-inner&#x27;).append(commentsList.join(&#x27;&#x27;));
@@ -242,13 +242,18 @@ define([&#x27;jquery&#x27;, &#x27;shared/dataUtils&#x27;, &#x27;persistentStorag
     HomeView.prototype._addComment = function ($postBtn, postId) {
         var $commentsList = $postBtn.parent().siblings(&#x27;.comments-inner&#x27;);
         var $messageBox = $postBtn.siblings(&#x27;textarea&#x27;);
+        var $savingSpinner = $postBtn.siblings(&#x27;.comments-textarea-spinner&#x27;);
+        var message = $messageBox.val();
+        if (message === &#x27;&#x27;) return;
         $messageBox.prop(&#x27;disabled&#x27;, true);
         $postBtn.prop(&#x27;disabled&#x27;, true);
-        $.when(this.controller.addComment(postId, $messageBox.val())).done(function (comment) {
+        $savingSpinner.show();
+        $.when(this.controller.addComment(postId, message)).done(function (comment) {
             $commentsList.append(commentMarkup(comment));
             $messageBox.val(&#x27;&#x27;);
             $messageBox.prop(&#x27;disabled&#x27;, false);
             $postBtn.prop(&#x27;disabled&#x27;, false);
+            $savingSpinner.hide();
         });
     };
 
