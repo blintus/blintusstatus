@@ -222,6 +222,9 @@ a:hover {
     text-align: center;
 }
 
+.remove-contact-method span {
+    margin-right: 5px;
+}
 
 /***********
  ** Icons **
@@ -259,3 +262,19 @@ a:hover {
 .status-icon-status-10 {
     background-image: url("../img/circle_grey.png");
 }
+
+
+/********************
+ ** Indents Levels **
+ ********************/
+
+.indent-level-0 { padding-left: 0; }
+.indent-level-1 { padding-left: 10px; }
+.indent-level-2 { padding-left: 20px; }
+.indent-level-3 { padding-left: 30px; }
+.indent-level-4 { padding-left: 40px; }
+.indent-level-5 { padding-left: 50px; }
+.indent-level-6 { padding-left: 60px; }
+.indent-level-7 { padding-left: 70px; }
+.indent-level-8 { padding-left: 80px; }
+.indent-level-9 { padding-left: 90px; }
