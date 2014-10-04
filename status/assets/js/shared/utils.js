@@ -1,4 +1,5 @@
 define(['lodash'], function (_) {
+    'use strict';
 
     /**
      * @class shared.Utils
