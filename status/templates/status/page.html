@@ -37,8 +37,9 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                </ul>
+                <div class="nav navbar-nav">
+                    <p id="page-title" class="navbar-text">{{ page_title }}</p>
+                </div>
                 {% if not hide_nav_user %}
                 <ul class="nav navbar-nav navbar-right">
                     {% if not user.is_authenticated %}
@@ -91,11 +92,8 @@
         </div><!-- /.container-fluid -->
     </nav>
 
-    <div class="container-fluid">
-        <h1 id="page-title">{{ page_title }}</h1>
-        <div id="content">
-            {% block content %}{% endblock %}
-        </div>
+    <div id="content" class="container-fluid">
+        {% block content %}{% endblock %}
     </div>
 
 </div><!-- /.container -->

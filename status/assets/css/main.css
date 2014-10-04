@@ -6,6 +6,19 @@ body {
     padding-top: 20px;
 }
 
+.navbar-brand {
+    padding-right: 5px;
+}
+#page-title {
+    margin-left: 0;
+    font-size: 18px;
+    line-height: 20px;
+}
+#page-title:before {
+    content: '|';
+    padding-right: 5px;
+}
+
 a:hover {
     cursor: pointer;
 }
