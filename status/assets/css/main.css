@@ -19,6 +19,11 @@ body {
     padding-right: 5px;
 }
 
+#logged-in-text {
+    margin: 0;
+    padding: 17px 15px 13px 15px;
+}
+
 a:hover {
     cursor: pointer;
 }
