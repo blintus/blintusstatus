@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>shared.Utils - The Blintus Status API</title>
+    <title>shared.modals.MessageModal - The Blintus Status API</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -92,7 +92,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>shared.Utils Class</h1>
+                        <h1>shared.modals.MessageModal Class</h1>
 <div class="box meta">
     
 
@@ -100,7 +100,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/status_assets_js_shared_utils.js.html#l4"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;utils.js:4</code></a>
+            Defined in: <a href="../files/status_assets_js_shared_modals.js.html#l57"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;modals.js:57</code></a>
         </div>
     
 
@@ -112,58 +112,20 @@
 
 
 <div class="box intro">
-    
+    <p>Creates and shows a new message modal with the specified settings,
+and removes in from the dom when it is closed.</p>
+<pre class="code prettyprint"><code>Options
+
+title: The modal title
+body:  The modal body
+</code></pre>
 </div>
 
 
-
-<div id="classdocs" class="tabview">
-    <ul class="api-class-tabs">
-        <li class="api-class-tab index"><a href="#index">Index</a></li>
-
-        
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-        
-        
-        
-        
-    </ul>
-
-    <div>
-        <div id="index" class="api-class-tabpanel index">
-            <h2 class="off-left">Item Index</h2>
-
-            
-                <div class="index-section methods">
-                    <h3>Methods</h3>
-
-                    <ul class="index-list methods">
-                        
-                            <li class="index-item method">
-                                <a href="#method_addChildren">addChildren</a>
-
-                                
-                                
-                            </li>
-                        
-                    </ul>
-                </div>
-            
-
-            
-
-            
-
-            
-        </div>
-
-        
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
-
-                
-                    <div id="method_addChildren" class="method item">
-    <h3 class="name"><code>addChildren</code></h3>
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_shared.modals.MessageModal" class="method item">
+    <h3 class="name"><code>shared.modals.MessageModal</code></h3>
 
     
         <div class="args">
@@ -171,7 +133,7 @@
             
                 <li class="arg">
                     
-                        <code>categories</code>
+                        <code>options</code>
                     
                 </li>
             
@@ -204,7 +166,7 @@
             
         
         
-        <a href="../files/status_assets_js_shared_utils.js.html#l12"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;utils.js:12</code></a>
+        <a href="../files/status_assets_js_shared_modals.js.html#l57"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;modals.js:57</code></a>
         
         </p>
 
@@ -215,42 +177,7 @@
     </div>
 
     <div class="description">
-        <p>Adds children to a categories primary key object.</p>
-<p>For example,</p>
-<pre class="code prettyprint"><code>
-{
-    1: {
-        pk: 1,
-        name: 'Category 1',
-        parent: null,
-    },
-    2: {
-        pk: 2,
-        name: 'Category 2',
-        parent: 1
-    }
-}
-</code></pre>
-becomes
-<pre class="code prettyprint"><code>
-{
-    1: {
-        pk: 1,
-        name: 'Category 1',
-        parent: null,
-        children: [{
-            pk: 2,
-            name: 'Category 2',
-            parent: 1
-        }]
-    },
-    2: {
-        pk: 2,
-        name: 'Category 2',
-        parent: 1
-    }
-}
-</code></pre>
+        
     </div>
 
     
@@ -261,14 +188,14 @@ becomes
             
                 <li class="param">
                     
-                        <code class="param-name">categories</code>
+                        <code class="param-name">options</code>
                         <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>The categories primary key object to modify</p>
+                        <p>The options</p>
 
                     </div>
 
@@ -284,8 +211,32 @@ becomes
     
 </div>
 
-                
-            </div>
+    </div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+
+            
+
+            
+
+            
+        </div>
+
         
 
         

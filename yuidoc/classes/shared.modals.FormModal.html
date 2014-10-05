@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>pages.settings.SettingsView - The Blintus Status API</title>
+    <title>shared.modals.FormModal - The Blintus Status API</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -92,7 +92,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>pages.settings.SettingsView Class</h1>
+                        <h1>shared.modals.FormModal Class</h1>
 <div class="box meta">
     
 
@@ -100,7 +100,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/status_assets_js_pages_settings_view.js.html#l8"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;settings&#x2F;view.js:8</code></a>
+            Defined in: <a href="../files/status_assets_js_shared_modals.js.html#l90"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;modals.js:90</code></a>
         </div>
     
 
@@ -112,15 +112,25 @@
 
 
 <div class="box intro">
-    <p>Constructor for a settings view</p>
+    <p>Creates a new form modal, but doesn&#39;t show it. This modal is not
+automatically removed from the dom, and is meant to be reused.</p>
+<pre class="code prettyprint"><code>Options
 
+title:          The title of the dialog
+body:           The body of the modal, typically the html for the form
+cancelBtn:      The text for the cancel button
+okBtn:          The text for the ok button
+submitCallback: The function to call after the user submits the form. This
+                gets called with an object containing field names as keys,
+                and values as the values.
+</code></pre>
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_pages.settings.SettingsView" class="method item">
-    <h3 class="name"><code>pages.settings.SettingsView</code></h3>
+        <div id="method_shared.modals.FormModal" class="method item">
+    <h3 class="name"><code>shared.modals.FormModal</code></h3>
 
     
         <div class="args">
@@ -128,7 +138,7 @@
             
                 <li class="arg">
                     
-                        <code>$container</code>
+                        <code>options</code>
                     
                 </li>
             
@@ -161,7 +171,7 @@
             
         
         
-        <a href="../files/status_assets_js_pages_settings_view.js.html#l8"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;settings&#x2F;view.js:8</code></a>
+        <a href="../files/status_assets_js_shared_modals.js.html#l90"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;modals.js:90</code></a>
         
         </p>
 
@@ -183,14 +193,14 @@
             
                 <li class="param">
                     
-                        <code class="param-name">$container</code>
-                        <span class="type">JQuery</span>
+                        <code class="param-name">options</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>A jQuery object for the root content container</p>
+                        <p>The options</p>
 
                     </div>
 
@@ -232,21 +242,28 @@
                     <ul class="index-list methods">
                         
                             <li class="index-item method private">
-                                <a href="#method__initEventListeners">_initEventListeners</a>
+                                <a href="#method__getFormData">_getFormData</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_init">init</a>
+                                <a href="#method_hide">hide</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_loadAllData">loadAllData</a>
+                                <a href="#method_reset">reset</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_show">show</a>
 
                                 
                                 
@@ -268,13 +285,17 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method__initEventListeners" class="method item private">
-    <h3 class="name"><code>_initEventListeners</code></h3>
+                    <div id="method__getFormData" class="method item private">
+    <h3 class="name"><code>_getFormData</code></h3>
 
     
         <span class="paren">()</span>
     
 
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+        </span>
     
 
     
@@ -302,7 +323,7 @@
             
         
         
-        <a href="../files/status_assets_js_pages_settings_view.js.html#l33"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;settings&#x2F;view.js:33</code></a>
+        <a href="../files/status_assets_js_shared_modals.js.html#l158"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;modals.js:158</code></a>
         
         </p>
 
@@ -313,20 +334,34 @@
     </div>
 
     <div class="description">
-        <p>Initializes the event listeners for the view</p>
+        <p>Get the form data for all forms in the modal.</p>
 
     </div>
 
     
 
     
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>:
+                    
+                    <p>The name: value mappings for all fields in the form</p>
+
+                
+            </div>
+        </div>
+    
 
     
 </div>
 
                 
-                    <div id="method_init" class="method item">
-    <h3 class="name"><code>init</code></h3>
+                    <div id="method_hide" class="method item">
+    <h3 class="name"><code>hide</code></h3>
 
     
         <span class="paren">()</span>
@@ -357,7 +392,7 @@
             
         
         
-        <a href="../files/status_assets_js_pages_settings_view.js.html#l23"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;settings&#x2F;view.js:23</code></a>
+        <a href="../files/status_assets_js_shared_modals.js.html#l136"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;modals.js:136</code></a>
         
         </p>
 
@@ -368,7 +403,7 @@
     </div>
 
     <div class="description">
-        <p>Initializes the view with data</p>
+        <p>Hide the form modal.</p>
 
     </div>
 
@@ -380,8 +415,8 @@
 </div>
 
                 
-                    <div id="method_loadAllData" class="method item">
-    <h3 class="name"><code>loadAllData</code></h3>
+                    <div id="method_reset" class="method item">
+    <h3 class="name"><code>reset</code></h3>
 
     
         <span class="paren">()</span>
@@ -412,7 +447,7 @@
             
         
         
-        <a href="../files/status_assets_js_pages_settings_controller.js.html#l18"><code>status&#x2F;assets&#x2F;js&#x2F;pages&#x2F;settings&#x2F;controller.js:18</code></a>
+        <a href="../files/status_assets_js_shared_modals.js.html#l146"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;modals.js:146</code></a>
         
         </p>
 
@@ -423,7 +458,62 @@
     </div>
 
     <div class="description">
-        <p>Load all data from the server</p>
+        <p>Reset all forms in the modal.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_show" class="method item">
+    <h3 class="name"><code>show</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/status_assets_js_shared_modals.js.html#l126"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;modals.js:126</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Show the form modal.</p>
 
     </div>
 

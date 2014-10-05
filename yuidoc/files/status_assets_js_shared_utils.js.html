@@ -47,6 +47,10 @@
             
                 <li><a href="../classes/pages.settings.SettingsView.html">pages.settings.SettingsView</a></li>
             
+                <li><a href="../classes/shared.modals.FormModal.html">shared.modals.FormModal</a></li>
+            
+                <li><a href="../classes/shared.modals.MessageModal.html">shared.modals.MessageModal</a></li>
+            
                 <li><a href="../classes/shared.Utils.html">shared.Utils</a></li>
             
             </ul>
@@ -93,6 +97,7 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 define([&#x27;lodash&#x27;], function (_) {
+    &#x27;use strict&#x27;;
 
     /**
      * @class shared.Utils
@@ -145,7 +150,13 @@ define([&#x27;lodash&#x27;], function (_) {
              * @param {Object} categories The categories primary key object to modify
              */
             addChildren: function (categories) {
-
+                 _.each(categories, function (category) {
+                    if (category.parent) {
+                        var parent = categories[category.parent];
+                        if (!parent.children) parent.children = [];
+                        parent.children.push(category);
+                    }
+                });
             }
 
         }

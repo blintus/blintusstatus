@@ -39,6 +39,16 @@
             "fors": {},
             "namespaces": {}
         },
+        "status/assets/js/shared/modals.js": {
+            "name": "status/assets/js/shared/modals.js",
+            "modules": {},
+            "classes": {
+                "shared.modals.MessageModal": 1,
+                "shared.modals.FormModal": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "status/assets/js/shared/utils.js": {
             "name": "status/assets/js/shared/utils.js",
             "modules": {},
@@ -118,6 +128,46 @@
                 }
             ]
         },
+        "shared.modals.MessageModal": {
+            "name": "shared.modals.MessageModal",
+            "shortname": "shared.modals.MessageModal",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "status/assets/js/shared/modals.js",
+            "line": 57,
+            "description": "Creates and shows a new message modal with the specified settings,\nand removes in from the dom when it is closed.\n\n<pre><code>Options\n\ntitle: The modal title\nbody:  The modal body\n</code></pre>",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "options",
+                    "description": "The options",
+                    "type": "Object"
+                }
+            ]
+        },
+        "shared.modals.FormModal": {
+            "name": "shared.modals.FormModal",
+            "shortname": "shared.modals.FormModal",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "status/assets/js/shared/modals.js",
+            "line": 90,
+            "description": "Creates a new form modal, but doesn't show it. This modal is not\nautomatically removed from the dom, and is meant to be reused.\n\n<pre><code>Options\n\ntitle:          The title of the dialog\nbody:           The body of the modal, typically the html for the form\ncancelBtn:      The text for the cancel button\nokBtn:          The text for the ok button\nsubmitCallback: The function to call after the user submits the form. This\n                gets called with an object containing field names as keys,\n                and values as the values.\n</code></pre>",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "options",
+                    "description": "The options",
+                    "type": "Object"
+                }
+            ]
+        },
         "shared.Utils": {
             "name": "shared.Utils",
             "shortname": "shared.Utils",
@@ -127,7 +177,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "status/assets/js/shared/utils.js",
-            "line": 3,
+            "line": 4,
             "static": 1
         }
     },
@@ -142,7 +192,7 @@
         },
         {
             "file": "status/assets/js/pages/home/controller.js",
-            "line": 52,
+            "line": 46,
             "description": "Helper method to get the ids of category, as well as any children categories\nof that category.",
             "itemtype": "method",
             "name": "_getCategoryIds",
@@ -159,7 +209,7 @@
         },
         {
             "file": "status/assets/js/pages/home/controller.js",
-            "line": 73,
+            "line": 67,
             "description": "Fetch the posts that belong to a category, as well as all posts belonging to child categories",
             "itemtype": "method",
             "name": "getPostsForCategory",
@@ -178,7 +228,7 @@
         },
         {
             "file": "status/assets/js/pages/home/controller.js",
-            "line": 87,
+            "line": 81,
             "description": "Get a single category by its id",
             "itemtype": "method",
             "name": "getCategory",
@@ -197,7 +247,7 @@
         },
         {
             "file": "status/assets/js/pages/home/controller.js",
-            "line": 98,
+            "line": 92,
             "description": "Get a list of root level categories with their children included",
             "itemtype": "method",
             "name": "getRootCategories",
@@ -209,7 +259,7 @@
         },
         {
             "file": "status/assets/js/pages/home/controller.js",
-            "line": 108,
+            "line": 102,
             "description": "Get all of the comments for a post",
             "params": [
                 {
@@ -310,8 +360,52 @@
             "class": "pages.settings.SettingsView"
         },
         {
+            "file": "status/assets/js/shared/modals.js",
+            "line": 3,
+            "description": "* Internal modal helper class **",
+            "class": "shared.modals.MessageModal"
+        },
+        {
+            "file": "status/assets/js/shared/modals.js",
+            "line": 126,
+            "description": "Show the form modal.",
+            "itemtype": "method",
+            "name": "show",
+            "class": "shared.modals.FormModal"
+        },
+        {
+            "file": "status/assets/js/shared/modals.js",
+            "line": 136,
+            "description": "Hide the form modal.",
+            "itemtype": "method",
+            "name": "hide",
+            "class": "shared.modals.FormModal"
+        },
+        {
+            "file": "status/assets/js/shared/modals.js",
+            "line": 146,
+            "description": "Reset all forms in the modal.",
+            "itemtype": "method",
+            "name": "reset",
+            "class": "shared.modals.FormModal"
+        },
+        {
+            "file": "status/assets/js/shared/modals.js",
+            "line": 158,
+            "description": "Get the form data for all forms in the modal.",
+            "itemtype": "method",
+            "name": "_getFormData",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "The name: value mappings for all fields in the form",
+                "type": "Object"
+            },
+            "class": "shared.modals.FormModal"
+        },
+        {
             "file": "status/assets/js/shared/utils.js",
-            "line": 11,
+            "line": 12,
             "description": "Adds children to a categories primary key object.\n\nFor example,\n<pre><code>\n{\n    1: {\n        pk: 1,\n        name: 'Category 1',\n        parent: null,\n    },\n    2: {\n        pk: 2,\n        name: 'Category 2',\n        parent: 1\n    }\n}\n</code></pre>\nbecomes\n<pre><code>\n{\n    1: {\n        pk: 1,\n        name: 'Category 1',\n        parent: null,\n        children: [{\n            pk: 2,\n            name: 'Category 2',\n            parent: 1\n        }]\n    },\n    2: {\n        pk: 2,\n        name: 'Category 2',\n        parent: 1\n    }\n}\n</code></pre>",
             "itemtype": "method",
             "name": "addChildren",
@@ -368,11 +462,15 @@
         },
         {
             "message": "Missing item type\nGet all of the comments for a post",
-            "line": " status/assets/js/pages/home/controller.js:108"
+            "line": " status/assets/js/pages/home/controller.js:102"
         },
         {
             "message": "Missing item type\nShow comments for the specified post",
             "line": " status/assets/js/pages/home/view.js:126"
+        },
+        {
+            "message": "Missing item type\n* Internal modal helper class **",
+            "line": " status/assets/js/shared/modals.js:3"
         },
         {
             "message": "Missing item type\n* Page routes **",
