@@ -12,7 +12,6 @@ urlpatterns = patterns('status',
     url(r'^rest/contactMethods', 'restviews.contactMethod', name='contactMethod'),
     url(r'^rest/categories', 'restviews.category', name='category'),
     url(r'^rest/subscriptions', 'restviews.subscription', name='subscription'),
-    url(r'^rest', 'restviews.index', name='rest'),
 
 
 

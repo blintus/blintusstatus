@@ -1,5 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import timedelta
+
+def formatDatetime(datetime):
+	datetime += timedelta(hours=-4)
+	return datetime.strftime("%m/%d/%Y at %H:%M")
 
 
 class Category(models.Model):
@@ -14,6 +19,14 @@ class Category(models.Model):
 		else:
 			return self.name
 
+	def serialize(self):
+		return {
+			"pk": self.pk,
+			"name": self.name,
+			"parent": self.parent.pk if self.parent else None,
+			"status": self.status
+		}
+
 	name = models.CharField(max_length=20)
 	parent = models.ForeignKey("Category", null = True, blank = True)
 	status = models.PositiveIntegerField()
@@ -24,6 +37,18 @@ class Post(models.Model):
 
 	def __str__(self):
 		return str(self.created) + " :: " + str(self.user) + " :: " + self.message
+
+	def serialize(self):
+		return {
+			"pk": self.pk,
+			"title": self.title,
+			"status": self.status,
+			"category": self.category.pk,
+			"created": formatDatetime(self.created),
+			"updated": formatDatetime(self.updated),
+			"message": self.message,
+			"user": self.user.username
+		}
 
 	title = models.CharField(max_length=255)
 	status = models.PositiveIntegerField()
@@ -40,9 +65,19 @@ class Comment(models.Model):
 	def __str__(self):
 		return str(self.created) + " :: " + str(self.user) + " :: " + self.message
 
+	def serialize(self):
+		return {
+			"pk": self.pk,
+			"post": self.post.pk,
+			"created": formatDatetime(self.created),
+			"updated": formatDatetime(self.updated),
+			"message": self.message,
+			"user": self.user.username
+		}
+
 	post = models.ForeignKey(Post)
-	created = models.DateField(auto_now = False, auto_now_add = True)
-	updated = models.DateField(auto_now = True)
+	created = models.DateTimeField(auto_now = False, auto_now_add = True)
+	updated = models.DateTimeField(auto_now = True)
 	message = models.TextField()
 	user = models.ForeignKey(User)
 
@@ -52,6 +87,13 @@ class Provider(models.Model):
 
 	def __str__(self):
 		return self.name + " :: " + self.gateway
+
+	def serialize(self):
+		return {
+			"pk": self.pk,
+			"name": self.name,
+			"gateway": self.gateway
+		}
 
 	name = models.CharField(max_length=25)
 	gateway = models.CharField(max_length=30)
@@ -66,6 +108,15 @@ class ContactMethod(models.Model):
 
 		elif (self.phoneNumber and self.provider.name):
 			return str(self.user) + " :: " + self.phoneNumber + " :: " + self.provider.name
+
+	def serialize(self):
+		return {
+			"pk": self.pk,
+			"email": self.email,
+			"phoneNumber": self.phoneNumber,
+			"provider": self.provider.name if self.provider else None,
+			"user": self.user.username
+		}
 
 
 	email = models.CharField(max_length=35, null = True, blank = True)
@@ -83,6 +134,14 @@ class Subscription(models.Model):
 
 		elif (self.contactMethod.phoneNumber and self.contactMethod.provider.name):
 			return str(self.user) + " :: " + self.category.name + " :: " + self.contactMethod.phoneNumber + " :: " + self.contactMethod.provider.name
+
+	def serialize(self):
+		return {
+			"pk": self.pk,
+			"category": self.category.pk,
+			"user": self.user.username,
+			"contactMethod": self.contactMethod.pk
+		}
 
 	category = models.ForeignKey(Category)
 	user = models.ForeignKey(User)

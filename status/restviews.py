@@ -1,31 +1,28 @@
 import json
 
-from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseForbidden
-from status.decorators import rest_login_required
-from django.contrib.auth.models import User
-from status.JSONSerializer import JSONSerializer
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
+from status.decorators import rest_login_required, allowed_methods
+
 from status.models import Post, Comment, Provider, ContactMethod, Category, Subscription
 
 
-def _returnJSON(obj):
-	s = JSONSerializer()
-	return HttpResponse(s.serialize(obj), content_type="application/json")
+def _returnJSON(objs):
+	serializedObjs = []
+	for obj in objs:
+		serializedObjs.append(obj.serialize())
+	return HttpResponse(json.dumps(serializedObjs), content_type="text/json")
 
 
-def index(request):
-    return _returnJSON(["testObject"])
-
-
+@allowed_methods('GET')
 @rest_login_required
 def post(request, post_id = None):
 	if request.method == 'GET':
 		if post_id:
 			return _returnJSON(Post.objects.filter(id = post_id))
 		return _returnJSON(Post.objects.all())
-	
-	return HttpResponseNotAllowed(['GET'], JsonResponse({'message':'method provided is not supported'}))
 
 
+@allowed_methods('GET', 'POST')
 @rest_login_required
 def comment(request, post_id = None):
 	if request.method == 'GET':
@@ -43,20 +40,18 @@ def comment(request, post_id = None):
 			return HttpResponse(JsonResponse({'message':'Comment successfully saved'}))
 		else:
 			return HttpResponseBadRequest(JsonResponse({'message':'Please supply the associated status and a message'}))
-	
-	return HttpResponseNotAllowed(['GET', 'POST'], JsonResponse({'message':'method provided is not supported'}))
 
 
+@allowed_methods('GET')
 @rest_login_required
 def provider(request, provider_id = None):
 	if request.method == 'GET':
 		if provider_id:
 			return _returnJSON(Provider.objects.filter(id = provider_id))
 		return _returnJSON(Provider.objects.all())
-	
-	return HttpResponseNotAllowed(['GET'], JsonResponse({'message':'method provided is not supported'}))
 
 
+@allowed_methods('GET', 'POST')
 @rest_login_required
 def contactMethod(request):
 	if request.method == 'GET':
@@ -92,17 +87,16 @@ def contactMethod(request):
 		
 		ContactMethod.objects.get(pk=pk, user = request.user).delete()
 		return HttpResponse(JsonResponse({'message':'Contact methods successfully deleted'}))
-	
-	return HttpResponseNotAllowed(['GET', 'POST'], JsonResponse({'message':'method provided is not supported'}))
 
 
+@allowed_methods('GET')
 @rest_login_required
 def category(request):
 	if request.method == 'GET':
 		return _returnJSON(Category.objects.all())
-	return HttpResponseNotAllowed(['GET'], JsonResponse({'message':'method provided is not supported'}))
 
 
+@allowed_methods('GET', 'POST')
 @rest_login_required
 def subscription(request):
 	if request.method == 'GET':
@@ -128,5 +122,3 @@ def subscription(request):
 	elif (request.method == 'POST') and (subscribed == 'true'):
 		Subscription.objects.get(category = category, user = request.user, contactMethod = contactMethod).delete()
 		return HttpResponse(JsonResponse({'message':'Subscription successfully deleted'}))
-	
-	return HttpResponseNotAllowed(['GET', 'POST'], JsonResponse({'message':'method provided is not supported'}))
