@@ -7,7 +7,7 @@ urlpatterns = patterns('status',
 
     # rest urls
     url(r'^rest/posts(/(?P<post_id>\d+))?', 'restviews.post', name='post'),
-    url(r'^rest/comments(/(?P<post_id>\d+))?', 'restviews.comment', name='comment'),
+    url(r'^rest/comments', 'restviews.comment', name='comment'),
     url(r'^rest/providers(/(?P<provider_id>\d+))?', 'restviews.provider', name='provider'),
     url(r'^rest/contactMethods', 'restviews.contactMethod', name='contactMethod'),
     url(r'^rest/categories', 'restviews.category', name='category'),

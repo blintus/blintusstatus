@@ -119,7 +119,7 @@ a:hover {
  **************/
 
 .comments-wrapper {
-    margin-top: 20px;
+    margin: 20px auto;
 }
 
 .comments-show-link {

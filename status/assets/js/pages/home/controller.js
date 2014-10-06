@@ -27,17 +27,23 @@ define(['lodash', 'pageUtils', 'shared/utils',
     HomeController.prototype.loadAllData = function () {
         var that = this;
 
-        $.when(postsMock, categoriesMock).done(function (posts, categories) {
+        var postRequest = $.ajax({
+            url: '/rest/posts',
+            type: 'GET',
+            dataType: 'json'
+        });
+        var categoryRequest = $.ajax({
+            url: '/rest/categories',
+            type: 'GET',
+            dataType: 'json'
+        });
+        $.when(postRequest, categoryRequest).done(function (postResponse, categoryResponse) {
             // Normal posts array
-            that._posts = posts;
+            that._posts = postResponse[0];
 
             // Created an object with child categories added to a children array
-            categories = _.indexBy(categories, 'pk');
-            utils.categories.addChildren(categories);
-
-            // An array of categories with each category having a array of it's children,
-            // if it has any
-            that._categories = categories;
+            that._categories = _.indexBy(categoryResponse[0], 'pk');
+            utils.categories.addChildren(that._categories);
 
             that.view.init();
         });
@@ -105,25 +111,25 @@ define(['lodash', 'pageUtils', 'shared/utils',
      * @param {int} postId The post id
      * @return {Array} A promise for the returned data
      */
-    HomeController.prototype.getCommentsForPost = function (postId, callback) {
-        var promise = $.Deferred();
-        setTimeout(function () {
-            promise.resolve(commentsMock[postId]);
-        }, 1000);
-        return promise;
+    HomeController.prototype.getCommentsForPost = function (postId) {
+        return $.ajax({
+            url: '/rest/comments',
+            type: 'GET',
+            data: {post: postId},
+            dataType: 'json'
+        });
     };
 
     HomeController.prototype.addComment = function (postId, message) {
-        var promise = $.Deferred();
-        setTimeout(function () {
-            promise.resolve({
-                pk: 85,
-                message: message,
-                user: 'current user',
-                created: '2014-10-02'
-            });
-        }, 1000);
-        return promise;
+        return $.ajax({
+            url: '/rest/comments',
+            type: 'POST',
+            data: {
+                postId: postId,
+                message: message
+            },
+            dataType: 'json'
+        });
     };
 
     return HomeController;

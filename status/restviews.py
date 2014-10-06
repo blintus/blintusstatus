@@ -24,20 +24,19 @@ def post(request, post_id = None):
 
 @allowed_methods('GET', 'POST')
 @rest_login_required
-def comment(request, post_id = None):
+def comment(request):
 	if request.method == 'GET':
-		if post_id:
-			thisPost = Post.objects.filter(id = post_id)
-			return _returnJSON(Comment.objects.filter(status = thisPost))
+		if 'post' in request.GET:
+			return _returnJSON(Comment.objects.filter(post_id = request.GET['post']))
 		return _returnJSON(Comment.objects.all())
 	
 	elif request.method == 'POST':
-		status = request.POST['status']
+		postId = request.POST['postId']
 		message = request.POST['message']
-		if status and message:
-			comment = Comment(status = status, message = message, user = request.user)
+		if postId and message:
+			comment = Comment(post_id = postId, message = message, user = request.user)
 			comment.save()
-			return HttpResponse(JsonResponse({'message':'Comment successfully saved'}))
+			return HttpResponse(JsonResponse(comment.serialize()))
 		else:
 			return HttpResponseBadRequest(JsonResponse({'message':'Please supply the associated status and a message'}))
 

@@ -82,7 +82,7 @@ define(['jquery', 'lodash', 'persistentStorage',
         this.$postContainer.on('click', '.post-comment-btn', function (event) {
             var $target = $(event.target);
             var postId = $target.data('postid');
-            that._addComment($target);
+            that._addComment($target, postId);
         });
 
     };
