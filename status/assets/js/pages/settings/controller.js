@@ -66,7 +66,7 @@ define(['pageUtils',
     };
 
     SettingsController.prototype.updateSubscription = function (contactmethodid, categoryid, checked) {
-        var that = this
+        var that = this;
         $.ajax({
             type: "POST",
             url: "/rest/subscriptions",
