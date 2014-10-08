@@ -48,21 +48,9 @@ define(['jquery',
         that.$contactMethodContainer.on('click', '.settings-category-checkbox', function (event) {
             var contactmethodid = $(event.target).data('contactmethodid'),
                 categoryid      = $(event.target).data('categoryid');
-            $.ajax({
-            	type: "POST",
-            	url: "/rest/subscriptions",
-            	data: {
-                    contactmethodid: contactmethodid,
-                    categoryid: categoryid,
-                    subscribed: !event.target.checked
-                }
-            }).done( function (msg) {
-                var p1 = that.controller.loadContactMethods();
-                var p2 = that.controller.loadSubscriptions();
-                
-                $.when(p1, p2).done(function () {
-                    that._loadContactMethods();
-                });
+            var p = that.controller.updateSubscription(contactmethodid, categoryid, event.target.checked);
+            $.when(p[0], p[1]).done(function () {
+                that._loadContactMethods();
             });
         });
 
@@ -118,23 +106,12 @@ define(['jquery',
                 provider = that.$contactMethodContainer.find('.new-contact-method-provider').val();
 
             if (((email && (phoneNumber === '') && (provider === '')) || ((email === '') && phoneNumber && (provider !== '')))) {
-                $.ajax({
-                    type: "POST",
-                    url: "/rest/contactMethods",
-                    data: {
-                        email: email,
-                        phoneNumber: phoneNumber,
-                        provider: provider,
-                        subscribed: false
-                    }
-                }).done( function (msg) {
-                    var p1 = that.controller.loadContactMethods();
-                    $.when(p1).done(function () {
-                        that._loadContactMethods();
-                    });
+                var p1 = that.controller.saveContactMethod(email, phoneNumber, provider);
+                $.when(p1).done(function () {
+                    that._loadContactMethods();
                 });
             } else {
-                alert('HOLY SHIT BATMAN! A WILD RETARD JUST APPEARED~!#@!!');
+                alert('Bad data');
             }
         });
 
@@ -147,18 +124,9 @@ define(['jquery',
                 confirmDelete = confirm("Remove contact method: " + name + "?");
 
             if (confirmDelete === true) {
-                $.ajax({
-                    type: "POST",
-                    url: "/rest/contactMethods",
-                    data: {
-                        pk: pk,
-                        subscribed: true
-                    }
-                }).done( function (msg) {
-                    var p1 = that.controller.loadContactMethods();
-                    $.when(p1).done(function () {
-                        that._loadContactMethods();
-                    });
+                var p1 = that.controller.removeContactMethod(pk);
+                $.when(p1).done(function () {
+                    that._loadContactMethods();
                 });
             }
         });

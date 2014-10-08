@@ -15,28 +15,6 @@ define(['pageUtils',
         this.categories = null;
     };
 
-    /**
-     * Load all data from the server
-     *
-     * @method loadAllData
-     */
-    SettingsController.prototype.loadAllData = function () {
-        var that = this,
-            cat_promise,
-            con_promise,
-            prov_promise,
-            sub_promise;
-
-        cat_promise  = that.loadCategories();
-        con_promise  = that.loadContactMethods();
-        prov_promise = that.loadProviders();
-        sub_promise  = that.loadSubscriptions();
-
-        $.when(cat_promise, con_promise, prov_promise, sub_promise).done(function () {
-            that.view.init();
-        });
-    };
-
     SettingsController.prototype.loadCategories = function () {
         var that = this;
         return $.getJSON("/rest/categories", function (json) {
@@ -62,6 +40,74 @@ define(['pageUtils',
         var that = this;
         return $.getJSON("/rest/subscriptions", function ( json ) {
             that.subscriptions = _.indexBy(json, 'pk');
+        });
+    };
+
+    /**
+     * Load all data from the server
+     *
+     * @method loadAllData
+     */
+    SettingsController.prototype.loadAllData = function () {
+        var that = this,
+            cat_promise,
+            con_promise,
+            prov_promise,
+            sub_promise;
+
+        cat_promise  = that.loadCategories();
+        con_promise  = that.loadContactMethods();
+        prov_promise = that.loadProviders();
+        sub_promise  = that.loadSubscriptions();
+
+        $.when(cat_promise, con_promise, prov_promise, sub_promise).done(function () {
+            that.view.init();
+        });
+    };
+
+    SettingsController.prototype.updateSubscription = function (contactmethodid, categoryid, checked) {
+        var that = this
+        $.ajax({
+            type: "POST",
+            url: "/rest/subscriptions",
+            data: {
+                contactmethodid: contactmethodid,
+                categoryid: categoryid,
+                subscribed: !checked
+            }
+        }).done( function (msg) {
+            return [that.loadContactMethods(), that.loadSubscriptions()];
+        });
+    };
+
+    SettingsController.prototype.saveContactMethod = function (email, phoneNumber, provider) {
+        var that = this;
+        $.ajax({
+            type: "POST",
+            url: "/rest/contactMethods",
+            data: {
+                email: email,
+                phoneNumber: phoneNumber,
+                provider: provider,
+                subscribed: false
+            }
+        }).done( function (msg) {
+            return that.loadContactMethods();
+        });
+    };
+
+    SettingsController.prototype.removeContactMethod = function (pk) {
+        var that = this;
+        $.ajax({
+            type: "POST",
+            url: "/rest/contactMethods",
+            data: {
+                pk: pk,
+                subscribed: true
+            }
+        }).done( function (msg) {
+            return that.loadContactMethods();
+            
         });
     };
 

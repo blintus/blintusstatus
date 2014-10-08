@@ -1,9 +1,9 @@
 <h3>Subscribe for updates</h3></br>
 <table class="table table-bordered table-striped table-hover" style="margin: 0 auto">
 	<tr>
-		<td></td>
+		<th></th>
 		{{#each contactMethods}}
-			<td class="contact-method">
+			<th class="contact-method">
 				{{#if email}}
 					{{email}}
 				{{else}}
@@ -13,7 +13,7 @@
 						{{/if}}
 					{{/if}}
 				{{/if}}
-			</td>
+			</th>
 		{{/each}}
 	</tr>
 	{{#each categories}}
