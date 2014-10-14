@@ -200,7 +200,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "status/assets/js/shared/modals.js",
-            "line": 127,
+            "line": 129,
             "description": "Creates a new form modal, but doesn't show it. This modal is not\nautomatically removed from the dom, and is meant to be reused.\n\n<pre><code>Options\n\ntitle:          The title of the dialog\nbody:           The body of the modal, typically the html for the form\ncancelBtn:      The text for the cancel button\nokBtn:          The text for the ok button\nsubmitCallback: The function to call after the user submits the form. This\n                gets called with an object containing field names as keys,\n                and values as the values.\n</code></pre>",
             "is_constructor": 1,
             "params": [
@@ -623,7 +623,7 @@
         },
         {
             "file": "status/assets/js/shared/modals.js",
-            "line": 163,
+            "line": 167,
             "description": "Show the form modal.",
             "itemtype": "method",
             "name": "show",
@@ -631,7 +631,7 @@
         },
         {
             "file": "status/assets/js/shared/modals.js",
-            "line": 173,
+            "line": 177,
             "description": "Hide the form modal.",
             "itemtype": "method",
             "name": "hide",
@@ -639,7 +639,7 @@
         },
         {
             "file": "status/assets/js/shared/modals.js",
-            "line": 183,
+            "line": 187,
             "description": "Reset all forms in the modal.",
             "itemtype": "method",
             "name": "reset",
@@ -647,7 +647,15 @@
         },
         {
             "file": "status/assets/js/shared/modals.js",
-            "line": 195,
+            "line": 199,
+            "description": "Submit the form.",
+            "itemtype": "method",
+            "name": "submit",
+            "class": "shared.modals.FormModal"
+        },
+        {
+            "file": "status/assets/js/shared/modals.js",
+            "line": 211,
             "description": "Get the form data for all forms in the modal.",
             "itemtype": "method",
             "name": "_getFormData",
