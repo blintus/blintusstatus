@@ -52,7 +52,6 @@ define(['jquery',
                 var email = formData.email;
                 if (email) {
                     $.when(that.controller.saveContactMethod(email, '', '')).done(function (response) {
-                        that.controller.updateContactMethod(response.contactMethod, true);
                         that._loadSubscriptions();
                     });
                 } else {
@@ -72,7 +71,6 @@ define(['jquery',
                     provider    = formData.provider;
                     if (phoneNumber && provider) {
                         $.when(that.controller.saveContactMethod('', phoneNumber, provider)).done(function (response) {
-                            that.controller.updateContactMethod(response.contactMethod, true);
                             that._loadSubscriptions();
                         });
                     } else {
@@ -127,7 +125,6 @@ define(['jquery',
 
             if (confirmDelete === true) {
                 $.when(that.controller.removeContactMethod(pk)).done(function (response) {
-                    that.controller.updateContactMethod(response.contactMethod, false);
                     that._loadSubscriptions();
                 });
             }

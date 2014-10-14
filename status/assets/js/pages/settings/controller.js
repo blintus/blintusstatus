@@ -137,17 +137,26 @@ define(['pageUtils',
      * @return {Array} A promise for the returned data
      */
     SettingsController.prototype.saveContactMethod = function (email, phoneNumber, provider) {
-        return $.ajax({
-            dataType: 'JSON',
-            type: "POST",
-            url: "/rest/contactMethods",
-            data: {
-                email: email,
-                phoneNumber: phoneNumber,
-                provider: provider,
-                subscribed: false
-            }
+        var that = this,
+            promise = $.Deferred(),
+            request = $.ajax({
+                dataType: 'JSON',
+                type: "POST",
+                url: "/rest/contactMethods",
+                data: {
+                    email: email,
+                    phoneNumber: phoneNumber,
+                    provider: provider,
+                    subscribed: false
+                }
+            });
+
+        $.when(request).done(function (response) {
+            that.updateContactMethod(response.contactMethod, true);
+            promise.resolve();
         });
+
+        return promise;
     };
 
     /**
@@ -159,15 +168,24 @@ define(['pageUtils',
      * @return {Array}  A promise for the returned data
      */
     SettingsController.prototype.removeContactMethod = function (pk) {
-        return $.ajax({
-            dataType: 'JSON',
-            type: "POST",
-            url: "/rest/contactMethods",
-            data: {
-                pk: pk,
-                subscribed: true
-            }
+        var that = this,
+            promise = $.Deferred(),
+            request = $.ajax({
+                dataType: 'JSON',
+                type: "POST",
+                url: "/rest/contactMethods",
+                data: {
+                    pk: pk,
+                    subscribed: true
+                }
+            });
+
+        $.when(request).done(function (response) {
+            that.updateContactMethod(response.contactMethod, false);
+            promise.resolve();
         });
+
+        return promise;
     };
 
     /**
