@@ -28,27 +28,31 @@ define(['jquery',
      * @method init
      */
     SettingsView.prototype.init = function () {
-        this._loadContactMethods();
+        this._loadSubscriptions();
         this._initEventListeners();
         this._initModals();
     };
 
-
+    /**
+     * Initializes two modals for adding contact methods
+     * one for an email addresas and another for adding a phone number
+     *
+     * @method _initModals
+     * @private
+     */
     SettingsView.prototype._initModals = function () {
         var that = this;
 
-        var title = 'Add an Email Address',
-            body = emailMarkup,
+        var title     = 'Add an Email Address',
+            body      = emailMarkup,
             cancelBtn = 'Nope Nope Nope...',
-            okBtn = 'Send to NSA',
+            okBtn     = 'Send to NSA',
             submitCallback = function (formData) {
                 var email = formData.email;
-
                 if (email) {
-                    var p1 = that.controller.saveContactMethod(email, '', '');
-                    $.when(p1).done(function (response) {
+                    $.when(that.controller.saveContactMethod(email, '', '')).done(function (response) {
                         that.controller.updateContactMethod(response.contactMethod, true);
-                        that._loadContactMethods();
+                        that._loadSubscriptions();
                     });
                 } else {
                     alert('Bad data');
@@ -57,19 +61,17 @@ define(['jquery',
         that.addEmailModal = new modals.FormModal({'title': title, 'body': body, 'cancelBtn': cancelBtn, 'okBtn': okBtn, 'submitCallback': submitCallback});
 
         var providers = this.controller.getProviders();
-        title = 'Add a Phone Number';
-        body = phoneNumberMarkup({ providers: providers });
+        title     = 'Add a Phone Number';
+        body      = phoneNumberMarkup({ providers: providers });
         cancelBtn = 'Nope Nope Nope...';
-        okBtn = 'Send to NSA';
+        okBtn     = 'Send to NSA';
         submitCallback = function (formData) {
             var phoneNumber = formData.phoneNumber,
-                provider = formData.provider;
-
+                provider    = formData.provider;
                 if (phoneNumber && provider) {
-                    var p1 = that.controller.saveContactMethod('', phoneNumber, provider);
-                    $.when(p1).done(function (response) {
+                    $.when(that.controller.saveContactMethod('', phoneNumber, provider)).done(function (response) {
                         that.controller.updateContactMethod(response.contactMethod, true);
-                        that._loadContactMethods();
+                        that._loadSubscriptions();
                     });
                 } else {
                     alert('Bad data');
@@ -117,21 +119,26 @@ define(['jquery',
         that.$subscriptionContainer.on('click', '.remove-contact-method', function (event) {
             event.stopPropagation();
 
-            var pk = $(event.target).data('pk'),
+            var pk   = $(event.target).data('pk'),
                 name = $(event.target).data('name'),
                 confirmDelete = confirm("Remove contact method: " + name + "?");
 
             if (confirmDelete === true) {
-                var p1 = that.controller.removeContactMethod(pk);
-                $.when(p1).done(function (response) {
+                $.when(that.controller.removeContactMethod(pk)).done(function (response) {
                     that.controller.updateContactMethod(response.contactMethod, false);
-                    that._loadContactMethods();
+                    that._loadSubscriptions();
                 });
             }
         });
     };
 
-    SettingsView.prototype._loadContactMethods = function () {
+    /**
+     * Loads subscription table
+     *
+     * @method _loadSubscriptions
+     * @private
+     */
+    SettingsView.prototype._loadSubscriptions = function () {
     	var contactMethods = this.controller.getContactMethods(),
     		categories = this.controller.getCategories(),
             subscriptions = this.controller.getSubscriptions(),
@@ -145,12 +152,10 @@ define(['jquery',
     	}));
 
         // Check correct checkbox's
-        var sub_len = Object.keys(subscriptions).length;
-
         for (var key in subscriptions) {
-            var con = subscriptions[key].contactMethod;
-            var cat = subscriptions[key].category;
-            var checkboxes = this.$subscriptionContainer.find('input[type="checkbox"]').filter('[data-contactmethodid="' + con + '"]').filter('[data-categoryid="' + cat + '"]').prop('checked', true);
+            var con = subscriptions[key].contactMethod,
+                cat = subscriptions[key].category,
+                checkboxes = this.$subscriptionContainer.find('input[type="checkbox"]').filter('[data-contactmethodid="' + con + '"]').filter('[data-categoryid="' + cat + '"]').prop('checked', true);
         }
     };
 

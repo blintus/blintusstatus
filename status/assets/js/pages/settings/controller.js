@@ -7,7 +7,7 @@ define(['pageUtils',
     /**
      * Constructor for a settings controller
      *
-     * @class pages.settings.controller
+     * @class pages.settings.SettingsController
      * @contructor
      * @param {jQuery} $container A jQuery object for the root content container
      */
