@@ -45,7 +45,11 @@
             
                 <li><a href="../classes/pages.home.HomeView.html">pages.home.HomeView</a></li>
             
+                <li><a href="../classes/pages.settings.SettingsController.html">pages.settings.SettingsController</a></li>
+            
                 <li><a href="../classes/pages.settings.SettingsView.html">pages.settings.SettingsView</a></li>
+            
+                <li><a href="../classes/shared.modals.ConfirmModal.html">shared.modals.ConfirmModal</a></li>
             
                 <li><a href="../classes/shared.modals.FormModal.html">shared.modals.FormModal</a></li>
             
@@ -125,17 +129,23 @@ define([&#x27;lodash&#x27;, &#x27;pageUtils&#x27;, &#x27;shared/utils&#x27;,
     HomeController.prototype.loadAllData = function () {
         var that = this;
 
-        $.when(postsMock, categoriesMock).done(function (posts, categories) {
+        var postRequest = $.ajax({
+            url: &#x27;/rest/posts&#x27;,
+            type: &#x27;GET&#x27;,
+            dataType: &#x27;json&#x27;
+        });
+        var categoryRequest = $.ajax({
+            url: &#x27;/rest/categories&#x27;,
+            type: &#x27;GET&#x27;,
+            dataType: &#x27;json&#x27;
+        });
+        $.when(postRequest, categoryRequest).done(function (postResponse, categoryResponse) {
             // Normal posts array
-            that._posts = posts;
+            that._posts = postResponse[0];
 
             // Created an object with child categories added to a children array
-            categories = _.indexBy(categories, &#x27;pk&#x27;);
-            utils.categories.addChildren(categories);
-
-            // An array of categories with each category having a array of it&#x27;s children,
-            // if it has any
-            that._categories = categories;
+            that._categories = _.indexBy(categoryResponse[0], &#x27;pk&#x27;);
+            utils.categories.addChildren(that._categories);
 
             that.view.init();
         });
@@ -203,25 +213,25 @@ define([&#x27;lodash&#x27;, &#x27;pageUtils&#x27;, &#x27;shared/utils&#x27;,
      * @param {int} postId The post id
      * @return {Array} A promise for the returned data
      */
-    HomeController.prototype.getCommentsForPost = function (postId, callback) {
-        var promise = $.Deferred();
-        setTimeout(function () {
-            promise.resolve(commentsMock[postId]);
-        }, 1000);
-        return promise;
+    HomeController.prototype.getCommentsForPost = function (postId) {
+        return $.ajax({
+            url: &#x27;/rest/comments&#x27;,
+            type: &#x27;GET&#x27;,
+            data: {post: postId},
+            dataType: &#x27;json&#x27;
+        });
     };
 
     HomeController.prototype.addComment = function (postId, message) {
-        var promise = $.Deferred();
-        setTimeout(function () {
-            promise.resolve({
-                pk: 85,
-                message: message,
-                user: &#x27;current user&#x27;,
-                created: &#x27;2014-10-02&#x27;
-            });
-        }, 1000);
-        return promise;
+        return $.ajax({
+            url: &#x27;/rest/comments&#x27;,
+            type: &#x27;POST&#x27;,
+            data: {
+                postId: postId,
+                message: message
+            },
+            dataType: &#x27;json&#x27;
+        });
     };
 
     return HomeController;

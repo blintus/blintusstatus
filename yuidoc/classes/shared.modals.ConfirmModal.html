@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>shared.modals.MessageModal - The Blintus Status API</title>
+    <title>shared.modals.ConfirmModal - The Blintus Status API</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -96,7 +96,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>shared.modals.MessageModal Class</h1>
+                        <h1>shared.modals.ConfirmModal Class</h1>
 <div class="box meta">
     
 
@@ -104,7 +104,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/status_assets_js_shared_modals.js.html#l57"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;modals.js:57</code></a>
+            Defined in: <a href="../files/status_assets_js_shared_modals.js.html#l90"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;modals.js:90</code></a>
         </div>
     
 
@@ -116,20 +116,23 @@
 
 
 <div class="box intro">
-    <p>Creates and shows a new message modal with the specified settings,
+    <p>Creates and shows a new confirm modal with the specified settings,
 and removes it from the dom when it is closed.</p>
 <pre class="code prettyprint"><code>Options
 
-title: The modal title
-body:  The modal body
+title:      The modal title
+body:       The modal body
+cancenBtn:  The text for the cancel button, defaults to 'Cancel'
+okBtn:      The text for the ok button, defaults to 'OK'
+okCallback: The method called if the user confirms
 </code></pre>
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_shared.modals.MessageModal" class="method item">
-    <h3 class="name"><code>shared.modals.MessageModal</code></h3>
+        <div id="method_shared.modals.ConfirmModal" class="method item">
+    <h3 class="name"><code>shared.modals.ConfirmModal</code></h3>
 
     
         <div class="args">
@@ -170,7 +173,7 @@ body:  The modal body
             
         
         
-        <a href="../files/status_assets_js_shared_modals.js.html#l57"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;modals.js:57</code></a>
+        <a href="../files/status_assets_js_shared_modals.js.html#l90"><code>status&#x2F;assets&#x2F;js&#x2F;shared&#x2F;modals.js:90</code></a>
         
         </p>
 

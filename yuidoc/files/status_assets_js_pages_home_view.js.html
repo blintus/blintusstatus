@@ -45,7 +45,11 @@
             
                 <li><a href="../classes/pages.home.HomeView.html">pages.home.HomeView</a></li>
             
+                <li><a href="../classes/pages.settings.SettingsController.html">pages.settings.SettingsController</a></li>
+            
                 <li><a href="../classes/pages.settings.SettingsView.html">pages.settings.SettingsView</a></li>
+            
+                <li><a href="../classes/shared.modals.ConfirmModal.html">shared.modals.ConfirmModal</a></li>
             
                 <li><a href="../classes/shared.modals.FormModal.html">shared.modals.FormModal</a></li>
             
@@ -180,7 +184,7 @@ define([&#x27;jquery&#x27;, &#x27;lodash&#x27;, &#x27;persistentStorage&#x27;,
         this.$postContainer.on(&#x27;click&#x27;, &#x27;.post-comment-btn&#x27;, function (event) {
             var $target = $(event.target);
             var postId = $target.data(&#x27;postid&#x27;);
-            that._addComment($target);
+            that._addComment($target, postId);
         });
 
     };

@@ -45,7 +45,11 @@
             
                 <li><a href="../classes/pages.home.HomeView.html">pages.home.HomeView</a></li>
             
+                <li><a href="../classes/pages.settings.SettingsController.html">pages.settings.SettingsController</a></li>
+            
                 <li><a href="../classes/pages.settings.SettingsView.html">pages.settings.SettingsView</a></li>
+            
+                <li><a href="../classes/shared.modals.ConfirmModal.html">shared.modals.ConfirmModal</a></li>
             
                 <li><a href="../classes/shared.modals.FormModal.html">shared.modals.FormModal</a></li>
             
@@ -154,7 +158,7 @@ define([&#x27;lodash&#x27;, &#x27;hbs!shared/modalMarkup&#x27;], function (_, mo
 
     /**
      * Creates and shows a new message modal with the specified settings,
-     * and removes in from the dom when it is closed.
+     * and removes it from the dom when it is closed.
      *
      * &lt;pre&gt;&lt;code&gt;Options
      *
@@ -181,6 +185,43 @@ define([&#x27;lodash&#x27;, &#x27;hbs!shared/modalMarkup&#x27;], function (_, mo
             that._modal.destroy();
         }).on(&#x27;shown.bs.modal&#x27;, function (event) {
             $(event.target).find(&#x27;.okBtn&#x27;).focus();
+        });
+    };
+
+
+    /**
+     * Creates and shows a new confirm modal with the specified settings,
+     * and removes it from the dom when it is closed.
+     *
+     * &lt;pre&gt;&lt;code&gt;Options
+     *
+     * title:      The modal title
+     * body:       The modal body
+     * cancenBtn:  The text for the cancel button, defaults to &#x27;Cancel&#x27;
+     * okBtn:      The text for the ok button, defaults to &#x27;OK&#x27;
+     * okCallback: The method called if the user confirms
+     * &lt;/code&gt;&lt;/pre&gt;
+     *
+     * @class shared.modals.ConfirmModal
+     * @constructor
+     * @param {Object} options The options
+     */
+    var ConfirmModal = function (options) {
+        var that = this;
+        this._modal = new _Modal({
+            title: options.title,
+            body: options.body,
+            cancelBtn: options.cancelBtn,
+            okBtn: options.okBtn,
+            cancelable: true,
+            show: true,
+            okCallback: function (event) {
+                options.okCallback();
+                that._modal.hide();
+            }
+        });
+        this._modal.on(&#x27;hidden.bs.modal&#x27;, function (event) {
+            that._modal.destroy();
         });
     };
 

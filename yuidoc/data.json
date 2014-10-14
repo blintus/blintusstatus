@@ -26,7 +26,9 @@
         "status/assets/js/pages/settings/controller.js": {
             "name": "status/assets/js/pages/settings/controller.js",
             "modules": {},
-            "classes": {},
+            "classes": {
+                "pages.settings.SettingsController": 1
+            },
             "fors": {},
             "namespaces": {}
         },
@@ -44,6 +46,7 @@
             "modules": {},
             "classes": {
                 "shared.modals.MessageModal": 1,
+                "shared.modals.ConfirmModal": 1,
                 "shared.modals.FormModal": 1
             },
             "fors": {},
@@ -108,6 +111,26 @@
                 }
             ]
         },
+        "pages.settings.SettingsController": {
+            "name": "pages.settings.SettingsController",
+            "shortname": "pages.settings.SettingsController",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 7,
+            "description": "Constructor for a settings controller",
+            "contructor": "",
+            "params": [
+                {
+                    "name": "$container",
+                    "description": "A jQuery object for the root content container",
+                    "type": "JQuery"
+                }
+            ]
+        },
         "pages.settings.SettingsView": {
             "name": "pages.settings.SettingsView",
             "shortname": "pages.settings.SettingsView",
@@ -117,7 +140,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "status/assets/js/pages/settings/view.js",
-            "line": 8,
+            "line": 11,
             "description": "Constructor for a settings view",
             "is_constructor": 1,
             "params": [
@@ -138,7 +161,27 @@
             "extension_for": [],
             "file": "status/assets/js/shared/modals.js",
             "line": 57,
-            "description": "Creates and shows a new message modal with the specified settings,\nand removes in from the dom when it is closed.\n\n<pre><code>Options\n\ntitle: The modal title\nbody:  The modal body\n</code></pre>",
+            "description": "Creates and shows a new message modal with the specified settings,\nand removes it from the dom when it is closed.\n\n<pre><code>Options\n\ntitle: The modal title\nbody:  The modal body\n</code></pre>",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "options",
+                    "description": "The options",
+                    "type": "Object"
+                }
+            ]
+        },
+        "shared.modals.ConfirmModal": {
+            "name": "shared.modals.ConfirmModal",
+            "shortname": "shared.modals.ConfirmModal",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "status/assets/js/shared/modals.js",
+            "line": 90,
+            "description": "Creates and shows a new confirm modal with the specified settings,\nand removes it from the dom when it is closed.\n\n<pre><code>Options\n\ntitle:      The modal title\nbody:       The modal body\ncancenBtn:  The text for the cancel button, defaults to 'Cancel'\nokBtn:      The text for the ok button, defaults to 'OK'\nokCallback: The method called if the user confirms\n</code></pre>",
             "is_constructor": 1,
             "params": [
                 {
@@ -157,7 +200,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "status/assets/js/shared/modals.js",
-            "line": 90,
+            "line": 127,
             "description": "Creates a new form modal, but doesn't show it. This modal is not\nautomatically removed from the dom, and is meant to be reused.\n\n<pre><code>Options\n\ntitle:          The title of the dialog\nbody:           The body of the modal, typically the html for the form\ncancelBtn:      The text for the cancel button\nokBtn:          The text for the ok button\nsubmitCallback: The function to call after the user submits the form. This\n                gets called with an object containing field names as keys,\n                and values as the values.\n</code></pre>",
             "is_constructor": 1,
             "params": [
@@ -192,7 +235,7 @@
         },
         {
             "file": "status/assets/js/pages/home/controller.js",
-            "line": 46,
+            "line": 52,
             "description": "Helper method to get the ids of category, as well as any children categories\nof that category.",
             "itemtype": "method",
             "name": "_getCategoryIds",
@@ -209,7 +252,7 @@
         },
         {
             "file": "status/assets/js/pages/home/controller.js",
-            "line": 67,
+            "line": 73,
             "description": "Fetch the posts that belong to a category, as well as all posts belonging to child categories",
             "itemtype": "method",
             "name": "getPostsForCategory",
@@ -228,7 +271,7 @@
         },
         {
             "file": "status/assets/js/pages/home/controller.js",
-            "line": 81,
+            "line": 87,
             "description": "Get a single category by its id",
             "itemtype": "method",
             "name": "getCategory",
@@ -247,7 +290,7 @@
         },
         {
             "file": "status/assets/js/pages/home/controller.js",
-            "line": 92,
+            "line": 98,
             "description": "Get a list of root level categories with their children included",
             "itemtype": "method",
             "name": "getRootCategories",
@@ -259,7 +302,7 @@
         },
         {
             "file": "status/assets/js/pages/home/controller.js",
-            "line": 102,
+            "line": 108,
             "description": "Get all of the comments for a post",
             "params": [
                 {
@@ -335,15 +378,208 @@
         },
         {
             "file": "status/assets/js/pages/settings/controller.js",
-            "line": 18,
+            "line": 24,
+            "description": "Load categories from the server",
+            "itemtype": "method",
+            "name": "loadCategories",
+            "class": "pages.settings.SettingsController"
+        },
+        {
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 36,
+            "description": "Load contact methods from the server",
+            "itemtype": "method",
+            "name": "loadContactMethods",
+            "class": "pages.settings.SettingsController"
+        },
+        {
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 48,
+            "description": "Load providers from the server",
+            "itemtype": "method",
+            "name": "loadProviders",
+            "class": "pages.settings.SettingsController"
+        },
+        {
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 60,
+            "description": "Load subscriptions from the server",
+            "itemtype": "method",
+            "name": "loadSubscriptions",
+            "class": "pages.settings.SettingsController"
+        },
+        {
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 72,
             "description": "Load all data from the server",
             "itemtype": "method",
             "name": "loadAllData",
-            "class": "pages.settings.SettingsView"
+            "class": "pages.settings.SettingsController"
+        },
+        {
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 89,
+            "description": "Updates a contact method in the controller's cache",
+            "itemtype": "method",
+            "name": "loadAllData",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "contact",
+                    "description": "method object to add or delete",
+                    "type": "Object"
+                },
+                {
+                    "name": "true",
+                    "description": "? add contact method : delete contact method",
+                    "type": "Boolean"
+                }
+            ],
+            "class": "pages.settings.SettingsController"
+        },
+        {
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 106,
+            "description": "Post subscription update to the server",
+            "itemtype": "method",
+            "name": "loadAllData",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "of the contact method for the subscription",
+                    "type": "Int"
+                },
+                {
+                    "name": "id",
+                    "description": "of the category for the subscription",
+                    "type": "Int"
+                },
+                {
+                    "name": "is",
+                    "description": "the checkbox currently checked",
+                    "type": "Boolean"
+                }
+            ],
+            "return": {
+                "description": "A promise for the returned data",
+                "type": "Array"
+            },
+            "class": "pages.settings.SettingsController"
+        },
+        {
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 129,
+            "description": "Post new contact method to the server",
+            "itemtype": "method",
+            "name": "loadAllData",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "email",
+                    "description": "address for the contact method",
+                    "type": "String"
+                },
+                {
+                    "name": "phone",
+                    "description": "number for the contact method",
+                    "type": "String"
+                },
+                {
+                    "name": "pk",
+                    "description": "of the provider for the contact method",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "A promise for the returned data",
+                "type": "Array"
+            },
+            "class": "pages.settings.SettingsController"
+        },
+        {
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 162,
+            "description": "Request server to delete a contact method",
+            "itemtype": "method",
+            "name": "loadAllData",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "pk",
+                    "description": "of the contact method to delete",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "A promise for the returned data",
+                "type": "Array"
+            },
+            "class": "pages.settings.SettingsController"
+        },
+        {
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 191,
+            "description": "Returns the contact methods cached by the controller",
+            "itemtype": "method",
+            "name": "getContactMethods",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "attributes  pk : contact method object",
+                "type": "Object"
+            },
+            "class": "pages.settings.SettingsController"
+        },
+        {
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 202,
+            "description": "Returns the categories cached by the controller",
+            "itemtype": "method",
+            "name": "getCategories",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "attributes  pk : category object",
+                "type": "Object"
+            },
+            "class": "pages.settings.SettingsController"
+        },
+        {
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 213,
+            "description": "Returns the subscriptions cached by the controller",
+            "itemtype": "method",
+            "name": "getSubscriptions",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "attributes  pk : subscription object",
+                "type": "Object"
+            },
+            "class": "pages.settings.SettingsController"
+        },
+        {
+            "file": "status/assets/js/pages/settings/controller.js",
+            "line": 224,
+            "description": "Returns the providers cached by the controller",
+            "itemtype": "method",
+            "name": "getProviders",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "attributes  pk : provider object",
+                "type": "Object"
+            },
+            "class": "pages.settings.SettingsController"
         },
         {
             "file": "status/assets/js/pages/settings/view.js",
-            "line": 23,
+            "line": 25,
             "description": "Initializes the view with data",
             "itemtype": "method",
             "name": "init",
@@ -351,10 +587,30 @@
         },
         {
             "file": "status/assets/js/pages/settings/view.js",
-            "line": 33,
+            "line": 36,
+            "description": "Initializes two modals for adding contact methods\none for an email addresas and another for adding a phone number",
+            "itemtype": "method",
+            "name": "_initModals",
+            "access": "private",
+            "tagname": "",
+            "class": "pages.settings.SettingsView"
+        },
+        {
+            "file": "status/assets/js/pages/settings/view.js",
+            "line": 83,
             "description": "Initializes the event listeners for the view",
             "itemtype": "method",
             "name": "_initEventListeners",
+            "access": "private",
+            "tagname": "",
+            "class": "pages.settings.SettingsView"
+        },
+        {
+            "file": "status/assets/js/pages/settings/view.js",
+            "line": 134,
+            "description": "Loads subscription table",
+            "itemtype": "method",
+            "name": "_loadSubscriptions",
             "access": "private",
             "tagname": "",
             "class": "pages.settings.SettingsView"
@@ -367,7 +623,7 @@
         },
         {
             "file": "status/assets/js/shared/modals.js",
-            "line": 126,
+            "line": 163,
             "description": "Show the form modal.",
             "itemtype": "method",
             "name": "show",
@@ -375,7 +631,7 @@
         },
         {
             "file": "status/assets/js/shared/modals.js",
-            "line": 136,
+            "line": 173,
             "description": "Hide the form modal.",
             "itemtype": "method",
             "name": "hide",
@@ -383,7 +639,7 @@
         },
         {
             "file": "status/assets/js/shared/modals.js",
-            "line": 146,
+            "line": 183,
             "description": "Reset all forms in the modal.",
             "itemtype": "method",
             "name": "reset",
@@ -391,7 +647,7 @@
         },
         {
             "file": "status/assets/js/shared/modals.js",
-            "line": 158,
+            "line": 195,
             "description": "Get the form data for all forms in the modal.",
             "itemtype": "method",
             "name": "_getFormData",
@@ -461,8 +717,12 @@
             "line": " status/assets/js/pages/home/controller.js:9"
         },
         {
+            "message": "unknown tag: contructor",
+            "line": " status/assets/js/pages/settings/controller.js:7"
+        },
+        {
             "message": "Missing item type\nGet all of the comments for a post",
-            "line": " status/assets/js/pages/home/controller.js:102"
+            "line": " status/assets/js/pages/home/controller.js:108"
         },
         {
             "message": "Missing item type\nShow comments for the specified post",
