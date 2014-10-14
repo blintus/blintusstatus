@@ -56,7 +56,7 @@ define(['lodash', 'hbs!shared/modalMarkup'], function (_, modalMarkup) {
 
     /**
      * Creates and shows a new message modal with the specified settings,
-     * and removes in from the dom when it is closed.
+     * and removes it from the dom when it is closed.
      *
      * <pre><code>Options
      *
@@ -83,6 +83,43 @@ define(['lodash', 'hbs!shared/modalMarkup'], function (_, modalMarkup) {
             that._modal.destroy();
         }).on('shown.bs.modal', function (event) {
             $(event.target).find('.okBtn').focus();
+        });
+    };
+
+
+    /**
+     * Creates and shows a new confirm modal with the specified settings,
+     * and removes it from the dom when it is closed.
+     *
+     * <pre><code>Options
+     *
+     * title:      The modal title
+     * body:       The modal body
+     * cancenBtn:  The text for the cancel button, defaults to 'Cancel'
+     * okBtn:      The text for the ok button, defaults to 'OK'
+     * okCallback: The method called if the user confirms
+     * </code></pre>
+     *
+     * @class shared.modals.ConfirmModal
+     * @constructor
+     * @param {Object} options The options
+     */
+    var ConfirmModal = function (options) {
+        var that = this;
+        this._modal = new _Modal({
+            title: options.title,
+            body: options.body,
+            cancelBtn: options.cancelBtn,
+            okBtn: options.okBtn,
+            cancelable: true,
+            show: true,
+            okCallback: function (event) {
+                options.okCallback();
+                that._modal.hide();
+            }
+        });
+        this._modal.on('hidden.bs.modal', function (event) {
+            that._modal.destroy();
         });
     };
 
