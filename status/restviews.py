@@ -86,6 +86,7 @@ def contactMethod(request):
 		
 		contactMethod = ContactMethod.objects.get(pk=pk, user = request.user)
 		contactMethod.delete()
+		contactMethod.pk = pk
 		return HttpResponse(JsonResponse({'contactMethod': contactMethod.serialize(), 'message':'Contact method successfully deleted'}))
 
 

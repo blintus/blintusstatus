@@ -4,7 +4,13 @@ define(['pageUtils',
     
     'use strict';
 
-
+    /**
+     * Constructor for a settings controller
+     *
+     * @class pages.settings.controller
+     * @contructor
+     * @param {jQuery} $container A jQuery object for the root content container
+     */
     var SettingsController = function ($container) {
         this.view = new SettingsView(this, $container);
         pageUtils.setTitle("Settings");
@@ -15,6 +21,11 @@ define(['pageUtils',
         this.categories = null;
     };
 
+    /**
+     * Load categories from the server
+     *
+     * @method loadCategories
+     */
     SettingsController.prototype.loadCategories = function () {
         var that = this;
         return $.getJSON("/rest/categories", function (json) {
@@ -22,6 +33,11 @@ define(['pageUtils',
         });
     };
 
+    /**
+     * Load contact methods from the server
+     *
+     * @method loadContactMethods
+     */
     SettingsController.prototype.loadContactMethods = function () {
         var that = this;
         return $.getJSON("/rest/contactMethods", function (json) {
@@ -29,6 +45,11 @@ define(['pageUtils',
         });
     };
 
+    /**
+     * Load providers from the server
+     *
+     * @method loadProviders
+     */
     SettingsController.prototype.loadProviders = function () {
         var that = this;
         return $.getJSON( "/rest/providers", function (json) {
@@ -36,6 +57,11 @@ define(['pageUtils',
         });
     };
 
+    /**
+     * Load subscriptions from the server
+     *
+     * @method loadSubscriptions
+     */
     SettingsController.prototype.loadSubscriptions = function () {
         var that = this;
         return $.getJSON("/rest/subscriptions", function ( json ) {
@@ -50,37 +76,55 @@ define(['pageUtils',
      */
     SettingsController.prototype.loadAllData = function () {
         var that = this,
-            cat_promise,
-            con_promise,
-            prov_promise,
-            sub_promise;
-
-        cat_promise  = that.loadCategories();
-        con_promise  = that.loadContactMethods();
-        prov_promise = that.loadProviders();
-        sub_promise  = that.loadSubscriptions();
+            cat_promise  = that.loadCategories(),
+            con_promise  = that.loadContactMethods(),
+            prov_promise = that.loadProviders(),
+            sub_promise  = that.loadSubscriptions();
 
         $.when(cat_promise, con_promise, prov_promise, sub_promise).done(function () {
             that.view.init();
         });
     };
 
+    /**
+     * Updates a contact method in the controller's cache
+     *
+     * @method loadAllData
+     * @private
+     * @param {Object}  contact method object to add or delete
+     * @param {boolean} true ? add contact method : delete contact method
+     */
     SettingsController.prototype.updateContactMethod = function (contactMethod, add) {
-        var pk = contactMethod.pk,
-            email = contactMethod.email,
+        var pk          = parseInt(contactMethod.pk),
+            email       = contactMethod.email,
             phoneNumber = contactMethod.phoneNumber,
-            provider = contactMethod.provider,
-            subscribed = subscribed;
+            provider    = contactMethod.provider;
+
         if (add) {
             this.contactMethods.pk = contactMethod;
         }
         else {
+//////// this part sometimes breaks where this.contactMethods.pk returns null
+//            console.log(this.contactMethods.pk);
+//            console.log(this.contactMethods);
+//            console.log(contactMethod);
+//            console.log(pk);
             delete this.contactMethods.pk;
+
         }
     };
 
+    /**
+     * Post subscription update to the server
+     *
+     * @method loadAllData
+     * @private
+     * @param {int}     id of the contact method for the subscription
+     * @param {int}     id of the category for the subscription
+     * @param {boolean} is the checkbox currently checked
+     * @return {Array}  A promise for the returned data
+     */
     SettingsController.prototype.updateSubscription = function (contactmethodid, categoryid, checked) {
-        var that = this;
         return $.ajax({
             dataType: 'JSON',
             type: "POST",
@@ -93,8 +137,17 @@ define(['pageUtils',
         });
     };
 
+    /**
+     * Post new contact method to the server
+     *
+     * @method loadAllData
+     * @private
+     * @param {String} email address for the contact method
+     * @param {String} phone number for the contact method
+     * @param {int}    pk of the provider for the contact method
+     * @return {Array} A promise for the returned data
+     */
     SettingsController.prototype.saveContactMethod = function (email, phoneNumber, provider) {
-        var that = this;
         return $.ajax({
             dataType: 'JSON',
             type: "POST",
@@ -108,8 +161,15 @@ define(['pageUtils',
         });
     };
 
+    /**
+     * Request server to delete a contact method
+     *
+     * @method loadAllData
+     * @private
+     * @param {int}     pk of the contact method to delete
+     * @return {Array}  A promise for the returned data
+     */
     SettingsController.prototype.removeContactMethod = function (pk) {
-        var that = this;
         return $.ajax({
             dataType: 'JSON',
             type: "POST",
@@ -121,30 +181,49 @@ define(['pageUtils',
         });
     };
 
+    /**
+     * Returns the contact methods cached by the controller
+     *
+     * @method getContactMethods
+     * @private
+     * @return {Object} attributes  pk : contact method object
+     */
     SettingsController.prototype.getContactMethods = function () {
-        var that = this,
-            rawContactMethods = $.extend(true, {}, that.contactMethods);
-        for (var key in rawContactMethods) {
-            var provider = that.providers[rawContactMethods[key].provider];
-            if (typeof provider !== 'undefined' && provider.name !== null) {
-                rawContactMethods[key].provider = provider.name;
-            }
-        }
-    	return rawContactMethods;
+        return this.contactMethods;
     };
 
+    /**
+     * Returns the categories cached by the controller
+     *
+     * @method getCategories
+     * @private
+     * @return {Object} attributes  pk : category object
+     */
     SettingsController.prototype.getCategories = function () {
     	return this.categories;
     };
 
+    /**
+     * Returns the subscriptions cached by the controller
+     *
+     * @method getSubscriptions
+     * @private
+     * @return {Object} attributes  pk : subscription object
+     */
     SettingsController.prototype.getSubscriptions = function () {
         return this.subscriptions;
     };
 
+    /**
+     * Returns the providers cached by the controller
+     *
+     * @method getProviders
+     * @private
+     * @return {Object} attributes  pk : provider object
+     */
     SettingsController.prototype.getProviders = function () {
         return this.providers;
     };
 
     return SettingsController;
-
 });

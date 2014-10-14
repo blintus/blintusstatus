@@ -108,6 +108,7 @@ define(['jquery',
             that.addEmailModal.reset().show();
         });
 
+        // Add a phone number
         that.$subscriptionContainer.on('click', '.add-phone-number-btn', function (event) {
             that.addPhoneNumberModal.reset().show();
         });
