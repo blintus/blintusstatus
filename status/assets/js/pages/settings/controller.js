@@ -1,6 +1,7 @@
 define(['pageUtils', 
-		'pages/settings/view'
-	], function (pageUtils, SettingsView) {
+		'pages/settings/view',
+        'shared/modals'
+	], function (pageUtils, SettingsView, modals) {
     
     'use strict';
 
@@ -19,6 +20,13 @@ define(['pageUtils',
         this.contactMethods = null;
         this.providers = null;
         this.categories = null;
+
+        this.failMessage = function (response) {
+            new modals.MessageModal({
+                'title': 'Woh! An Error Has Appeared!',
+                'body': response.responseJSON.message
+            }); 
+        };
     };
 
     /**
@@ -114,6 +122,8 @@ define(['pageUtils',
      * @return {Array}  A promise for the returned data
      */
     SettingsController.prototype.updateSubscription = function (contactmethodid, categoryid, checked) {
+        var that = this;
+
         return $.ajax({
             dataType: 'JSON',
             type: "POST",
@@ -123,7 +133,7 @@ define(['pageUtils',
                 categoryid: categoryid,
                 subscribed: !checked
             }
-        });
+        }).fail(that.failMessage);
     };
 
     /**
@@ -149,7 +159,7 @@ define(['pageUtils',
                     provider: provider,
                     subscribed: false
                 }
-            });
+            }).fail(that.failMessage);
 
         $.when(request).done(function (response) {
             that.updateContactMethod(response.contactMethod, true);
@@ -178,7 +188,7 @@ define(['pageUtils',
                     pk: pk,
                     subscribed: true
                 }
-            });
+            }).fail(that.failMessage);
 
         $.when(request).done(function (response) {
             that.updateContactMethod(response.contactMethod, false);

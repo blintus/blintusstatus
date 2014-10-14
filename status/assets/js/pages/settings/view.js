@@ -55,7 +55,10 @@ define(['jquery',
                         that._loadSubscriptions();
                     });
                 } else {
-                    alert('Bad data');
+                    new modals.MessageModal({
+                        'title': 'I Can Has Personal Information?',
+                        'body': 'Please provide an email address'
+                    });
                 }
             }
         });
@@ -74,7 +77,10 @@ define(['jquery',
                             that._loadSubscriptions();
                         });
                     } else {
-                        alert('Bad data');
+                        new modals.MessageModal({
+                            'title': 'I Can Has Personal Information?',
+                            'body': 'Please provide a phone number and provider'
+                        });
                     }
             }
         });
