@@ -101,7 +101,10 @@
 <script src="{% static 'js/lib/jquery.min.js' %}"></script>
 <script src="{% static 'js/lib/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/lib/lodash.min.js' %}"></script>
-<script>ASSET_ROOT = {% static '' %}</script>
+<script>
+    ASSET_ROOT = {% static '' %};
+    LOGGED_IN = {{ user.is_authenticated|yesno:"true,false" }};
+</script>
 <script src="{% static 'js/lib/require.min.js' %}" data-main="{% static 'js/main.js' %}"></script>
 
 </body>
