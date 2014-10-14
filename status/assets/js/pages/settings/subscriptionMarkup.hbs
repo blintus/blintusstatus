@@ -1,5 +1,5 @@
 <h3>Subscribe for updates</h3></br>
-<table class="table table-bordered table-striped table-hover" style="margin: 0 auto">
+<table class="table table-bordered table-striped table-hover subscription-table" style="margin: 0 auto">
 	<tr>
 		<th></th>
 		{{#each contactMethods}}
@@ -45,26 +45,5 @@
 		{{/each}}
 	</tr>
 </table></br></br>
-
-<h3>Add a Contact Method</h3></br>
-
-<form action="" role="form" style="width: 400px; margin: 0 auto">
-	<div class="form-group">
-        <label for="email">Email</label>
-        <input type="text" id="email" class="form-control new-contact-method-email"/>
-    </div>
-    <div class="form-group">
-        <label for="phoneNumber">Phone Number</label>
-        <input type="text" id="phoneNumber" class="form-control new-contact-method-phone-number"/>
-    </div>
-    <div class="form-group">
-        <label for="provider">Provider</label>
-        <select id="provider" class="form-control new-contact-method-provider">
-        	<option value="">Not Applicable</option>
-        	{{#each providers}}
-		    	<option value="{{pk}}">{{name}}</option>
-		    {{/each}}
-		</select>
-    </div>
-    <input class="btn btn-primary pull-right submit-new-contact-method" type="submit"/>
-</form>
+<button type="button" class="add-email-btn"><span class="glyphicon glyphicon-envelope"></span>  Add an Email Address</button>
+<button type="button" class="add-phone-number-btn"><span class="glyphicon glyphicon-earphone"></span>  Add a Phone Number</button>

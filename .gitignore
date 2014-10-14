@@ -14,3 +14,5 @@ sqlite.db
 
 # Collected static assets
 /assets
+
+node_modules

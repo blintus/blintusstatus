@@ -65,9 +65,24 @@ define(['pageUtils',
         });
     };
 
+    SettingsController.prototype.updateContactMethod = function (contactMethod, add) {
+        var pk = contactMethod.pk,
+            email = contactMethod.email,
+            phoneNumber = contactMethod.phoneNumber,
+            provider = contactMethod.provider,
+            subscribed = subscribed;
+        if (add) {
+            this.contactMethods.pk = contactMethod;
+        }
+        else {
+            delete this.contactMethods.pk;
+        }
+    };
+
     SettingsController.prototype.updateSubscription = function (contactmethodid, categoryid, checked) {
         var that = this;
-        $.ajax({
+        return $.ajax({
+            dataType: 'JSON',
             type: "POST",
             url: "/rest/subscriptions",
             data: {
@@ -75,14 +90,13 @@ define(['pageUtils',
                 categoryid: categoryid,
                 subscribed: !checked
             }
-        }).done( function (msg) {
-            return [that.loadContactMethods(), that.loadSubscriptions()];
         });
     };
 
     SettingsController.prototype.saveContactMethod = function (email, phoneNumber, provider) {
         var that = this;
-        $.ajax({
+        return $.ajax({
+            dataType: 'JSON',
             type: "POST",
             url: "/rest/contactMethods",
             data: {
@@ -91,23 +105,19 @@ define(['pageUtils',
                 provider: provider,
                 subscribed: false
             }
-        }).done( function (msg) {
-            return that.loadContactMethods();
         });
     };
 
     SettingsController.prototype.removeContactMethod = function (pk) {
         var that = this;
-        $.ajax({
+        return $.ajax({
+            dataType: 'JSON',
             type: "POST",
             url: "/rest/contactMethods",
             data: {
                 pk: pk,
                 subscribed: true
             }
-        }).done( function (msg) {
-            return that.loadContactMethods();
-            
         });
     };
 

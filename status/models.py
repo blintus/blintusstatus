@@ -112,8 +112,8 @@ class ContactMethod(models.Model):
 	def serialize(self):
 		return {
 			"pk": self.pk,
-			"email": self.email,
-			"phoneNumber": self.phoneNumber,
+			"email": self.email if self.email else None,
+			"phoneNumber": self.phoneNumber if self.phoneNumber else None,
 			"provider": self.provider.name if self.provider else None,
 			"user": self.user.username
 		}
