@@ -4,6 +4,12 @@ from django.contrib.auth import authenticate, login as djangoLogin, logout as dj
 from django.contrib.auth.models import User
 
 
+def notFound(request):
+    return render(request, "status/notFound.html", {
+        "page_title": "Not Found"
+    })
+
+
 def register(request):
     error = False
     username = ""

@@ -7,6 +7,13 @@ var PAGE_ROUTES = [
     [/^settings/, 'pages/settings/controller']
 ];
 
+var SERVER_URLS = [
+    /^404/,
+    /^login/,
+    /^register/,
+    /^logout/
+];
+
 (function () {
 
     /*****************************
@@ -130,7 +137,8 @@ var PAGE_ROUTES = [
     var loadPage = function () {
         var pathname = window.location.pathname;
         if (pathname.indexOf('/') === 0) pathname = pathname.substring(1);
-        PAGE_ROUTES.forEach(function (routePath) {
+        var pageFound = false;
+        _.each(PAGE_ROUTES, function (routePath) {
             var route = routePath[0];
             var path = routePath[1];
             if (route.test(pathname)) {
@@ -141,8 +149,22 @@ var PAGE_ROUTES = [
                 require([path], function (Controller) {
                     pageController = new Controller($contentElement);
                 });
+                pageFound = true;
+                return false; // exit iteration early
             }
         });
+        if (!pageFound) {
+            var serverRouteFound = false;
+            _.each(SERVER_URLS, function (regex) {
+                if (regex.test(pathname)) {
+                    serverRouteFound = true;
+                    return false; // exit iteration early
+                }
+            })
+            if (!serverRouteFound) {
+                window.location = '/404';
+            }
+        }
     };
 
     var changePage = function () {

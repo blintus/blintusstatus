@@ -1,9 +1,12 @@
 from django.conf import settings
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 urlpatterns = patterns('status',
+
+    # 404
+    url(r'^404', 'views.notFound', name='notFound'),
 
     # rest urls
     url(r'^rest/posts(/(?P<post_id>\d+))?', 'restviews.post', name='post'),
@@ -12,8 +15,6 @@ urlpatterns = patterns('status',
     url(r'^rest/contactMethods', 'restviews.contactMethod', name='contactMethod'),
     url(r'^rest/categories', 'restviews.category', name='category'),
     url(r'^rest/subscriptions', 'restviews.subscription', name='subscription'),
-
-
 
     # login/logout/register views
     url(r'^login', 'views.login', name='login'),
