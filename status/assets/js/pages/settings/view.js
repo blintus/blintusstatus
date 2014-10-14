@@ -42,12 +42,13 @@ define(['jquery',
      */
     SettingsView.prototype._initModals = function () {
         var that = this;
-
-        var title     = 'Add an Email Address',
-            body      = emailMarkup,
-            cancelBtn = 'Nope Nope Nope...',
-            okBtn     = 'Send to NSA',
-            submitCallback = function (formData) {
+        
+        that.addEmailModal = new modals.FormModal({
+            'title': 'Add an Email Address', 
+            'body': emailMarkup, 
+            'cancelBtn': 'Nope Nope Nope...', 
+            'okBtn': 'Send to NSA', 
+            'submitCallback': function (formData) {
                 var email = formData.email;
                 if (email) {
                     $.when(that.controller.saveContactMethod(email, '', '')).done(function (response) {
@@ -57,27 +58,28 @@ define(['jquery',
                 } else {
                     alert('Bad data');
                 }
-            };
-        that.addEmailModal = new modals.FormModal({'title': title, 'body': body, 'cancelBtn': cancelBtn, 'okBtn': okBtn, 'submitCallback': submitCallback});
+            }
+        });
 
         var providers = this.controller.getProviders();
-        title     = 'Add a Phone Number';
-        body      = phoneNumberMarkup({ providers: providers });
-        cancelBtn = 'Nope Nope Nope...';
-        okBtn     = 'Send to NSA';
-        submitCallback = function (formData) {
-            var phoneNumber = formData.phoneNumber,
-                provider    = formData.provider;
-                if (phoneNumber && provider) {
-                    $.when(that.controller.saveContactMethod('', phoneNumber, provider)).done(function (response) {
-                        that.controller.updateContactMethod(response.contactMethod, true);
-                        that._loadSubscriptions();
-                    });
-                } else {
-                    alert('Bad data');
-                }
-        };
-        that.addPhoneNumberModal = new modals.FormModal({'title': title, 'body': body, 'cancelBtn': cancelBtn, 'okBtn': okBtn, 'submitCallback': submitCallback});
+        that.addPhoneNumberModal = new modals.FormModal({
+            'title': 'Add a Phone Number', 
+            'body': phoneNumberMarkup({ providers: providers }), 
+            'cancelBtn': 'Nope Nope Nope...', 
+            'okBtn': 'Send to NSA', 
+            'submitCallback': function (formData) {
+                var phoneNumber = formData.phoneNumber,
+                    provider    = formData.provider;
+                    if (phoneNumber && provider) {
+                        $.when(that.controller.saveContactMethod('', phoneNumber, provider)).done(function (response) {
+                            that.controller.updateContactMethod(response.contactMethod, true);
+                            that._loadSubscriptions();
+                        });
+                    } else {
+                        alert('Bad data');
+                    }
+            }
+        });
     };
 
     /**

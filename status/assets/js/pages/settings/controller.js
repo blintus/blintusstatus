@@ -95,22 +95,11 @@ define(['pageUtils',
      * @param {boolean} true ? add contact method : delete contact method
      */
     SettingsController.prototype.updateContactMethod = function (contactMethod, add) {
-        var pk          = parseInt(contactMethod.pk),
-            email       = contactMethod.email,
-            phoneNumber = contactMethod.phoneNumber,
-            provider    = contactMethod.provider;
-
         if (add) {
-            this.contactMethods.pk = contactMethod;
+            this.contactMethods[contactMethod.pk] = contactMethod;
         }
         else {
-//////// this part sometimes breaks where this.contactMethods.pk returns null
-//            console.log(this.contactMethods.pk);
-//            console.log(this.contactMethods);
-//            console.log(contactMethod);
-//            console.log(pk);
-            delete this.contactMethods.pk;
-
+            delete this.contactMethods[contactMethod.pk];
         }
     };
 
