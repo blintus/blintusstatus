@@ -114,7 +114,9 @@ define(['lodash', 'hbs!shared/modalMarkup'], function (_, modalMarkup) {
             cancelable: true,
             show: true,
             okCallback: function (event) {
-                options.okCallback();
+                if (options.okCallback) {
+                    options.okCallback();
+                }
                 that._modal.hide();
             }
         });
@@ -145,19 +147,21 @@ define(['lodash', 'hbs!shared/modalMarkup'], function (_, modalMarkup) {
      */
     var FormModal = function (options) {
         var that = this;
+        this._submitCallback = options.submitCallback || _.noop;
         this._modal = new _Modal({
             title: options.title,
             body: options.body,
             cancelBtn: options.cancelBtn,
             okBtn: options.okBtn,
             okCallback: function (event) {
-                if (options.submitCallback) {
-                    options.submitCallback(that._getFormData());
-                }
-                that.hide();
+                that.submit();
             }
         });
         this._forms = this._modal.find('form');
+        this._forms.on('submit', function (event) {
+            event.preventDefault();
+            that.submit();
+        });
     };
 
     /**
@@ -190,6 +194,18 @@ define(['lodash', 'hbs!shared/modalMarkup'], function (_, modalMarkup) {
             form.reset();
         });
         return this;
+    };
+
+    /**
+     * Submit the form.
+     *
+     * @method submit
+     */
+    FormModal.prototype.submit = function () {
+        if (this._submitCallback) {
+            this._submitCallback(this._getFormData());
+        }
+        this.hide();
     };
 
     /**
