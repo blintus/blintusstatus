@@ -12,15 +12,17 @@
             </div>
             <div class="comments">
                 <div class="comments-inner"></div>
-                <div class="post-comment">
-                    <div class="comments-textarea-spinner spinner">
-                        <div class="bounce1"></div>
-                        <div class="bounce2"></div>
-                        <div class="bounce3"></div>
+                {{#if loggedIn}}
+                    <div class="post-comment">
+                        <div class="comments-textarea-spinner spinner">
+                            <div class="bounce1"></div>
+                            <div class="bounce2"></div>
+                            <div class="bounce3"></div>
+                        </div>
+                        <textarea class="form-control" placeholder="Write a comment"></textarea>
+                        <input type="button" value="Post" class="btn btn-primary post-comment-btn" data-postid="{{pk}}">
                     </div>
-                    <textarea class="form-control" placeholder="Write a comment"></textarea>
-                    <input type="button" value="Post" class="btn btn-primary post-comment-btn" data-postid="{{pk}}">
-                </div>
+                {{/if}}
             </div>
         </div>
     </div>

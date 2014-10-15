@@ -118,7 +118,8 @@ define(['jquery', 'lodash', 'persistentStorage',
             post.category = that.controller.getCategory(post.category);
         });
         this.$postContainer.empty().append(postMarkup({
-            posts: posts
+            posts: posts,
+            loggedIn: LOGGED_IN
         }));
 
     };
