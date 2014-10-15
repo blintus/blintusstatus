@@ -14,7 +14,6 @@ def _returnJSON(objs):
 
 
 @allowed_methods('GET')
-@rest_login_required
 def post(request, post_id = None):
 	if request.method == 'GET':
 		if post_id:
@@ -23,7 +22,7 @@ def post(request, post_id = None):
 
 
 @allowed_methods('GET', 'POST')
-@rest_login_required
+@rest_login_required('POST')
 def comment(request):
 	if request.method == 'GET':
 		if 'post' in request.GET:
