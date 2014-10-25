@@ -1,14 +1,16 @@
+from smtplib import SMTP
 from django.contrib import admin
-
-# Register your models here.
-
 from status.models import *
+
+
+EMAIL = "blintus@blint.us"
+PASSWORD = ""
 
 
 def updateCategoryStatuses(category, status):
         category.status = status
         category.save()
-        if category.parent == None:
+        if not category.parent:
             return
         if status == 2:
             updateCategoryStatuses(category.parent, 2)
@@ -25,6 +27,26 @@ def updateCategoryStatuses(category, status):
                 updateCategoryStatuses(category.parent, 2)
 
 
+class Emailer(object):
+    def __init__(self):
+        self.conn = SMTP("smtp.zoho.com", "587")
+        self.conn.starttls()
+        self.conn.login(EMAIL, PASSWORD)
+
+    def __del__(self):
+        self.conn.close()
+
+    def sendEmail(self, to, subject, body):
+        message = [
+            "To: " + to,
+            "From: " + EMAIL,
+            "Subject: [Blintus Status] " + subject,
+            "",
+            body
+        ]
+        self.conn.sendmail(EMAIL, to, "\n".join(message))
+
+
 class CategoryAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         updateCategoryStatuses(obj, obj.status)
@@ -35,7 +57,21 @@ class PostAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         updateCategoryStatuses(obj.category, obj.status)
+        self.sendNotifications(obj.category, obj, Emailer())
         obj.save();
+
+    def sendNotifications(self, category, post, emailer):
+        subscriptions = Subscription.objects.filter(category = category)
+        for subscription in subscriptions:
+            contactMethod = subscription.contactMethod
+            email = ""
+            if contactMethod.isEmail():
+                email = contactMethod.email
+            else:
+                email = "{}@{}".format(contactMethod.phoneNumber, contactMethod.provider.gateway)
+            emailer.sendEmail(email, post.title, post.message);
+        if category.parent:
+            self.sendNotifications(category.parent, post, emailer)
 
 
 admin.site.register(Category, CategoryAdmin)

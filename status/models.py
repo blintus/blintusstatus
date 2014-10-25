@@ -109,6 +109,9 @@ class ContactMethod(models.Model):
 		elif (self.phoneNumber and self.provider.name):
 			return str(self.user) + " :: " + self.phoneNumber + " :: " + self.provider.name
 
+	def isEmail(self):
+		return self.email and not (self.phoneNumber and self.provider)
+
 	def serialize(self):
 		return {
 			"pk": self.pk,
