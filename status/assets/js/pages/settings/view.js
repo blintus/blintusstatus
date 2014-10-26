@@ -1,10 +1,12 @@
 define(['jquery',
-		'hbs!pages/settings/markup/markup',
-		'hbs!pages/settings/markup/emailMarkup',
+        'hbs!pages/settings/markup/markup',
+        'hbs!pages/settings/markup/emailMarkup',
         'hbs!pages/settings/markup/phoneNumberMarkup',
         'hbs!pages/settings/markup/subscriptionMarkup',
+        'hbs!pages/settings/markup/subscriptionRowMarkup',
         'shared/modals'
-	], function ($, pageMarkup, emailMarkup, phoneNumberMarkup, subscriptionMarkup, modals) {
+    ], function ($, pageMarkup, emailMarkup, phoneNumberMarkup, subscriptionMarkup,
+        subscriptionRowMarkup, modals) {
 
     'use strict';
 
@@ -97,7 +99,7 @@ define(['jquery',
 
         // Add a subscription by clicking on cell
         that.$subscriptionContainer.on('click', '.settings-category-cell', function (event) {
-        	$(event.target).find('input[type="checkbox"]').click();
+            $(event.target).find('input[type="checkbox"]').click();
         });
 
         // Add a subscription by clicking checkbox
@@ -144,17 +146,21 @@ define(['jquery',
      * @private
      */
     SettingsView.prototype._loadSubscriptions = function () {
-    	var contactMethods = this.controller.getContactMethods(),
-    		categories = this.controller.getCategories(),
+        var contactMethods = this.controller.getContactMethods(),
+            rootCategories = _.filter(this.controller.getCategories(), {parent: null}),
             subscriptions = this.controller.getSubscriptions(),
             providers = this.controller.getProviders();
 
         // Create subscription table
-    	this.$subscriptionContainer.empty().append(subscriptionMarkup({
-    		contactMethods: contactMethods,
-    		categories: categories,
+        this.$subscriptionContainer.empty().append(subscriptionMarkup({
+            contactMethods: contactMethods,
             providers: providers
-    	}));
+        }));
+        this.$subscriptionContainer.find('.subscription-table tbody').append(subscriptionRowMarkup({
+            depth: 0,
+            categories: rootCategories,
+            contactMethods: contactMethods
+        }));
 
         // Check correct checkbox's
         for (var key in subscriptions) {

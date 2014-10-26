@@ -1,7 +1,8 @@
 define(['pageUtils',
-		'pages/settings/view',
+        'shared/utils',
+        'pages/settings/view',
         'shared/modals'
-	], function (pageUtils, SettingsView, modals) {
+    ], function (pageUtils, utils, SettingsView, modals) {
 
     'use strict';
 
@@ -38,6 +39,7 @@ define(['pageUtils',
         var that = this;
         return $.getJSON("/rest/categories", function (json) {
             that.categories = _.indexBy(json, 'pk');
+            utils.categories.addChildren(that.categories);
         });
     };
 
@@ -217,7 +219,7 @@ define(['pageUtils',
      * @return {Object} attributes  pk : category object
      */
     SettingsController.prototype.getCategories = function () {
-    	return this.categories;
+        return this.categories;
     };
 
     /**

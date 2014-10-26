@@ -104,6 +104,9 @@ var SERVER_URLS = [
         Handlebars.registerHelper('recursivePartial', function (template, contextHash) {
             var tpl = Handlebars.partials[template];
             if (!tpl) return "";
+            if (contextHash.hash && !_.isUndefined(contextHash.hash.depth)) {
+                contextHash.hash.depth++;
+            }
             return new Handlebars.SafeString(tpl(contextHash.hash));
         });
     });

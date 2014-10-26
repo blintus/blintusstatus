@@ -264,9 +264,9 @@ a:hover {
 }
 
 
-/********************
- ** Indents Levels **
- ********************/
+/*******************
+ ** Indent Levels **
+ *******************/
 
 .indent-level-0 { padding-left: 0; }
 .indent-level-1 { padding-left: 10px; }

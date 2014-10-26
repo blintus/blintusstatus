@@ -59,6 +59,11 @@ define(['lodash'], function (_) {
                         parent.children.push(category);
                     }
                 });
+                _.each(categories, function (category) {
+                    if (category.children) {
+                        category.children = _.sortBy(category.children, 'name');
+                    }
+                });
             }
 
         }

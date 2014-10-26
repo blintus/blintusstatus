@@ -1,49 +1,44 @@
 <h3>Subscribe for updates</h3></br>
 <table class="table table-bordered table-striped table-hover subscription-table" style="margin: 0 auto">
-	<tr>
-		<th></th>
-		{{#each contactMethods}}
-			<th class="contact-method">
+	<thead>
+		<tr>
+			<th></th>
+			{{#each contactMethods}}
+				<th class="contact-method">
+					{{#if email}}
+						{{email}}
+					{{else}}
+						{{#if phoneNumber}}
+							{{#if provider}}
+								{{phoneNumber}}  ({{provider}})
+							{{/if}}
+						{{/if}}
+					{{/if}}
+				</th>
+			{{/each}}
+		</tr>
+	</thead>
+	<tbody></tbody>
+	<tfoot>
+		<tr>
+			<td></td>
+			{{#each contactMethods}}
 				{{#if email}}
-					{{email}}
+					<td class="settings-category-cell">
+						<button type="button" class="btn btn-danger btn-sm remove-contact-method" data-pk="{{pk}}" data-name="{{email}}"><span class="glyphicon glyphicon-remove"></span>Remove</button>
+					</td>
 				{{else}}
 					{{#if phoneNumber}}
 						{{#if provider}}
-							{{phoneNumber}}  ({{provider}})
+							<td class="settings-category-cell">
+								<button type="button" class="btn btn-danger btn-sm remove-contact-method" data-pk="{{pk}}" data-name="{{phoneNumber}} ({{provider}}"><span class="glyphicon glyphicon-remove"></span>Remove</button>
+							</td>
 						{{/if}}
 					{{/if}}
 				{{/if}}
-			</th>
-		{{/each}}
-	</tr>
-	{{#each categories}}
-		<tr>
-			<td>{{name}}</td>
-			{{#each ../contactMethods}}
-				<td class="settings-category-cell">
-					<input type="checkbox" class="settings-category-checkbox" data-contactmethodid="{{pk}}" data-categoryid="{{../pk}}">
-				</td>
 			{{/each}}
 		</tr>
-	{{/each}}
-	<tr>
-		<td></td>
-		{{#each contactMethods}}
-			{{#if email}}
-				<td class="settings-category-cell">
-					<button type="button" class="btn btn-danger btn-sm remove-contact-method" data-pk="{{pk}}" data-name="{{email}}"><span class="glyphicon glyphicon-remove"></span>Remove</button>
-				</td>
-			{{else}}
-				{{#if phoneNumber}}
-					{{#if provider}}
-						<td class="settings-category-cell">
-							<button type="button" class="btn btn-danger btn-sm remove-contact-method" data-pk="{{pk}}" data-name="{{phoneNumber}} ({{provider}}"><span class="glyphicon glyphicon-remove"></span>Remove</button>
-						</td>
-					{{/if}}
-				{{/if}}
-			{{/if}}
-		{{/each}}
-	</tr>
+	</tfoot>
 </table></br></br>
 <button type="button" class="btn btn-large btn-primary add-email-btn"><span class="glyphicon glyphicon-envelope"></span>  Add an Email Address</button>
 <button type="button" class="btn btn-large btn-primary add-phone-number-btn"><span class="glyphicon glyphicon-earphone"></span>  Add a Phone Number</button>
