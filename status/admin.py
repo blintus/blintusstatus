@@ -3,8 +3,8 @@ from django.contrib import admin
 from status.models import *
 
 
-EMAIL = "blintus@blint.us"
-PASSWORD = ""
+EMAIL = "status@blint.us"
+PASSWORD = "Bl1n+u554+u5"
 
 
 def updateCategoryStatuses(category, status):
@@ -70,8 +70,6 @@ class PostAdmin(admin.ModelAdmin):
             else:
                 email = "{}@{}".format(contactMethod.phoneNumber, contactMethod.provider.gateway)
             emailer.sendEmail(email, post.title, post.message);
-        if category.parent:
-            self.sendNotifications(category.parent, post, emailer)
 
 
 admin.site.register(Category, CategoryAdmin)
