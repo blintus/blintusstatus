@@ -3,7 +3,7 @@
         <td><span class="indent-level-{{../depth}}">{{name}}</span></td>
         {{#each ../contactMethods}}
             <td class="settings-category-cell">
-                <input type="checkbox" class="settings-category-checkbox" data-contactmethodid="{{pk}}" data-categoryid="{{../pk}}">
+                <input type="checkbox" class="settings-category-checkbox" data-contactmethodid="{{pk}}" data-categoryid="{{../pk}}" data-parentid="{{../parent}}">
             </td>
         {{/each}}
     </tr>

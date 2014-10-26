@@ -110,6 +110,7 @@ define(['jquery',
                 categoryid      = $(event.target).data('categoryid');
             $.when(that.controller.updateSubscription(contactmethodid, categoryid, event.target.checked)).done(function (response) {
                     event.target.checked = response.checked;
+                    that._toggleChildrenCheckboxes(categoryid, contactmethodid, response.checked, response.checked);
             });
         });
 
@@ -162,12 +163,32 @@ define(['jquery',
             contactMethods: contactMethods
         }));
 
-        // Check correct checkbox's
+        // Check correct checkboxes
         for (var key in subscriptions) {
             var con = subscriptions[key].contactMethod,
-                cat = subscriptions[key].category,
-                checkboxes = this.$subscriptionContainer.find('input[type="checkbox"]').filter('[data-contactmethodid="' + con + '"]').filter('[data-categoryid="' + cat + '"]').prop('checked', true);
+                cat = subscriptions[key].category;
+            this.$subscriptionContainer
+                .find('input[type="checkbox"][data-contactmethodid="' + con + '"][data-categoryid="' + cat + '"]').prop('checked', true);
+            this._toggleChildrenCheckboxes(cat, con, true, false);
         }
+    };
+
+    SettingsView.prototype._toggleChildrenCheckboxes = function (parentCategoryId, contactMethodId, disabled, parentChecked) {
+        var that = this;
+        this.$subscriptionContainer
+            .find('input[type="checkbox"]' +
+                  '[data-contactmethodid="' + contactMethodId + '"]' +
+                  '[data-parentid="' + parentCategoryId + '"]')
+            .each(function (i, val) {
+                var $val = $(val);
+                if (parentChecked) {
+                    if (!val.checked) {
+                        $val.click();
+                    }
+                }
+                val.disabled = disabled;
+                that._toggleChildrenCheckboxes($val.data('categoryid'), contactMethodId, disabled, parentChecked);
+            });
     };
 
     return SettingsView;
