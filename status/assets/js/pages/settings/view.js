@@ -1,11 +1,11 @@
-define(['jquery', 
-		'hbs!pages/settings/markup',
-		'hbs!pages/settings/emailMarkup',
-        'hbs!pages/settings/phoneNumberMarkup',
-        'hbs!pages/settings/subscriptionMarkup',
+define(['jquery',
+		'hbs!pages/settings/markup/markup',
+		'hbs!pages/settings/markup/emailMarkup',
+        'hbs!pages/settings/markup/phoneNumberMarkup',
+        'hbs!pages/settings/markup/subscriptionMarkup',
         'shared/modals'
 	], function ($, pageMarkup, emailMarkup, phoneNumberMarkup, subscriptionMarkup, modals) {
-    
+
     'use strict';
 
     /**
@@ -42,12 +42,12 @@ define(['jquery',
      */
     SettingsView.prototype._initModals = function () {
         var that = this;
-        
+
         that.addEmailModal = new modals.FormModal({
-            'title': 'Add an Email Address', 
-            'body': emailMarkup, 
-            'cancelBtn': 'Nope Nope Nope...', 
-            'okBtn': 'Send to NSA', 
+            'title': 'Add an Email Address',
+            'body': emailMarkup,
+            'cancelBtn': 'Nope Nope Nope...',
+            'okBtn': 'Send to NSA',
             'submitCallback': function (formData) {
                 var email = formData.email;
                 if (email) {
@@ -65,10 +65,10 @@ define(['jquery',
 
         var providers = this.controller.getProviders();
         that.addPhoneNumberModal = new modals.FormModal({
-            'title': 'Add a Phone Number', 
-            'body': phoneNumberMarkup({ providers: providers }), 
-            'cancelBtn': 'Nope Nope Nope...', 
-            'okBtn': 'Send to NSA', 
+            'title': 'Add a Phone Number',
+            'body': phoneNumberMarkup({ providers: providers }),
+            'cancelBtn': 'Nope Nope Nope...',
+            'okBtn': 'Send to NSA',
             'submitCallback': function (formData) {
                 var phoneNumber = formData.phoneNumber,
                     provider    = formData.provider;
@@ -148,7 +148,7 @@ define(['jquery',
     		categories = this.controller.getCategories(),
             subscriptions = this.controller.getSubscriptions(),
             providers = this.controller.getProviders();
-        
+
         // Create subscription table
     	this.$subscriptionContainer.empty().append(subscriptionMarkup({
     		contactMethods: contactMethods,

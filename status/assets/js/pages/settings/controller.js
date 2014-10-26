@@ -1,8 +1,8 @@
-define(['pageUtils', 
+define(['pageUtils',
 		'pages/settings/view',
         'shared/modals'
 	], function (pageUtils, SettingsView, modals) {
-    
+
     'use strict';
 
     /**
@@ -25,7 +25,7 @@ define(['pageUtils',
             new modals.MessageModal({
                 'title': 'Woh! An Error Has Appeared!',
                 'body': response.responseJSON.message
-            }); 
+            });
         };
     };
 
