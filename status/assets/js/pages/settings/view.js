@@ -129,14 +129,19 @@ define(['jquery',
             event.stopPropagation();
 
             var pk   = $(event.target).data('pk'),
-                name = $(event.target).data('name'),
-                confirmDelete = confirm("Remove contact method: " + name + "?");
+                name = $(event.target).data('name');
 
-            if (confirmDelete === true) {
-                $.when(that.controller.removeContactMethod(pk)).done(function (response) {
-                    that._loadSubscriptions();
-                });
-            }
+            new modals.ConfirmModal({
+                title: 'Remove contact method?',
+                body: 'Are you sure you want to remove the contact method "' + name + '"?',
+                cancelBtn: 'No',
+                okBtn: 'Yes',
+                okCallback: function () {
+                    $.when(that.controller.removeContactMethod(pk)).done(function (response) {
+                        that._loadSubscriptions();
+                    });
+                }
+            });
         });
     };
 
