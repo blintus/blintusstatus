@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Category',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
                 ('name', models.CharField(max_length=20)),
                 ('status', models.PositiveIntegerField()),
                 ('parent', models.ForeignKey(null=True, to='status.Category', blank=True)),
@@ -28,9 +28,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Comment',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('created', models.DateField(auto_now_add=True)),
-                ('updated', models.DateField(auto_now=True)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('created', models.DateTimeField(auto_now_add=True)),
+                ('updated', models.DateTimeField(auto_now=True)),
                 ('message', models.TextField()),
             ],
             options={
@@ -40,9 +40,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ContactMethod',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('email', models.CharField(max_length=35, blank=True, null=True)),
-                ('phoneNumber', models.CharField(max_length=15, blank=True, null=True)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('email', models.CharField(null=True, blank=True, max_length=35)),
+                ('phoneNumber', models.CharField(null=True, blank=True, max_length=15)),
             ],
             options={
             },
@@ -51,11 +51,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Post',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
                 ('title', models.CharField(max_length=255)),
                 ('status', models.PositiveIntegerField()),
-                ('created', models.DateField(auto_now_add=True)),
-                ('updated', models.DateField(auto_now=True)),
+                ('created', models.DateTimeField(auto_now_add=True)),
+                ('updated', models.DateTimeField(auto_now=True)),
                 ('message', models.TextField()),
                 ('category', models.ForeignKey(to='status.Category')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Provider',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
                 ('name', models.CharField(max_length=25)),
                 ('gateway', models.CharField(max_length=30)),
             ],
@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Subscription',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
                 ('category', models.ForeignKey(to='status.Category')),
                 ('contactMethod', models.ForeignKey(to='status.ContactMethod')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
