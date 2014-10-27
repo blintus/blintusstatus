@@ -1,3 +1,4 @@
+import os
 from smtplib import SMTP
 from django.contrib import admin
 from status.models import *
