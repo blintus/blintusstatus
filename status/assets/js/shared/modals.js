@@ -232,7 +232,8 @@ define(['lodash', 'hbs!shared/modalMarkup'], function (_, modalMarkup) {
 
     return {
         MessageModal: MessageModal,
-        FormModal: FormModal
+        FormModal: FormModal,
+        ConfirmModal: ConfirmModal
     };
 
 });
