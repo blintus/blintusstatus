@@ -1,10 +1,11 @@
+import os
 from smtplib import SMTP
 from django.contrib import admin
 from status.models import *
 
 
 EMAIL = "status@blint.us"
-PASSWORD = "Bl1n+u554+u5"
+PASSWORD = os.environ["SMTP_PASSWORD"]
 
 
 def updateCategoryStatuses(category, status):
