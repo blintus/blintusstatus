@@ -192,7 +192,9 @@ define(['jquery',
                     }
                 }
                 val.disabled = disabled;
-                that._toggleChildrenCheckboxes($val.data('categoryid'), contactMethodId, disabled, parentChecked);
+                if (disabled) {
+                    that._toggleChildrenCheckboxes($val.data('categoryid'), contactMethodId, disabled, parentChecked);
+                }
             });
     };
 
