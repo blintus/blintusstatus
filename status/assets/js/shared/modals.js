@@ -120,6 +120,9 @@ define(['lodash', 'hbs!shared/modalMarkup'], function (_, modalMarkup) {
                 that._modal.hide();
             }
         });
+        this._modal.on('shown.bs.modal', function (event) {
+            that._modal.find('.okBtn').focus();
+        });
         this._modal.on('hidden.bs.modal', function (event) {
             that._modal.destroy();
         });
